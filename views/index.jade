@@ -1,5 +1,15 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	h1= title
+	p Here are the products you scraped: 
+
+	.products_container
+		//- p= products
+		ul 
+			each product in products
+				li 
+					h3 Product: #{product.ProductName}
+					p Description : #{product.ProductDescription}
+					p Price: #{product.Price}
+					img(src=product.ImageUrl)
