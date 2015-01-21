@@ -18,13 +18,19 @@ function scrapeBigY(callback) {
 
 			console.log(json);
 
-			var result = [];
+			var result = {
+				StartDate: '', 
+				EndDate: '', 
+				Products: []
+			};
 
 			json.map(function (containerObj) {
 				containerObj.CS_Page.map(function (obj) {
 					obj.SaleItems.map(function (item) {
 						
-						result.push({
+						result.StartDate = containerObj.StartDate.slice(0, 10);
+						result.EndDate = containerObj.EndDate.slice(0, 10);
+						result.Products.push({
 							ProductName: item.ProductName, 
 							ProductDescription: item.ProductDescription, 
 							Price: item.Price, 

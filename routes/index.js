@@ -8,8 +8,10 @@ router.get('/', function(req, res) {
 	scrapeBigY(function (data) {
 		
 		res.render('index', { 
-			title: 'ShopScraper', 
-			products: data
+			title: 'ShopScraper',
+			startDate: data.StartDate, 
+			endDate: data.EndDate,  
+			products: data.Products
 		});
 
 	});
