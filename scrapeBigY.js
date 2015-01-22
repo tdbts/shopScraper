@@ -2,7 +2,6 @@ var request = require('request'),
 	cheerio = require('cheerio');
 
 function scrapeBigY(callback) {
-	var result = [];
 
 	request("http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?storeId=30&size=768", function (err, resp, body) {
 		
@@ -43,7 +42,7 @@ function scrapeBigY(callback) {
 			});
 
 			//console.log(result);
-			console.log("Scraped " + result.length + " products!");
+			console.log("Scraped " + result.Products.length + " products!");
 			
 			callback(result);
 
