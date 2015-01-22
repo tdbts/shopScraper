@@ -9,7 +9,8 @@ router.get('/', function (req, res) {
 	scrapeBigY(function (data) {
 		
 		res.render('index', { 
-			title: 'ShopScraper - Big Y',
+			title: "ShopScraper",
+			storeName: "Big Y", 
 			startDate: data.StartDate, 
 			endDate: data.EndDate,  
 			products: data.Products
@@ -24,7 +25,8 @@ router.get('/ShopRite', function (req, res) {
 	scrapeShopRite(function (data) {
 		
 		res.render('index', {
-			title: 'ShopScraper - ShopRite', 
+			title: "ShopScraper",
+			storeName: "ShopRite",  
 			startDate: data.StartDate, 
 			endDate: data.EndDate, 
 			products: data.Products

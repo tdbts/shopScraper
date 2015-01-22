@@ -26,7 +26,7 @@ function scrapeShopRite(callback) {
 
 				var name = $(this).find('p.itemTitle').text(), 
 					price = $(this).find('p.itemPrice').text(), 
-					description = $(this).find('p.itemBrand').text(), 
+					description = $(this).find('p.itemBrand').text() || "No description found", 
 					image = $(this).find('img.itemImage').attr('src');
 
 				if (image && name && price) {

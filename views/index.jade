@@ -1,10 +1,10 @@
 extends layout
 
 block content
-	h1= title
+	h1 #{title} - #{storeName} 
 	p Here are the products you scraped: 
 
-	h3 Big Y Flyer for #{startDate} to #{endDate} 
+	h3 #{storeName} Flyer for #{startDate} to #{endDate} 
 
 	.products_container
 		//- p= products
