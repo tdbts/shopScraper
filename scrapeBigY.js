@@ -24,11 +24,13 @@ function scrapeBigY(callback) {
 			};
 
 			json.map(function (containerObj) {
+				
+				result.StartDate = containerObj.StartDate.slice(0, 10);
+				result.EndDate = containerObj.EndDate.slice(0, 10);
+
 				containerObj.CS_Page.map(function (obj) {
 					obj.SaleItems.map(function (item) {
 						
-						result.StartDate = containerObj.StartDate.slice(0, 10);
-						result.EndDate = containerObj.EndDate.slice(0, 10);
 						result.Products.push({
 							ProductName: item.ProductName, 
 							ProductDescription: item.ProductDescription, 
