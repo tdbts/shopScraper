@@ -1,7 +1,7 @@
 var request = require('request'),  
 	async = require('async');
 
-function scrapeStopAndShop(callback) {
+function scrapeStopAndShopCircularPages(callback) {
 
 	request("http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=111191", function (err, resp, body) {
 		
@@ -54,10 +54,10 @@ function getProducts(pageID, callback) {
 
 				json.content.collection.data.map(function (product) {
 					result.push({
-						productName: product.title, 
-						productDescription: product.description || "No Description Provided", 
-						productPrice: product.price + " " + product.pricequalifier, 
-						productImage: product.image
+						ProductName: product.title, 
+						ProductDescription: product.description || "No Description Provided", 
+						Price: product.price + " " + product.pricequalifier, 
+						ImageUrl: product.image
 					});
 				});
 			}
@@ -72,10 +72,9 @@ function getProducts(pageID, callback) {
 
 }
 
+function handleCircularPageResults(resultsArray, callback) {
 
-scrapeStopAndShop(function (resultsArray) {
-
-	var pageIDs = [];	
+	var pageIDs = [];
 
 	resultsArray.map(function (page) {
 		return pageIDs.push(page.pageID);
@@ -101,9 +100,26 @@ scrapeStopAndShop(function (resultsArray) {
 			return prev.concat(curr);
 		});
 
-		console.log(allProducts);
-		console.log("Found " + allProducts.length + " products on sale this week!");		
+		// console.log(allProducts);
+		// console.log("Found " + allProducts.length + " products on sale this week!");
+			callback(allProducts);
+	});
+}
 
+function scrapeStopAndShop(callback) {
+
+	scrapeStopAndShopCircularPages(function (resultsArray) {
+		
+		handleCircularPageResults(resultsArray, callback);
 	});
 
-});
+}
+
+// scrapeStopAndShop(function (allProducts) {
+// 	console.log(allProducts);
+// 	console.log("Found " + allProducts.length + " products on sale this week!");
+
+// });
+
+
+module.exports = scrapeStopAndShop;

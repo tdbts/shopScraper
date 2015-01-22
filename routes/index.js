@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var scrapeBigY = require('../scrapeBigY');
 var scrapeShopRite = require('../scrapeShopRite');
+var scrapeStopAndShop = require('../scrapeStopAndShop');
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -9,7 +10,6 @@ router.get('/', function (req, res) {
 	scrapeBigY(function (data) {
 		
 		res.render('index', { 
-			title: "ShopScraper",
 			storeName: "Big Y", 
 			startDate: data.StartDate, 
 			endDate: data.EndDate,  
@@ -25,7 +25,6 @@ router.get('/ShopRite', function (req, res) {
 	scrapeShopRite(function (data) {
 		
 		res.render('index', {
-			title: "ShopScraper",
 			storeName: "ShopRite",  
 			startDate: data.StartDate, 
 			endDate: data.EndDate, 
@@ -33,6 +32,19 @@ router.get('/ShopRite', function (req, res) {
 		});
 	});
 
+});
+
+router.get('/StopAndShop', function (req, res) {
+	
+	scrapeStopAndShop(function (data) {
+
+		res.render('index', { 
+			storeName: "Stop and Shop", 
+			startDate: "START DATE", 
+			endDate: "END DATE", 
+			products: data
+		});
+	});
 });
 
 

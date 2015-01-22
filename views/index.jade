@@ -1,7 +1,7 @@
 extends layout
 
 block content
-	h1 #{title} - #{storeName} 
+	h1 ShopScraper - #{storeName} 
 	p Here are the products you scraped: 
 
 	h3 #{storeName} Flyer for #{startDate} to #{endDate} 
@@ -11,7 +11,7 @@ block content
 		ul 
 			each product in products
 				li 
-					h3 Product: #{product.ProductName}
-					p Description : #{product.ProductDescription}
-					p Price: #{product.Price}
-					img(src=product.ImageUrl)
+					h3.product_name Product: #{product.ProductName}
+					p.product_desciption Description : #{product.ProductDescription}
+					p.product_price Price: #{product.Price}
+					img.product_image(src=product.ImageUrl)
