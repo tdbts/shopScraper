@@ -1,5 +1,4 @@
-var request = require('request'), 
-	cheerio = require('cheerio'), 
+var request = require('request'),  
 	async = require('async');
 
 function scrapeStopAndShop(callback) {
@@ -12,9 +11,7 @@ function scrapeStopAndShop(callback) {
 
 		if (!err && resp.statusCode === 200) {
 
-			var $ = cheerio.load(body);
-
-			console.log(body);
+			// console.log(body);
 
 			var json = JSON.parse(body);
 
@@ -29,7 +26,7 @@ function scrapeStopAndShop(callback) {
 			});
 
 			console.log("Found " + result.length + " pages!");
-			console.log(result);
+			// console.log(result);
 
 			callback(result);
 		}
@@ -51,7 +48,7 @@ function getProducts(pageID, callback) {
 
 			var result = [];
 
-			console.log(json.content.collection.data);
+			// console.log(json.content.collection.data);
 
 			if (json.content.collection.data && json.content.collection.data.length > 0) {
 
@@ -78,16 +75,13 @@ function getProducts(pageID, callback) {
 
 scrapeStopAndShop(function (resultsArray) {
 
-	var pageIDs = [], 
-        allPageContent = [];	
-
+	var pageIDs = [];	
 
 	resultsArray.map(function (page) {
 		return pageIDs.push(page.pageID);
 	});
 
-	console.log(pageIDs);
-
+	// console.log(pageIDs);
 
 	async.map(pageIDs, getProducts, function (err, results) {
 		
@@ -95,13 +89,21 @@ scrapeStopAndShop(function (resultsArray) {
 			return new Error("There was an error mapping over the page IDs!");
 		}
 
-		//allPageContent.push(results);
-		console.log("Results are: ");
-		console.log(results);
-		console.log(results.length);
+		// console.log(results);
+		console.log("Found " + results.length + " pages for this week's sales!");
 		console.log(results.map(function (page) {
 			return page.length;
 		}));
+
+		var allProducts = results.reduce(function (prev, curr) {
+			prev = prev || [];
+
+			return prev.concat(curr);
+		});
+
+		console.log(allProducts);
+		console.log("Found " + allProducts.length + " products on sale this week!");		
+
 	});
 
 });
