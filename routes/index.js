@@ -7,13 +7,13 @@ var scrapeStopAndShop = require('../scrapeStopAndShop');
 /* GET home page. */
 router.get('/', function (req, res) {
 
-	scrapeBigY(function (data) {
+	scrapeBigY.scrape(function (data) {
 		
 		res.render('index', { 
 			storeName: "Big Y", 
-			startDate: data.StartDate, 
-			endDate: data.EndDate,  
-			products: data.Products
+			startDate: data.startDate, 
+			endDate: data.endDate,  
+			products: data.products
 		});
 
 	});

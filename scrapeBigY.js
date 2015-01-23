@@ -1,60 +1,70 @@
 var request = require('request'), 
 	cheerio = require('cheerio');
 
-function scrapeBigY(callback) {
+var scrapeBigY = {
 
-	request("http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?storeId=30&size=768", function (err, resp, body) {
+	config: {
+		circularDataLocation: "http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?storeId=30&size=768"	
+	}, 
+
+	scrape: function (callback) {
+		
+		var self = this;
+
+		request(this.config.circularDataLocation, function (err, resp, body) {
+			
+			self.handleError(err);
+
+			if (!err && resp.statusCode === 200) {
+
+				var json = JSON.parse(body);
+
+				// DEVELOPMENT ONLY
+				console.log(json);
+
+				var circularData = {
+					startDate: '', 
+					endDate: '', 
+					products: []
+				};
+
+				json.map(function (containerObj) {
+					
+					circularData.startDate = containerObj.StartDate.slice(0, 10);
+					circularData.endDate = containerObj.EndDate.slice(0, 10);
+
+					containerObj.CS_Page.map(function (obj) {
+						obj.SaleItems.map(function (item) {
+							
+							circularData.products.push({
+								ProductName: item.ProductName, 
+								ProductDescription: item.ProductDescription, 
+								Price: item.Price, 
+								ImageUrl: item.ImageUrl
+							});
+
+						});
+					});
+
+				});
+
+				// DEVELOPMENT ONLY
+				// console.log(circularData)
+
+				console.log("Scraped " + circularData.products.length + " products!");
+				
+				callback(circularData);		
+			}
+		}) 
+	}, 
+
+	handleError: function (err, message) {
 		
 		if (err) {
-			return new Error("There was an error making the URL request.\n" + err);
+			return new Error(message + "\n" + err);
 		}
+	}
 
-		if (!err && resp.statusCode === 200) {
-			
-			var $ = cheerio.load(body);
-
-			var json = JSON.parse(body);
-
-			console.log(json);
-
-			var result = {
-				StartDate: '', 
-				EndDate: '', 
-				Products: []
-			};
-
-			json.map(function (containerObj) {
-				
-				result.StartDate = containerObj.StartDate.slice(0, 10);
-				result.EndDate = containerObj.EndDate.slice(0, 10);
-
-				containerObj.CS_Page.map(function (obj) {
-					obj.SaleItems.map(function (item) {
-						
-						result.Products.push({
-							ProductName: item.ProductName, 
-							ProductDescription: item.ProductDescription, 
-							Price: item.Price, 
-							ImageUrl: item.ImageUrl
-						});
-					
-					});
-				});	
-
-			});
-
-			//console.log(result);
-			console.log("Scraped " + result.Products.length + " products!");
-			
-			callback(result);
-
-		}
-	});
-	
-}
+};
 
 module.exports = scrapeBigY;
-
-	
-
-
