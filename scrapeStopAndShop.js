@@ -102,7 +102,7 @@ function handleCircularPageResults(resultsArray, callback) {
 
 		// console.log(allProducts);
 		// console.log("Found " + allProducts.length + " products on sale this week!");
-			callback(allProducts);
+		callback(allProducts);
 	});
 }
 
