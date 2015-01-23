@@ -38,7 +38,7 @@ function scrapeStopAndShopCircularPages(callback) {
 
 function getProducts(pageID, callback) {
 
-	request("http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&pageid=" + pageID + "&resultset=full", function (err, resp, body) {
+	request("http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&resultset=full&pageid=" + pageID, function (err, resp, body) {
 		
 		if (err) {
 			return new Error("There was an error making the URL request.\n" + err);
