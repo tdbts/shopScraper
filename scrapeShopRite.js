@@ -187,5 +187,3 @@ var scrapeShopRite = {
 
 
 module.exports = scrapeShopRite;
-
-//scrapeShopRite.scrape(console.log);

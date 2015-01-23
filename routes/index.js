@@ -40,9 +40,9 @@ router.get('/StopAndShop', function (req, res) {
 
 		res.render('index', { 
 			storeName: "Stop and Shop", 
-			startDate: "START DATE", 
-			endDate: "END DATE", 
-			products: data
+			startDate: 	data.startDate, 
+			endDate: data.endDate, 
+			products: data.products
 		});
 	});
 });
