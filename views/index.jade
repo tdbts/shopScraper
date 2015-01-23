@@ -10,8 +10,9 @@ block content
 		//- p= products
 		ul 
 			each product in products
-				li 
-					h3.product_name Product: #{product.ProductName}
-					p.product_desciption Description : #{product.ProductDescription}
-					p.product_price Price: #{product.Price}
-					img.product_image(src=product.ImageUrl)
+				.product_info
+					li 
+						h3.product_name Product: #{product.ProductName}
+						p.product_desciption Description : #{product.ProductDescription}
+						p.product_price Price: #{product.Price}
+						img.product_image(src=product.ImageUrl)

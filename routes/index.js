@@ -22,7 +22,7 @@ router.get('/', function (req, res) {
 
 router.get('/ShopRite', function (req, res) {
 	
-	scrapeShopRite(function (data) {
+	scrapeShopRite.scrape(function (data) {
 		
 		res.render('index', {
 			storeName: "ShopRite",  
