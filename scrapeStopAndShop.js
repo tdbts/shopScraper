@@ -1,153 +1,156 @@
-var request = require('request'),  
+var request = require('request'), 
 	async = require('async');
 
-function scrapeStopAndShopCircularPages(callback) {
+var scrapeStopAndShop = {
 
-	// The information for the various pages is also available in the landing page html 
-	// within the pageElementsArray variable.  If updates cause this url to fail, it may 
-	// be better to grab this information from that array instead. 
-	request("http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=111191", function (err, resp, body) {
-		
-		if (err) {
-			return new Error("There was an error making the URL request.\n" + err);
+	config: {
+		pagesDataLocation: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=111191", 
+		baseForPagesURL: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&resultset=full&pageid=", 
+		dateIndexes: {
+			startDate: [0, 10], 
+			endDate: [0, 10]
 		}
+	}, 
 
-		if (!err && resp.statusCode === 200) {
+	getCircularPageData: function (callback) {
+		
+		var self = this;
 
-			// console.log(body);
+		request(this.config.pagesDataLocation, function (err, resp, body) {
+			
+			self.handleError(err, "There was an error making the URL request.");
 
-			var json = JSON.parse(body);
+			if (!err && resp.statusCode === 200) {
 
-			var result = [];	
+				// DEVELOPMENT ONLY
+				// console.log(body)
 
-			json.content.collection[0].data.map(function (page) {
-				result.push({
-					pageID: page.pageid, 
-					endDate: page.enddate, 
-					image: page.imageurl 
+				var json = JSON.parse(body), 
+					circularPagesData = [];
+
+				json.content.collection[0].data.map(function (page) {
+					circularPagesData.push({
+						pageID: page.pageid, 
+						endDate: page.enddate, 
+						image: page.imageurl 
+					});
 				});
-			});
 
-			console.log("Found " + result.length + " pages!");
-			// console.log(result);
+				// DEVELOPMENT ONLY
+				console.log("Found " + circularPagesData.length + " pages!");
+				// console.log(circularPagesData);
 
-			callback(result);
-		}
-	});
-}
+				callback(circularPagesData);
+			}
+		});
+	},
 
-function getProducts(pageID, callback) {
-
-	request("http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&resultset=full&pageid=" + pageID, function (err, resp, body) {
+	getProducts: function (pageID, callback) {
 		
-		if (err) {
-			return new Error("There was an error making the URL request.\n" + err);
-		}
+		var self = scrapeStopAndShop;
 
-		if (!err && resp.statusCode === 200) {
+		request(self.config.baseForPagesURL + pageID, function (err, resp, body) {
+			
+			self.handleError(err);
 
-			//console.log(body);
-			var json = JSON.parse(body);
+			if (!err && resp.statusCode === 200) {
 
-			var result = {
+				// DEVELOPMENT ONLY
+				// console.log(body)
+				var json = JSON.parse(body);
+
+				var pageData = {
+					startDate: '', 
+					endDate: '', 
+					products: []
+				};
+
+				// DEVELOPMENT ONLY
+				// console.log(json.content.collection[0].data);
+				var productData = json.content.collection[0].data;
+
+				if (productData && productData.length > 0) {
+					var dateIndexes = self.config.dateIndexes;
+					pageData.startDate = productData[0].listingstart.slice(dateIndexes.startDate[0], dateIndexes.startDate[1]);
+					pageData.endDate = productData[0].listingend.slice(dateIndexes.endDate[0], dateIndexes.endDate[1]);
+
+					productData.map(function (product) {
+						pageData.products.push({
+							ProductName: product.title, 
+							ProductDescription: product.description || "No description provided.", 
+							Price: product.price + " " + product.pricequalifier, 
+							ImageUrl: product.image 
+						});
+					});
+				}
+
+				// DEVELOPMENT ONLY
+				// console.log(pageData);
+				callback(null, pageData);
+			}
+		});
+	},
+
+	handleCircularPageResults: function (pagesArray, callback) {
+		
+		var pageIDs = [], 
+			self = this;
+
+		pagesArray.map(function (page) {
+			return pageIDs.push(page.pageID);
+		});
+
+		// console.log(pageIDs);
+
+		async.map(pageIDs, this.getProducts, function (err, results) {
+			
+			self.handleError(err, "There was an error mapping over the page IDs!");
+
+			// DEVELOPMENT ONLY
+			// console.log(results);
+			console.log("Found " + results.length + " pages for this week's sales!");
+			console.log(results.map(function (page) {
+				return page.products.length;
+			}));
+
+			var allProducts = {
 				startDate: '', 
 				endDate: '', 
 				products: []
 			};
 
-			//console.log(json.content.collection[0].data);
+			results.map(function (pageData) {
+				allProducts.startDate = allProducts.startDate || pageData.startDate;
+				allProducts.endDate = allProducts.endDate || pageData.endDate;
 
-			if (json.content.collection[0].data && json.content.collection[0].data.length > 0) {
-
-				result.startDate = json.content.collection[0].data[0].listingstart.slice(0, 10);
-				result.endDate = json.content.collection[0].data[0].listingend.slice(0, 10);
-
-				json.content.collection[0].data.map(function (product) {
-					result.products.push({
-						ProductName: product.title, 
-						ProductDescription: product.description || "No Description Provided", 
-						Price: product.price + " " + product.pricequalifier, 
-						ImageUrl: product.image
-					});
+				pageData.products.forEach(function (data) {
+					allProducts.products.push(data);
 				});
-			}
-
-
-			//console.log(result);
-			callback(null, result);
-
-		}			
-
-	});
-
-}
-
-function handleCircularPageResults(pagesArray, callback) {
-
-	var pageIDs = [];
-
-	pagesArray.map(function (page) {
-		return pageIDs.push(page.pageID);
-	});
-
-	// console.log(pageIDs);
-
-	async.map(pageIDs, getProducts, function (err, results) {
-		
-		if (err) {
-			return new Error("There was an error mapping over the page IDs!");
-		}
-
-		console.log(results);
-		console.log("Found " + results.length + " pages for this week's sales!");
-		console.log(results.map(function (page) {
-			return page.products.length;
-		}));
-
-		var allProducts = {
-			startDate: '', 
-			endDate: '', 
-			products: []
-		};
-
-
-		// results.reduce(function (prev, curr) {
-		// 	allProducts.startDate = prev.startDate;
-		// 	allProducts.endDate = prev.endDate;
-
-		// 	return 
-		// });
-
-		results.map(function (pageData) {
-			allProducts.startDate = allProducts.startDate || pageData.startDate;
-			allProducts.endDate = allProducts.endDate || pageData.endDate;
-
-			pageData.products.forEach(function (data) {
-				allProducts.products.push(data);
 			});
+
+			callback(allProducts);
+		
 		});
 
-		// console.log(allProducts);
-		// console.log("Found " + allProducts.length + " products on sale this week!");
-		callback(allProducts);
-	});
-}
+	},  
 
-function scrapeStopAndShop(callback) {
-
-	scrapeStopAndShopCircularPages(function (results) {
+	scrape: function (callback) {
 		
-		handleCircularPageResults(results, callback);
-	});
+		var self = this;
 
-}
+		this.getCircularPageData(function (results) {
+			
+			self.handleCircularPageResults(results, callback); 
+		});
+		 
+	},
 
-// scrapeStopAndShop(function (allProducts) {
-// 	console.log(allProducts);
-// 	console.log("Found " + allProducts.products.length + " products on sale this week!");
+	handleError: function (err, message) {
+		if (err) {
+			return new Error(message + "\n" + err);
+		}
+	}	
 
-// });
-
+};
 
 module.exports = scrapeStopAndShop;
-

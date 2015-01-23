@@ -36,7 +36,7 @@ router.get('/ShopRite', function (req, res) {
 
 router.get('/StopAndShop', function (req, res) {
 	
-	scrapeStopAndShop(function (data) {
+	scrapeStopAndShop.scrape(function (data) {
 
 		res.render('index', { 
 			storeName: "Stop and Shop", 
