@@ -26,9 +26,9 @@ router.get('/ShopRite', function (req, res) {
 		
 		res.render('index', {
 			storeName: "ShopRite",  
-			startDate: data.StartDate, 
-			endDate: data.EndDate, 
-			products: data.Products
+			startDate: data.startDate, 
+			endDate: data.endDate, 
+			products: data.products
 		});
 	});
 

@@ -39,7 +39,7 @@ var scrapeShopRite = {
 		});
 
 		// DEVELOPMENT ONLY
-		console.log(pageNumbers);
+		// console.log(pageNumbers);
 
 		var numberOfPages = pageNumbers.reduce(function (prev, curr) {
 			return curr > prev ? curr : prev;
@@ -84,13 +84,13 @@ var scrapeShopRite = {
 
 				var $ = cheerio.load(body); 
 				var pageData = {
-					StartDate: '', 
-					EndDate: '', 
-					Products: []
+					startDate: '', 
+					endDate: '', 
+					products: []
 				};
 				
-				pageData.StartDate = self.getDate(self.config.startDateLocation, $);
-				pageData.EndDate = self.getDate(self.config.endDateLocation, $);
+				pageData.startDate = self.getDate(self.config.startDateLocation, $);
+				pageData.endDate = self.getDate(self.config.endDateLocation, $);
 
 				var productConfig = self.config.product;
 
@@ -102,8 +102,8 @@ var scrapeShopRite = {
 						image = $(this).find(productConfig.imageLocation.element)
 							.attr(productConfig.imageLocation.attribute);	
 					
-					if (image && name && price) {
-						pageData.Products.push({
+					if (name && price && description && image) {
+						pageData.products.push({
 							ProductName: name, 
 							ProductDescription: description || "No description provided.", 
 							Price: price, 
@@ -136,22 +136,22 @@ var scrapeShopRite = {
 			// console.log(results.length);
 
 			var finalResults = {
-				StartDate: '', 
-				EndDate: '', 
-				Products: []
+				startDate: '', 
+				endDate: '', 
+				products: []
 			};
 
 			results.map(function (page) {
-				finalResults.StartDate = finalResults.StartDate || page.StartDate;
-				finalResults.EndDate = finalResults.EndDate || page.EndDate;
-				page.Products.map(function (product) {
-					finalResults.Products.push(product);
+				finalResults.startDate = finalResults.startDate || page.startDate;
+				finalResults.endDate = finalResults.endDate || page.endDate;
+				page.products.map(function (product) {
+					finalResults.products.push(product);
 				});
 			});
 
 			// DEVELOPMENT ONLY
 			// console.log(finalResults);
-			console.log("Found " + finalResults.Products.length + " products in this week's circular!");
+			console.log("Found " + finalResults.products.length + " products in this week's circular!");
 			callback(finalResults);
 
 		});
