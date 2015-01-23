@@ -62,6 +62,16 @@ var scrapeShopRite = {
 		return pages;
 	}, 
 
+	getDate: function (dateConfig, $) {
+		
+		if ($) {
+
+			return $(dateConfig.element)
+				.attr(dateConfig.attribute)
+				.slice(dateConfig.indexes[0], dateConfig.indexes[1]);
+		} 
+	}, 
+
 	scrapePage: function (pageNumber, callback) {
 		
 		var self = scrapeShopRite;
@@ -78,18 +88,10 @@ var scrapeShopRite = {
 					EndDate: '', 
 					Products: []
 				};
-
-				var startDateConfig = self.config.startDateLocation, 
-					endDateConfig = self.config.endDateLocation;
-
-				pageData.StartDate = $(startDateConfig.element)
-					.attr(startDateConfig.attribute)
-					.slice(startDateConfig.indexes[0], startDateConfig.indexes[1]);
-
-				pageData.EndDate = $(endDateConfig.element)
-					.attr(endDateConfig.attribute)
-					.slice(endDateConfig.indexes[0], endDateConfig.indexes[1]);
 				
+				pageData.StartDate = self.getDate(self.config.startDateLocation, $);
+				pageData.EndDate = self.getDate(self.config.endDateLocation, $);
+
 				var productConfig = self.config.product;
 
 				$(productConfig.containerLocation).map(function () {
@@ -130,7 +132,7 @@ var scrapeShopRite = {
 			self.handleError("There was an error mapping over the page numbers!");
 
 			// DEVELOPMENT ONLY
-			console.log(JSON.stringify(results));
+			// console.log(JSON.stringify(results));
 			// console.log(results.length);
 
 			var finalResults = {
@@ -148,7 +150,7 @@ var scrapeShopRite = {
 			});
 
 			// DEVELOPMENT ONLY
-			console.log(finalResults);
+			// console.log(finalResults);
 			console.log("Found " + finalResults.Products.length + " products in this week's circular!");
 			callback(finalResults);
 
