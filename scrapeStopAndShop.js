@@ -76,10 +76,10 @@ var scrapeStopAndShop = {
 
 					productData.map(function (product) {
 						pageData.products.push({
-							ProductName: product.title, 
-							ProductDescription: product.description || "No description provided.", 
-							Price: product.price + " " + product.pricequalifier, 
-							ImageUrl: product.image 
+							productName: product.title, 
+							productDescription: product.description || "No description provided.", 
+							price: product.price + " " + product.pricequalifier, 
+							imageUrl: product.image 
 						});
 					});
 				}

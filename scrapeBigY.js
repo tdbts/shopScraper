@@ -37,10 +37,10 @@ var scrapeBigY = {
 						obj.SaleItems.map(function (item) {
 							
 							circularData.products.push({
-								ProductName: item.ProductName, 
-								ProductDescription: item.ProductDescription, 
-								Price: item.Price, 
-								ImageUrl: item.ImageUrl
+								productName: item.ProductName, 
+								productDescription: item.ProductDescription, 
+								price: item.Price, 
+								imageUrl: item.ImageUrl
 							});
 
 						});

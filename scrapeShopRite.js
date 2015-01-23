@@ -104,10 +104,10 @@ var scrapeShopRite = {
 					
 					if (name && price && description && image) {
 						pageData.products.push({
-							ProductName: name, 
-							ProductDescription: description || "No description provided.", 
-							Price: price, 
-							ImageUrl: image
+							productName: name, 
+							productDescription: description || "No description provided.", 
+							price: price, 
+							imageUrl: image
 						});
 					}
 
