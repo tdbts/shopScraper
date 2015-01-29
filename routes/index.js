@@ -4,6 +4,14 @@ var scrapeBigY = require('../scrapeBigY');
 var scrapeShopRite = require('../scrapeShopRite');
 var scrapeStopAndShop = require('../scrapeStopAndShop');
 
+/* 
+* Need to create a better MV* architecture for this webapp.  
+* I should not have my business logic within each of these get() 
+* method calls.
+* Will need one type of controller for the pages, and another 
+* type for the index.
+*/
+
 /* GET home page. */
 router.get('/', function (req, res) {
 	
