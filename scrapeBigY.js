@@ -1,5 +1,4 @@
-var request = require('request'), 
-	cheerio = require('cheerio');
+var request = require('request');
 
 var scrapeBigY = {
 
