@@ -19,7 +19,7 @@ var scrapeBigY = {
 	config: {
 		circularDataLocation: "http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?storeId=30&size=768"	
 	}, 
-
+	
 	scrape: function (callback) {
 		
 		var self = this;
@@ -33,7 +33,7 @@ var scrapeBigY = {
 				var json = JSON.parse(body);
 
 				// DEVELOPMENT ONLY
-				console.log(json);
+				// console.log(json);
 
 				var circularData = {
 					startDate: '', 
@@ -45,7 +45,7 @@ var scrapeBigY = {
 				// the code maps over.  Rather, I should put these values in the config, and 
 				// then refer to those as I need them.
 				// Also, I don't need to map over the 'json'.  It looks like the Big Y api 
-				// sends back an array with one container object.    
+				// sends back an array with one container object.  I can simply use pop().    
 				json.map(function (containerObj) {
 					
 					circularData.startDate = containerObj.StartDate.slice(0, 10);

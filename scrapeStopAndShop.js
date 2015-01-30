@@ -9,8 +9,8 @@ var scrapeStopAndShop = {
 		urls: {
 			urlForPromotionID: "http://stopandshop.shoplocal.com/StopandShop/BrowseByPage?storeid=2599015", 
 			pagesDataLocation: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=", 
+			baseForPagesURL: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&resultset=full&pageid=", 
 		}, 
-		baseForPagesURL: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&resultset=full&pageid=", 
 		parameters: {
 			promotionID: null
 		}, 
@@ -88,7 +88,7 @@ var scrapeStopAndShop = {
 		
 		var self = scrapeStopAndShop;
 
-		request(self.config.baseForPagesURL + pageID, function (err, resp, body) {
+		request(self.config.urls.baseForPagesURL + pageID, function (err, resp, body) {
 			
 			self.handleError(err);
 
