@@ -1,0 +1,19 @@
+extends layout
+
+block content
+	#navigation
+		#shopscraper_title
+			h1= title
+		#directions_div
+			h3 Choose which store's listings you would like to view: 
+		#store_logos
+			.logo#big_y_logo
+				a(href='/BigY')
+					img#big_y_image(src=bigYLogo)
+			.logo#stop_and_shop_logo
+				a(href='/StopAndShop')
+					img#stop_and_shop_image(src=stopAndShopLogo)
+			.logo#shop_rite_logo
+				a(href='/ShopRite')
+					img#shop_rite_image(src=shopRiteLogo) 
+			
