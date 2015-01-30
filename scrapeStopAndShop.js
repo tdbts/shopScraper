@@ -1,22 +1,61 @@
 var request = require('request'), 
-	async = require('async');
+	async = require('async'), 
+	url = require('url'), 
+	_ = require('underscore');
 
 var scrapeStopAndShop = {
 
 	config: {
-		pagesDataLocation: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=111191", 
+		urls: {
+			urlForPromotionID: "http://stopandshop.shoplocal.com/StopandShop/BrowseByPage?storeid=2599015", 
+			pagesDataLocation: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=", 
+		}, 
 		baseForPagesURL: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&resultset=full&pageid=", 
+		parameters: {
+			promotionID: null
+		}, 
 		dateIndexes: {
 			startDate: [0, 10], 
 			endDate: [0, 10]
 		}
 	}, 
 
-	getCircularPageData: function (callback) {
+	setConfigValue: function (key, value) {
+		if (key) {
+			return key = value;
+		} 
+	}, 
+
+	getPromotionID: function (promotionIDurl, callback) {
 		
 		var self = this;
 
-		request(this.config.pagesDataLocation, function (err, resp, body) {
+		request({url: this.config.urls.urlForPromotionID, followRedirect: false}, function (err, resp, body) {
+			
+			if (!err && resp.statusCode >= 300 && resp.statusCode < 400) {
+
+				// DEVELOPMENT ONLY
+				// console.log(resp.statusCode);
+				// console.log(resp.toJSON());
+				var queryObj = url.parse(resp.headers.location, true).query;
+				// DEVELOPMENT ONLY
+				// console.log(queryObj);
+
+				var promotionIDobj = _.pick(queryObj, 'promotionid')
+				// DEVELOPMENT ONLY
+				// console.log(promotionIDobj);
+
+				callback(promotionIDobj);
+			}
+		});
+
+	}, 
+
+	getCircularPageData: function (circularPageDataURL, callback) {
+		
+		var self = this;
+
+		request(circularPageDataURL, function (err, resp, body) {
 			
 			self.handleError(err, "There was an error making the URL request.");
 
@@ -55,7 +94,7 @@ var scrapeStopAndShop = {
 
 			if (!err && resp.statusCode === 200) {
 
-				// DEVELOPMENT ONLY
+				// DEVELOPMENT ONLY	
 				// console.log(body)
 				var json = JSON.parse(body);
 
@@ -136,11 +175,17 @@ var scrapeStopAndShop = {
 
 	scrape: function (callback) {
 		
-		var self = this;
+		var self = this, 
+			config = this.config;
 
-		this.getCircularPageData(function (results) {
+		this.getPromotionID(config.urls.urlForPromotionID, function (results) {
 			
-			self.handleCircularPageResults(results, callback); 
+			self.setConfigValue(config.parameters.promotionID, results.promotionid);
+
+			self.getCircularPageData(config.urls.pagesDataLocation + results.promotionid, function (results) {
+				
+				self.handleCircularPageResults(results, callback); 
+			});
 		});
 		 
 	},
