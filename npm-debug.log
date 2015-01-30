@@ -1,27 +1,30 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'start' ]
+1 verbose cli [ '/usr/bin/node',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'uninstall',
+1 verbose cli   'grunt-mocha',
+1 verbose cli   '--save-dev' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.33
 4 verbose node symlink /usr/bin/node
-5 verbose run-script [ 'prestart', 'start', 'poststart' ]
-6 info prestart shopScraper@0.0.0
-7 info start shopScraper@0.0.0
-8 verbose unsafe-perm in lifecycle true
-9 info shopScraper@0.0.0 Failed to exec start script
-10 error shopScraper@0.0.0 start: `node ./bin/www`
-10 error Exit status 8
-11 error Failed at the shopScraper@0.0.0 start script.
-11 error This is most likely a problem with the shopScraper package,
-11 error not with npm itself.
-11 error Tell the author that this fails on your system:
-11 error     node ./bin/www
-11 error You can get their info via:
-11 error     npm owner ls shopScraper
-11 error There is likely additional logging output above.
+5 verbose node_modules/grunt-mocha unbuild
+6 info preuninstall grunt-mocha@0.4.11
+7 info uninstall grunt-mocha@0.4.11
+8 verbose true,/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules,/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules unbuild grunt-mocha@0.4.11
+9 info postuninstall grunt-mocha@0.4.11
+10 error Error: EACCES, unlink '/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/grunt-mocha/node_modules/.bin/_mocha'
+10 error  { [Error: EACCES, unlink '/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/grunt-mocha/node_modules/.bin/_mocha']
+10 error   errno: 3,
+10 error   code: 'EACCES',
+10 error   path: '/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/grunt-mocha/node_modules/.bin/_mocha' }
+11 error Please try running this command again as root/Administrator.
 12 error System Linux 3.13.0-44-generic
-13 error command "/usr/bin/node" "/usr/bin/npm" "start"
+13 error command "/usr/bin/node" "/usr/bin/npm" "uninstall" "grunt-mocha" "--save-dev"
 14 error cwd /home/tdbts/Documents/Hckr/projects/apps/shopScraper
 15 error node -v v0.10.33
 16 error npm -v 1.4.28
-17 error code ELIFECYCLE
-18 verbose exit [ 1, true ]
+17 error path /home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/grunt-mocha/node_modules/.bin/_mocha
+18 error code EACCES
+19 error errno 3
+20 error stack Error: EACCES, unlink '/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/grunt-mocha/node_modules/.bin/_mocha'
+21 verbose exit [ 3, true ]
