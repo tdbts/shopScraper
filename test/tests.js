@@ -3,7 +3,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var should = chai.should();
 
-describe('Viewbase', function () {
+describe('Viewbase constructor', function () {
 	
 	var View = require('../views/Viewbase'); 
 	var testTemplate = "template";
@@ -12,28 +12,50 @@ describe('Viewbase', function () {
 	var testResponse = {
 			
 		render: function (template, data) {
+			
 			if (template && data) {
 				return true;
 			}
 		}
 	};
 
+	var v = new View(testResponse, testTemplate);
+	
 	it("Should should create an object with response, template, extend and render properties.", function () {
 		
-		var v = new View(testResponse, testTemplate);
+		expect(v.response).to.exist;
+		expect(v.template).to.exist;
+		expect(v.extend).to.exist;
+		expect(v.render).to.exist;
 
-		should.exist(v.response);
-		should.exist(v.template);
-		should.exist(v.extend);
-		should.exist(v.render);
+
 	});
 
 	it("Should have two methods, 'extend' and 'render.'", function () {
 		
-		var v = new View(testResponse, testTemplate);
-
 		expect(v.extend).to.be.a('function');
 		expect(v.render).to.be.a('function');
+	});
+
+	it("Should render a template when the render method is called.", function () {
+		
+		expect(v.render(testData)).to.be.true;
+	});
+
+	it("Should be extensible.", function () {
+		
+		var child = v.extend({
+			template: "new template", 
+			foo: "bar", 
+			ping: function () {}
+		});
+
+		expect(child.prototype.foo).to.exist.and.equal("bar");
+		expect(child.prototype.ping).to.exist.and.be.a('function');
+		expect(child.response).to.not.exist;
+		expect(child.prototype.template).to.exist.and.equal("new template");
+		expect(child.prototype.extend).to.exist.and.be.a('function');
+		expect(child.prototype.render).to.exist.and.be.a('function');
 	});
 
 });
