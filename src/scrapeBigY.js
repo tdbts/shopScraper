@@ -18,7 +18,8 @@ var request = require('request'),
 var scrapeBigY = {
 
 	config: {
-		circularDataLocation: "http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?storeId=30&size=768"	
+		circularDataLocation: "http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?size=768&storeId=",
+		storeIDNumber: "30"  	
 	}, 
 
 	getDate: function (sourceObject, dateType) {
@@ -28,57 +29,70 @@ var scrapeBigY = {
 
 		return sourceObject[prop].slice(0, 10); 
 	}, 
+
+	getContainerObj: function (source) {
+		
+		return JSON.parse(source).pop();
+	}, 
+
+	getProductData: function (source, ProductConstructor) {
+		
+		return new ProductConstructor(
+			source.ProductName, 
+			source.ProductDescription, 
+			source.Price, 
+			source.ImageUrl
+		); 
+	}, 
+
+	getProducts: function (src, dest, productHandler) {
+		
+		src.CS_Page.map(function (obj) {
+			obj.SaleItems.map(function (item) {
+
+				dest.push(productHandler(item, Product));
+
+			});
+		});
+	}, 
 	
 	scrape: function (callback) {
 		
-		var self = this;
+		var self = this, 
+			config = this.config;
 
-		request(this.config.circularDataLocation, function (err, resp, body) {
+		request(config.circularDataLocation + config.storeIDNumber, function (err, resp, body) {
 			
 			self.handleError(err);
 
 			if (!err && resp.statusCode === 200) {
 
-				var json = JSON.parse(body);
+				var containerObj = self.getContainerObj(body);
 
 				// DEVELOPMENT ONLY
-				// console.log(json);
+				// console.log(containerObj);
 
 				var circularData = {
-					startDate: '', 
-					endDate: '', 
+					startDate: self.getDate(containerObj, 'start'), 
+					endDate: self.getDate(containerObj, 'end'), 
 					products: []
 				};
 
-				// In the f(x) below, I shouldn't hardcode the containerObj parameters that 
-				// the code maps over.  Rather, I should put these values in the config, and 
-				// then refer to those as I need them.   
-				var containerObj = json.pop();
-					
-				circularData.startDate = self.getDate(containerObj, 'start');
-				circularData.endDate = self.getDate(containerObj, 'end');
-
-				containerObj.CS_Page.map(function (obj) {
-					obj.SaleItems.map(function (item) {
-
-						circularData.products.push(new Product(
-							item.ProductName, 
-							item.ProductDescription, 
-							item.Price, 
-							item.ImageUrl
-						));
-					});
-				});
-
+				self.getProducts(containerObj, circularData.products, self.getProductData);
 
 				// DEVELOPMENT ONLY
 				// console.log(circularData)
 
-				console.log("Scraped " + circularData.products.length + " products!");
-				
+				self.logScrapeResults(circularData.products);
+
 				callback(circularData);		
 			}
-		}) 
+		}); 
+	}, 
+
+	logScrapeResults:function (productsArray) {
+		
+		console.log("Scraped " + productsArray.length + " products!");
 	}, 
 
 	handleError: function (err, message) {
