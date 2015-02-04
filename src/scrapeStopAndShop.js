@@ -27,10 +27,8 @@ var scrapeStopAndShop = {
 	}, 
 
 	getPromotionID: function (promotionIDurl, callback) {
-		
-		var self = this;
 
-		request({url: this.config.urls.urlForPromotionID, followRedirect: false}, function (err, resp, body) {
+		request({url: this.config.urls.urlForPromotionID, followRedirect: false}, function (err, resp) {
 			
 			if (!err && resp.statusCode >= 300 && resp.statusCode < 400) {
 
@@ -41,7 +39,7 @@ var scrapeStopAndShop = {
 				// DEVELOPMENT ONLY
 				// console.log(queryObj);
 
-				var promotionIDobj = _.pick(queryObj, 'promotionid')
+				var promotionIDobj = _.pick(queryObj, 'promotionid');
 				// DEVELOPMENT ONLY
 				// console.log(promotionIDobj);
 

@@ -10,8 +10,8 @@ module.exports = {
 	scrape: function () {}, 
 	
 	logScrapeResults: function (productsArray) {
-		console.log("Scraped " + productsArray.length + " products from this week's " 
-			+ this.config.storeName + " circular!");
+		console.log("Scraped " + productsArray.length + " products from this week's " + 
+			this.config.storeName + " circular!");
 	}, 
 	
 	handleError: function (err, message) {
@@ -19,4 +19,4 @@ module.exports = {
 			return new Error(message + "\n" + err);
 		}
 	}
-}
+};
