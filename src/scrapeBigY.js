@@ -1,21 +1,8 @@
-/* 
-
-Will want to make a base Scraper object from which the scrapers for the various 
-stores can inherit.  It would look something like this: 
-
-// Scraper.js
-module.exports = {
-	config: {}, 
-	scrape: function() {}, 
-	handleError: function(err, message) {...}
-};
-
-*/
-
 var request = require('request'), 
+	scraper = require('./scraper'), 
 	Product = require('./Product');
 
-var scrapeBigY = {
+var scrapeBigY = scraper.extend({
 
 	config: {
 		storeName: "Big Y", 
@@ -68,7 +55,7 @@ var scrapeBigY = {
 
 	handleRequestResults: function (err, resp, body) {
 		
-		var self = scrapeBigY;
+		var self = this;
 		
 		self.handleError(err);
 
@@ -109,19 +96,6 @@ var scrapeBigY = {
 		});
 	}, 
 
-	logScrapeResults:function (productsArray) {
-		
-		console.log("Scraped " + productsArray.length + " products from this week's " 
-			+ this.config.storeName + " circular!");
-	}, 
-
-	handleError: function (err, message) {
-		
-		if (err) {
-			return new Error(message + "\n" + err);
-		}
-	}
-
-};
+});
 
 module.exports = scrapeBigY;
