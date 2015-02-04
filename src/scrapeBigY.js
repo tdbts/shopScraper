@@ -18,6 +18,7 @@ var request = require('request'),
 var scrapeBigY = {
 
 	config: {
+		storeName: "Big Y", 
 		circularDataLocation: "http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?size=768&storeId=",
 		storeIDNumber: "30"  	
 	}, 
@@ -92,7 +93,8 @@ var scrapeBigY = {
 
 	logScrapeResults:function (productsArray) {
 		
-		console.log("Scraped " + productsArray.length + " products!");
+		console.log("Scraped " + productsArray.length + " products from this week's " 
+			+ this.config.storeName + " circular!");
 	}, 
 
 	handleError: function (err, message) {
