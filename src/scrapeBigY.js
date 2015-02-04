@@ -56,39 +56,57 @@ var scrapeBigY = {
 			});
 		});
 	}, 
+
+	urlRequest: function (requester, url, callback) {
+		 
+		 requester(url, function (err, resp, body) {
+		 	
+		 	callback(err, resp, body);
+		 });
+
+	}, 
+
+	handleRequestResults: function (err, resp, body) {
+		
+		var self = scrapeBigY;
+		
+		self.handleError(err);
+
+		if (!err && resp.statusCode === 200) {
+
+			var containerObj = self.getContainerObj(body);
+
+			// DEVELOPMENT ONLY
+			// console.log(containerObj);
+
+			var circularData = {
+				startDate: self.getDate(containerObj, 'start'), 
+				endDate: self.getDate(containerObj, 'end'), 
+				products: []
+			};
+
+			self.getProducts(containerObj, circularData.products, self.getProductData);
+
+			// DEVELOPMENT ONLY
+			// console.log(circularData)
+
+			self.logScrapeResults(circularData.products);
+
+			return circularData;	
+		}
+	}, 
 	
 	scrape: function (callback) {
 		
 		var self = this, 
 			config = this.config;
 
-		request(config.circularDataLocation + config.storeIDNumber, function (err, resp, body) {
+		self.urlRequest(request, config.circularDataLocation + config.storeIDNumber, function (err, resp, body) {
 			
-			self.handleError(err);
+			var circularData = self.handleRequestResults(err, resp, body);
 
-			if (!err && resp.statusCode === 200) {
-
-				var containerObj = self.getContainerObj(body);
-
-				// DEVELOPMENT ONLY
-				// console.log(containerObj);
-
-				var circularData = {
-					startDate: self.getDate(containerObj, 'start'), 
-					endDate: self.getDate(containerObj, 'end'), 
-					products: []
-				};
-
-				self.getProducts(containerObj, circularData.products, self.getProductData);
-
-				// DEVELOPMENT ONLY
-				// console.log(circularData)
-
-				self.logScrapeResults(circularData.products);
-
-				callback(circularData);		
-			}
-		}); 
+			callback(circularData);
+		});
 	}, 
 
 	logScrapeResults:function (productsArray) {
