@@ -86,3 +86,66 @@ describe("Product constructor", function () {
 
 
 });
+
+
+describe("Big Y Scraper", function () {
+	
+	var scrapeBigY = require('../src/scrapeBigY');
+
+	it("Should slice out start and end dates from data object.", function () {
+		
+		var mockDates = {StartDate: "02/27/1987", EndDate: "08/21/1988ExtraStuff", wrongDate: "04/24/2000"}, 
+			startDate = scrapeBigY.getDate(mockDates, 'start'), 
+			endDate = scrapeBigY.getDate(mockDates, 'end');
+
+		expect(startDate).to.equal("02/27/1987");	
+		expect(endDate).to.equal("08/21/1988");
+	});
+
+	it("Given JSON data consisting of an array with a single container object, it should return the container object.", function () {
+		
+		var mockJSON = JSON.stringify([{prop1: "value1", prop2: 32}]), 
+			containerObj = scrapeBigY.getContainerObj(mockJSON);
+
+		expect(containerObj).to.be.an('object');
+		expect(containerObj.prop1).to.exist.and.equal("value1");
+		expect(containerObj.prop2).to.exist.and.equal(32);
+	});
+
+	it("Should return a new product instance, given a source object.", function () {
+		
+		var Product = require('../src/Product'), 
+			mockSource = {
+				ProductName: "Jiff", 
+				ProductDescription: "Best peanut butter", 
+				Price: "$2.99", 
+				ImageUrl: '../img/pb-jiff.jpeg'
+			};
+
+		var instance = scrapeBigY.getProductData(mockSource, Product);
+
+		expect(instance).to.be.an('object');
+		expect(instance.productName).to.equal("Jiff");	
+	});
+
+	it("Should map over circular data to get product information.", function () {
+		
+		var destination = []; 
+		var mockCircularData = {
+			CS_Page: [{
+				SaleItems: ["bananas", "Cheerios", "bacon"]
+			}]
+		};
+		var mockProductHandler = function (item, product) {
+			return item;
+		};
+
+		scrapeBigY.getProducts(mockCircularData, destination, mockProductHandler);
+		
+		expect(destination.length).to.equal(3);
+		expect(destination[2]).to.equal("bacon");
+
+	});
+
+
+});
