@@ -12,12 +12,21 @@ module.exports = {
 
 */
 
-var request = require('request');
+var request = require('request'), 
+	Product = require('./Product');
 
 var scrapeBigY = {
 
 	config: {
 		circularDataLocation: "http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?storeId=30&size=768"	
+	}, 
+
+	getDate: function (sourceObject, dateType) {
+
+		var prop = dateType === 'start' ? 'StartDate' 
+			: dateType === 'end' ? 'EndDate' : void 0;
+
+		return sourceObject[prop].slice(0, 10); 
 	}, 
 	
 	scrape: function (callback) {
@@ -41,33 +50,26 @@ var scrapeBigY = {
 					products: []
 				};
 
-				// In the f(x) below, I shouldn't hardcode the containerObj paramaters that 
+				// In the f(x) below, I shouldn't hardcode the containerObj parameters that 
 				// the code maps over.  Rather, I should put these values in the config, and 
-				// then refer to those as I need them.
-				// Also, I don't need to map over the 'json'.  It looks like the Big Y api 
-				// sends back an array with one container object.  I can simply use pop().    
-				json.map(function (containerObj) {
+				// then refer to those as I need them.   
+				var containerObj = json.pop();
 					
-					circularData.startDate = containerObj.StartDate.slice(0, 10);
-					circularData.endDate = containerObj.EndDate.slice(0, 10);
+				circularData.startDate = self.getDate(containerObj, 'start');
+				circularData.endDate = self.getDate(containerObj, 'end');
 
-					containerObj.CS_Page.map(function (obj) {
-						obj.SaleItems.map(function (item) {
-							// The process below is inefficent.  
-							// I should try to make a constructor f(x) Product that 
-							// creates an object like the one below, and pass it the 
-							// four values it needs (item.ProductName, etc...)			
-							circularData.products.push({
-								productName: item.ProductName, 
-								productDescription: item.ProductDescription, 
-								price: item.Price, 
-								imageUrl: item.ImageUrl
-							});
+				containerObj.CS_Page.map(function (obj) {
+					obj.SaleItems.map(function (item) {
 
-						});
+						circularData.products.push(new Product(
+							item.ProductName, 
+							item.ProductDescription, 
+							item.Price, 
+							item.ImageUrl
+						));
 					});
-
 				});
+
 
 				// DEVELOPMENT ONLY
 				// console.log(circularData)

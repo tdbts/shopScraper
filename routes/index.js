@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var scrapeBigY = require('../scrapeBigY');
-var scrapeShopRite = require('../scrapeShopRite');
-var scrapeStopAndShop = require('../scrapeStopAndShop');
+var scrapeBigY = require('../src/scrapeBigY');
+var scrapeShopRite = require('../src/scrapeShopRite');
+var scrapeStopAndShop = require('../src/scrapeStopAndShop');
 
 /* 
 * Need to create a better MV* architecture for this webapp.  
