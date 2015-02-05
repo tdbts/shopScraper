@@ -112,6 +112,17 @@ describe("Scraper Base Object", function () {
 
 	});
 
+	it("Should return the store name.", function () {
+		
+		var testScraper = scraper.extend({
+			config: {
+				storeName: "Try N' Save"
+			}
+		});
+
+		expect(testScraper.getStoreName()).to.equal("Try N' Save");
+	});
+
 	it("Should log the results of the scrape.", function () {
 		
 		var products = ["thing1", "thing2"], 
@@ -132,6 +143,20 @@ describe("Scraper Base Object", function () {
 
 		testLog.restore();
 
+	});
+	
+	it("Should parse and standardize dates.", function () {
+		
+		expect(scraper.parseDate("2015/2/6")).to.equal("Friday, February 6th 2015");
+		expect(scraper.parseDate("02/06/2015")).to.equal("Friday, February 6th 2015")
+		expect(scraper.parseDate("2015-08-03")).to.equal("Monday, August 3rd 2015");
+		expect(scraper.parseDate("8/3/2015")).to.equal("Monday, August 3rd 2015");
+
+	});
+
+	it("Should handle errors.", function () {
+		
+		expect(scraper.handleError("Test Error", "Scraper returned an error: ")).to.throw;
 	});
 
 });

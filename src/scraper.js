@@ -1,4 +1,5 @@
-var _ = require('underscore');
+var _ = require('underscore'), 
+	moment = require('moment');
 
 module.exports = { 
 	config: {},
@@ -15,13 +16,14 @@ module.exports = {
 	}, 
 	
 	logScrapeResults: function (productsArray) {
+		
 		console.log("Scraped " + productsArray.length + " products from this week's " + 
 			this.getStoreName() + " circular!");
 	}, 
 
-	parseDate: function (parser, parserProp, givenDate) {
+	parseDate: function (givenDate) {
 		
-		return parser(givenDate)[parserProp];
+		return moment(givenDate).format("dddd, MMMM Do YYYY");
 	}, 
 	
 	handleError: function (err, message) {
