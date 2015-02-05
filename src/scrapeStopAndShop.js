@@ -193,5 +193,4 @@ var scrapeStopAndShop = scraper.extend({
 
 });
 
-
 module.exports = scrapeStopAndShop;

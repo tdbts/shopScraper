@@ -21,6 +21,12 @@ module.exports = function (grunt) {
 	        }
 	    }, 
 
+		nodemon: {
+			dev: {
+				script: 'app.js'
+			}
+		}, 
+
 	    watch: {
 	        gruntfile: {
 	            files: '<%= jshint.gruntfile.src %>',
@@ -37,7 +43,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-mocha-test');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-nodemon');
 
-	grunt.registerTask('default', ['mochaTest', 'jshint']);
+	grunt.registerTask('default', ['mochaTest', 'jshint', 'nodemon']);
 };
 
