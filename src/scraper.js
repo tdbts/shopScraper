@@ -8,10 +8,20 @@ module.exports = {
 	}, 
 	
 	scrape: function () {}, 
+
+	getStoreName: function () {
+		
+		return this.config.storeName;
+	}, 
 	
 	logScrapeResults: function (productsArray) {
 		console.log("Scraped " + productsArray.length + " products from this week's " + 
-			this.config.storeName + " circular!");
+			this.getStoreName() + " circular!");
+	}, 
+
+	parseDate: function (parser, parserProp, givenDate) {
+		
+		return parser(givenDate)[parserProp];
 	}, 
 	
 	handleError: function (err, message) {

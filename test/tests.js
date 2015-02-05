@@ -88,6 +88,54 @@ describe("Product constructor", function () {
 
 });
 
+describe("Scraper Base Object", function () {
+	
+	var scraper = require('../src/scraper');
+
+	it("Should be extensible.", function () {
+		
+		var childObj = {
+			prop1: "value1", 
+			prop2: function () {
+				return "value2";
+			}, 
+			scrape: function () {
+				return "Scrape successful!";
+			}
+		};
+
+		var extension = scraper.extend(childObj);
+
+		expect(extension).to.have.a.property('prop1');
+		expect(extension.prop2).to.be.a('function');
+		expect(extension.scrape()).to.equal("Scrape successful!");
+
+	});
+
+	it("Should log the results of the scrape.", function () {
+		
+		var products = ["thing1", "thing2"], 
+			testScraper = scraper.extend({
+				config: {
+					storeName: "My Store"
+				}
+			});
+
+		var testLog = sinon.stub(console, "log", function (input) {
+			return input;
+		});
+
+		testScraper.logScrapeResults(products);
+
+		expect(testLog.called).to.be.true;
+		expect(testLog.args[0][0]).to.equal("Scraped 2 products from this week's My Store circular!");
+
+		testLog.restore();
+
+	});
+
+});
+
 
 describe("Big Y Scraper", function () {
 	
@@ -200,6 +248,11 @@ describe("Big Y Scraper", function () {
 			statusCode: 200
 		};
 
+		// Implementing Sinon's stub and spy methods
+		var testLog = sinon.stub(console, "log", function (input) {
+			return input;
+		});
+
 		sinon.spy(scrapeBigY, "logScrapeResults");
 
 		var circularData = scrapeBigY.handleRequestResults(null, fakeResponseObject, fakeData);
@@ -211,7 +264,9 @@ describe("Big Y Scraper", function () {
 		expect(circularData.products[0].imageUrl).to.equal("http://fakeURL/products/1");
 		expect(scrapeBigY.logScrapeResults.called).to.be.true;
 
+		// Restore environment
 		scrapeBigY.logScrapeResults.restore();
+		testLog.restore();
 	});
 
 });
