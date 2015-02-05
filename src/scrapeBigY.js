@@ -15,7 +15,7 @@ var scrapeBigY = scraper.extend({
 		var prop = dateType === 'start' ? 'StartDate' 
 			: dateType === 'end' ? 'EndDate' : void 0;
 
-		return sourceObject[prop].slice(0, 10); 
+		return this.parseDate(sourceObject[prop]); 
 	}, 
 
 	getContainerObj: function (source) {

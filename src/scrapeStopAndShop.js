@@ -7,6 +7,7 @@ var request = require('request'),
 var scrapeStopAndShop = scraper.extend({
 
 	config: {
+		storeName: "Stop And Shop", 
 		urls: {
 			urlForPromotionID: "http://stopandshop.shoplocal.com/StopandShop/BrowseByPage?storeid=2599015", 
 			pagesDataLocation: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=", 
@@ -14,17 +15,7 @@ var scrapeStopAndShop = scraper.extend({
 		}, 
 		parameters: {
 			promotionID: null
-		}, 
-		dateIndexes: {
-			startDate: [0, 10], 
-			endDate: [0, 10]
 		}
-	}, 
-
-	setConfigValue: function (key, value) {
-		if (key) {
-			return key = value;
-		} 
 	}, 
 
 	getPromotionID: function (promotionIDurl, callback) {
@@ -108,9 +99,11 @@ var scrapeStopAndShop = scraper.extend({
 				var productData = json.content.collection[0].data;
 
 				if (productData && productData.length > 0) {
-					var dateIndexes = self.config.dateIndexes;
-					pageData.startDate = productData[0].listingstart.slice(dateIndexes.startDate[0], dateIndexes.startDate[1]);
-					pageData.endDate = productData[0].listingend.slice(dateIndexes.endDate[0], dateIndexes.endDate[1]);
+										
+					pageData.startDate = self.parseDate(productData[0].listingstart);
+					pageData.endDate = self.parseDate(productData[0].listingend);
+
+
 
 					productData.map(function (product) {
 						pageData.products.push({
@@ -129,14 +122,23 @@ var scrapeStopAndShop = scraper.extend({
 		});
 	},
 
+	getPageIDs: function (sourceArray, dest, key) {
+		
+		sourceArray.map(function (page) {
+
+			return dest.push(page[key]);
+		});
+	}, 
+
 	handleCircularPageResults: function (pagesArray, callback) {
 		
 		var pageIDs = [], 
 			self = this;
 
-		pagesArray.map(function (page) {
-			return pageIDs.push(page.pageID);
-		});
+		// pagesArray.map(function (page) {
+		// 	return pageIDs.push(page.pageID);
+		// });
+		this.getPageIDs(pagesArray, pageIDs, "pageID");
 
 		// console.log(pageIDs);
 
@@ -179,7 +181,7 @@ var scrapeStopAndShop = scraper.extend({
 
 		this.getPromotionID(config.urls.urlForPromotionID, function (results) {
 			
-			self.setConfigValue(config.parameters.promotionID, results.promotionid);
+			config.parameters.promotionID = results.promotionid;
 
 			self.getCircularPageData(config.urls.pagesDataLocation + results.promotionid, function (results) {
 				
