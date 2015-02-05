@@ -1,7 +1,8 @@
 // tests.js 
-var chai = require('chai');
-var expect = chai.expect;
-var should = chai.should();
+var chai = require('chai'),
+	sinon = require('sinon'), 
+	expect = chai.expect,
+	should = chai.should();
 
 describe('Viewbase constructor', function () {
 	
@@ -147,5 +148,70 @@ describe("Big Y Scraper", function () {
 
 	});
 
+	it("Should perform http requests and call a callback on the result.", function () {
+		
+		var server = sinon.fakeServer.create(), 
+			testCallback = sinon.spy(), 
+			request = require('request');
+
+		server.respondWith("GET", '/api/fakeData.json', [
+			200, 
+			{"Content-Type": "application/json"}, 
+			JSON.stringify([{"prop1": "value1", "prop2": 32}])
+		]);
+
+		scrapeBigY.urlRequest(request, '/api/fakeData.json', testCallback);
+		server.respond();
+
+		expect(testCallback.called).to.be.true;
+
+		server.restore();
+
+	});
+
+	it("Should handle the results of the http request.", function () {
+		
+		var fakeData = JSON.stringify([
+				    {
+				        "CS_Page": [
+				            {
+				                "SaleItems": [
+				                    {
+				                        "ImageUrl": "http://fakeURL/products/1",
+				                        "Price": "2 FOR $5.00",
+				                        "ProductDescription": " 9 to 14 oz",
+				                        "ProductName": " Tostitos Tortilla Chips"
+				                    },
+				                    {
+				                        "ImageUrl": "http://fakeURL/products/2",
+				                        "Price": "4 FOR $10.00 With Your Card",
+				                        "ProductDescription": "Cabot, Assorted Varieties",
+				                        "ProductName": "Sargento Shredded Cheese"
+				                    }
+				                ]
+				            },
+				        ],
+				        "EndDate": "2015-02-04T00:00:00",
+				        "StartDate": "2015-01-29T00:00:00"
+				    }
+				]);
+
+		var fakeResponseObject = {
+			statusCode: 200
+		};
+
+		sinon.spy(scrapeBigY, "logScrapeResults");
+
+		var circularData = scrapeBigY.handleRequestResults(null, fakeResponseObject, fakeData);
+
+		var log = scrapeBigY.logScrapeResults.getCall(0);
+
+		expect(circularData.startDate).to.equal("2015-01-29");
+		expect(circularData.products.length).to.equal(2);
+		expect(circularData.products[0].imageUrl).to.equal("http://fakeURL/products/1");
+		expect(scrapeBigY.logScrapeResults.called).to.be.true;
+
+		scrapeBigY.logScrapeResults.restore();
+	});
 
 });
