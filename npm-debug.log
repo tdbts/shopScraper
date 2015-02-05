@@ -1,27 +1,27 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'uninstall', 'jshint' ]
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'start' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.33
 4 verbose node symlink /usr/bin/node
-5 verbose node_modules/jshint unbuild
-6 info preuninstall jshint@2.6.0
-7 info uninstall jshint@2.6.0
-8 verbose true,/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules,/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules unbuild jshint@2.6.0
-9 verbose /home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/.bin,[object Object] binRoot
-10 info postuninstall jshint@2.6.0
-11 error Error: EACCES, unlink '/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/jshint/node_modules/.bin/shjs'
-11 error  { [Error: EACCES, unlink '/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/jshint/node_modules/.bin/shjs']
-11 error   errno: 3,
-11 error   code: 'EACCES',
-11 error   path: '/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/jshint/node_modules/.bin/shjs' }
-12 error Please try running this command again as root/Administrator.
-13 error System Linux 3.13.0-44-generic
-14 error command "/usr/bin/node" "/usr/bin/npm" "uninstall" "jshint"
-15 error cwd /home/tdbts/Documents/Hckr/projects/apps/shopScraper
-16 error node -v v0.10.33
-17 error npm -v 1.4.28
-18 error path /home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/jshint/node_modules/.bin/shjs
-19 error code EACCES
-20 error errno 3
-21 error stack Error: EACCES, unlink '/home/tdbts/Documents/Hckr/projects/apps/shopScraper/node_modules/jshint/node_modules/.bin/shjs'
-22 verbose exit [ 3, true ]
+5 verbose run-script [ 'prestart', 'start', 'poststart' ]
+6 info prestart shopScraper@0.0.0
+7 info start shopScraper@0.0.0
+8 verbose unsafe-perm in lifecycle true
+9 info shopScraper@0.0.0 Failed to exec start script
+10 error shopScraper@0.0.0 start: `node ./bin/www`
+10 error Exit status 8
+11 error Failed at the shopScraper@0.0.0 start script.
+11 error This is most likely a problem with the shopScraper package,
+11 error not with npm itself.
+11 error Tell the author that this fails on your system:
+11 error     node ./bin/www
+11 error You can get their info via:
+11 error     npm owner ls shopScraper
+11 error There is likely additional logging output above.
+12 error System Linux 3.13.0-44-generic
+13 error command "/usr/bin/node" "/usr/bin/npm" "start"
+14 error cwd /home/tdbts/Documents/Hckr/projects/apps/shopScraper
+15 error node -v v0.10.33
+16 error npm -v 1.4.28
+17 error code ELIFECYCLE
+18 verbose exit [ 1, true ]

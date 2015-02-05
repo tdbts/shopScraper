@@ -1,9 +1,10 @@
 var request = require('request'), 
 	async = require('async'), 
 	url = require('url'), 
+	scraper = require('./scraper'), 
 	_ = require('underscore');
 
-var scrapeStopAndShop = {
+var scrapeStopAndShop = scraper.extend({
 
 	config: {
 		urls: {
@@ -186,14 +187,9 @@ var scrapeStopAndShop = {
 			});
 		});
 		 
-	},
+	}
 
-	handleError: function (err, message) {
-		if (err) {
-			return new Error(message + "\n" + err);
-		}
-	}	
+});
 
-};
 
 module.exports = scrapeStopAndShop;
