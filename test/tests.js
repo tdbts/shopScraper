@@ -4,6 +4,7 @@ var chai = require('chai'),
 	expect = chai.expect,
 	should = chai.should();
 
+// Testing '../views/Viewbase.js'
 describe('Viewbase constructor', function () {
 	
 	var View = require('../views/Viewbase'); 
@@ -61,7 +62,7 @@ describe('Viewbase constructor', function () {
 
 });
 
-
+// Testing '../src/Product.js'
 describe("Product constructor", function () {
 	
 	var Product = require('../src/Product.js');
@@ -85,9 +86,9 @@ describe("Product constructor", function () {
 		expect(chips.price).to.equal("$2.99");
 	});
 
-
 });
 
+// Testing '../src/scraper.js'
 describe("Scraper Base Object", function () {
 	
 	var scraper = require('../src/scraper');
@@ -161,19 +162,20 @@ describe("Scraper Base Object", function () {
 
 });
 
-
+// Testing '../src/scrapeBigY.js'
 describe("Big Y Scraper", function () {
 	
 	var scrapeBigY = require('../src/scrapeBigY');
 
 	it("Should slice out start and end dates from data object.", function () {
 		
-		var mockDates = {StartDate: "02/27/1987", EndDate: "08/21/1988ExtraStuff", wrongDate: "04/24/2000"}, 
+		var mockDates = {StartDate: "02/27/1987", EndDate: "08/21/1988", wrongDate: "04/24/2000"}, 
 			startDate = scrapeBigY.getDate(mockDates, 'start'), 
 			endDate = scrapeBigY.getDate(mockDates, 'end');
+		// PROBLEM
 
-		expect(startDate).to.equal("02/27/1987");	
-		expect(endDate).to.equal("08/21/1988");
+		expect(startDate).to.equal("Friday, February 27th 1987");	
+		expect(endDate).to.equal("Sunday, August 21st 1988");
 	});
 
 	it("Given JSON data consisting of an array with a single container object, it should return the container object.", function () {
@@ -245,30 +247,29 @@ describe("Big Y Scraper", function () {
 	it("Should handle the results of the http request.", function () {
 		
 		var fakeData = JSON.stringify([
-				    {
-				        "CS_Page": [
-				            {
-				                "SaleItems": [
-				                    {
-				                        "ImageUrl": "http://fakeURL/products/1",
-				                        "Price": "2 FOR $5.00",
-				                        "ProductDescription": " 9 to 14 oz",
-				                        "ProductName": " Tostitos Tortilla Chips"
-				                    },
-				                    {
-				                        "ImageUrl": "http://fakeURL/products/2",
-				                        "Price": "4 FOR $10.00 With Your Card",
-				                        "ProductDescription": "Cabot, Assorted Varieties",
-				                        "ProductName": "Sargento Shredded Cheese"
-				                    }
-				                ]
-				            },
-				        ],
-				        "EndDate": "2015-02-04T00:00:00",
-				        "StartDate": "2015-01-29T00:00:00"
-				    }
-				]);
-
+		    {
+		        "CS_Page": [
+		            {
+		                "SaleItems": [
+		                    {
+		                        "ImageUrl": "http://fakeURL/products/1",
+		                        "Price": "2 FOR $5.00",
+		                        "ProductDescription": " 9 to 14 oz",
+		                        "ProductName": " Tostitos Tortilla Chips"
+		                    },
+		                    {
+		                        "ImageUrl": "http://fakeURL/products/2",
+		                        "Price": "4 FOR $10.00 With Your Card",
+		                        "ProductDescription": "Cabot, Assorted Varieties",
+		                        "ProductName": "Sargento Shredded Cheese"
+		                    }
+		                ]
+		            },
+		        ],
+		        "EndDate": "2015-02-04T00:00:00",
+		        "StartDate": "2015-01-29T00:00:00"
+		    }
+		]);
 		var fakeResponseObject = {
 			statusCode: 200
 		};
@@ -283,8 +284,7 @@ describe("Big Y Scraper", function () {
 		var circularData = scrapeBigY.handleRequestResults(null, fakeResponseObject, fakeData);
 
 		var log = scrapeBigY.logScrapeResults.getCall(0);
-
-		expect(circularData.startDate).to.equal("2015-01-29");
+		expect(circularData.startDate).to.equal("Thursday, January 29th 2015");
 		expect(circularData.products.length).to.equal(2);
 		expect(circularData.products[0].imageUrl).to.equal("http://fakeURL/products/1");
 		expect(scrapeBigY.logScrapeResults.called).to.be.true;
@@ -292,6 +292,20 @@ describe("Big Y Scraper", function () {
 		// Restore environment
 		scrapeBigY.logScrapeResults.restore();
 		testLog.restore();
+	});
+
+});
+
+// Testing '../src/UrlObject.js'
+describe("UrlObject Constructor", function () {
+	
+	var UrlObject = require('../src/UrlObject');
+
+	it("Should return an object when invoked.", function () {
+		
+		var testObj = new UrlObject();
+
+		expect(testObj).to.be.a('object');
 	});
 
 });
