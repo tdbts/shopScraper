@@ -130,6 +130,32 @@ var scrapeStopAndShop = scraper.extend({
 		});
 	}, 
 
+	collectAllProducts: function (src, dest) {
+		
+		src.forEach(function (data) {
+			dest.push(data);
+		});
+	}, 
+
+	getDate: function (src, dest, type) {
+
+		var prop = type === 'start' ? "startDate" 
+			: type === 'end' ? "endDate" : void 0;
+
+		return dest[prop] = dest[prop] || src[prop];
+	}, 
+
+	processPageDataObjects: function (pageDataArray, dest, dateProcessor, collector) {
+		
+		return pageDataArray.map(function (pageData) {
+			
+			dateProcessor(pageData, dest, 'start');
+			dateProcessor(pageData, dest, 'end');
+
+			collector(pageData.products, dest.products);
+		});
+	}, 
+
 	handleCircularPageResults: function (pagesArray, callback) {
 		
 		var pageIDs = [], 
@@ -159,14 +185,7 @@ var scrapeStopAndShop = scraper.extend({
 				products: []
 			};
 
-			results.map(function (pageData) {
-				allProducts.startDate = allProducts.startDate || pageData.startDate;
-				allProducts.endDate = allProducts.endDate || pageData.endDate;
-
-				pageData.products.forEach(function (data) {
-					allProducts.products.push(data);
-				});
-			});
+			self.processPageDataObjects(results, allProducts, self.getDate, self.collectAllProducts);
 
 			callback(allProducts);
 		
