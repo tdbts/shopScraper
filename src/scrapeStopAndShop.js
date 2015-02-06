@@ -2,6 +2,7 @@ var request = require('request'),
 	async = require('async'), 
 	url = require('url'), 
 	scraper = require('./scraper'), 
+	Product = require('./Product'), 
 	_ = require('underscore');
 
 var scrapeStopAndShop = scraper.extend({
@@ -74,7 +75,50 @@ var scrapeStopAndShop = scraper.extend({
 		});
 	},
 
-	getProducts: function (pageID, callback) {
+	parsePageProductData: function (jsonSource) {
+		
+		var json = JSON.parse(jsonSource);
+
+		return json.content.collection.shift().data;
+	}, 
+
+	collectPageProductObjects: function (src, dest, ProductConstructor) {
+		
+		return src.map(function (product) {
+			
+			dest.push(new ProductConstructor(
+				product.title, 
+				product.description, 
+				product.price + " " + product.pricequalifier, 
+				product.image
+			));
+		});
+	}, 
+	// FOR FRIDAY, FEBRUARY 6TH - CHANGE 'gatherProductData' so that it takes a configuration 
+	// object with the four properties below, with an additional to be defined 'dateGetter' 
+	// which will perform the productData.shift().listingstart... functionality.
+	gatherPageData: function (jsonSource, dataParser, dateParser, productCollector) {
+		
+		var pageData = {
+			startDate: '', 
+			endDate: '', 
+			products: []
+		};
+
+		var productData = dataParser(jsonSource);
+
+		if (productData && productData.length > 0) {
+
+			pageData.startDate = dateParser(productData.shift().listingstart);
+			pageData.endDate = dateParser(productData.shift().listingend);
+
+			productCollector(productData, pageData.products, Product);
+		}
+
+		return pageData;
+	}, 
+
+	getProductsFromPage: function (pageID, callback) {
 		
 		var self = scrapeStopAndShop;
 
@@ -84,36 +128,7 @@ var scrapeStopAndShop = scraper.extend({
 
 			if (!err && resp.statusCode === 200) {
 
-				// DEVELOPMENT ONLY	
-				// console.log(body)
-				var json = JSON.parse(body);
-
-				var pageData = {
-					startDate: '', 
-					endDate: '', 
-					products: []
-				};
-
-				// DEVELOPMENT ONLY
-				// console.log(json.content.collection[0].data);
-				var productData = json.content.collection[0].data;
-
-				if (productData && productData.length > 0) {
-										
-					pageData.startDate = self.parseDate(productData[0].listingstart);
-					pageData.endDate = self.parseDate(productData[0].listingend);
-
-
-
-					productData.map(function (product) {
-						pageData.products.push({
-							productName: product.title, 
-							productDescription: product.description || "No description provided.", 
-							price: product.price + " " + product.pricequalifier, 
-							imageUrl: product.image 
-						});
-					});
-				}
+				var pageData = self.gatherPageData(body, self.parsePageProductData, self.parseDate, self.collectPageProductObjects);
 
 				// DEVELOPMENT ONLY
 				// console.log(pageData);
@@ -168,7 +183,7 @@ var scrapeStopAndShop = scraper.extend({
 
 		// console.log(pageIDs);
 
-		async.map(pageIDs, this.getProducts, function (err, results) {
+		async.map(pageIDs, this.getProductsFromPage, function (err, results) {
 			
 			self.handleError(err, "There was an error mapping over the page IDs!");
 
