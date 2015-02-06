@@ -139,15 +139,16 @@ var scrapeStopAndShop = scraper.extend({
 
 	}, 
 
-	gatherPageData: function (config) {
-		
-		var pageData = {
-			startDate: '', 
-			endDate: '', 
-			products: []
-		};
+	CircularPageData: function (startDate, endDate, products) {
+		this.startDate = startDate || '';
+		this.endDate = endDate || '';
+		this.products = products || [];
+	}, 
 
-		var productData = config.dataParser(config.jsonSource);
+	gatherPageData: function (config, PageDataConstructor) {
+		
+		var pageData = new PageDataConstructor(),
+			productData = config.dataParser(config.jsonSource);
 
 		if (productData && productData.length > 0) {
 
@@ -173,7 +174,7 @@ var scrapeStopAndShop = scraper.extend({
 				var config = self.config.dataProcessors;
 				config.jsonSource = body;
 
-				var pageData = self.gatherPageData(config);
+				var pageData = self.gatherPageData(config, self.CircularPageData);
 
 				// DEVELOPMENT ONLY
 				// console.log(pageData);
@@ -237,11 +238,7 @@ var scrapeStopAndShop = scraper.extend({
 				return page.products.length;
 			}));
 
-			var allProducts = {
-				startDate: '', 
-				endDate: '', 
-				products: []
-			};
+			var allProducts = new self.CircularPageData();
 
 			self.processPageDataObjects(results, allProducts, self.getDate, self.collectAllProducts);
 
