@@ -17,17 +17,10 @@ var scrapeStopAndShop = scraper.extend({
 		parameters: {
 			promotionID: null
 		}, 
-		// dataProcessors: {
-		// 	jsonSource: null, 
-		// 	dataParser: this.parsePageProductData, 
-		// 	dateGetter: this.getDateFromPage, 
-		// 	dateParser: this.parseDate, 
-		// 	productCollector: this.collectPageProductObjects
-		// }
 		dataProcessors: {
 			jsonSource: null, 
 			dataParser: function () {
-				return scrapeStopAndShop.parsePageProductData.apply(scrapeStopAndShop, arguments);
+				return scrapeStopAndShop.locateAndParsePageData.apply(scrapeStopAndShop, arguments);
 			}, 
 			dateGetter: function () {
 				return scrapeStopAndShop.getDateFromPage.apply(scrapeStopAndShop, arguments);
@@ -43,8 +36,12 @@ var scrapeStopAndShop = scraper.extend({
 
 	getPromotionID: function (promotionIDurl, callback) {
 
+		var self = this;
+
 		request({url: this.config.urls.urlForPromotionID, followRedirect: false}, function (err, resp) {
 			
+			self.handleError(err, "An error occured getting this " + self.config.storeName + " location's  promotion ID number.");
+
 			if (!err && resp.statusCode >= 300 && resp.statusCode < 400) {
 
 				// DEVELOPMENT ONLY
@@ -62,6 +59,24 @@ var scrapeStopAndShop = scraper.extend({
 			}
 		});
 
+	},
+
+	PageMetadataObject: function (pageID, endDate, image) {
+		this.pageID = pageID; 
+		this.endDate = endDate; 
+		this.image = image;
+	}, 
+
+	getPageMetadata: function (dataSource, dataParser, MetadataObjConstructor) {
+		
+		var pageMetadataSource = dataParser(dataSource), 
+			circularPagesData = [];
+
+		pageMetadataSource.map(function (page) {
+			circularPagesData.push(new MetadataObjConstructor(page.pageid, page.enddate, page.imageurl));
+		});
+
+		return circularPagesData; 
 	}, 
 
 	getCircularPageData: function (circularPageDataURL, callback) {
@@ -70,23 +85,14 @@ var scrapeStopAndShop = scraper.extend({
 
 		request(circularPageDataURL, function (err, resp, body) {
 			
-			self.handleError(err, "There was an error making the URL request.");
+			self.handleError(err, "There was an error getting the circular page metadata.");
 
 			if (!err && resp.statusCode === 200) {
 
 				// DEVELOPMENT ONLY
 				// console.log(body)
 
-				var json = JSON.parse(body), 
-					circularPagesData = [];
-
-				json.content.collection[0].data.map(function (page) {
-					circularPagesData.push({
-						pageID: page.pageid, 
-						endDate: page.enddate, 
-						image: page.imageurl 
-					});
-				});
+				var circularPagesData = self.getPageMetadata(body, self.config.dataProcessors.dataParser, self.PageMetadataObject);
 
 				// DEVELOPMENT ONLY
 				console.log("Found " + circularPagesData.length + " pages!");
@@ -97,7 +103,7 @@ var scrapeStopAndShop = scraper.extend({
 		});
 	},
 
-	parsePageProductData: function (jsonSource) {
+	locateAndParsePageData: function (jsonSource) {
 		
 		var json = JSON.parse(jsonSource);
 
