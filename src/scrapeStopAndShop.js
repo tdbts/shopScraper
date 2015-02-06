@@ -34,11 +34,16 @@ var scrapeStopAndShop = scraper.extend({
 		}
 	}, 
 
-	getPromotionID: function (promotionIDurl, callback) {
+	getQueryObject: function (objLocation) {
+		
+		return url.parse(objLocation, true).query;
+	}, 
+
+	getPromotionID: function (requestConfig, callback) {
 
 		var self = this;
 
-		request({url: this.config.urls.urlForPromotionID, followRedirect: false}, function (err, resp) {
+		request(requestConfig, function (err, resp) {
 			
 			self.handleError(err, "An error occured getting this " + self.config.storeName + " location's  promotion ID number.");
 
@@ -47,7 +52,9 @@ var scrapeStopAndShop = scraper.extend({
 				// DEVELOPMENT ONLY
 				// console.log(resp.statusCode);
 				// console.log(resp.toJSON());
-				var queryObj = url.parse(resp.headers.location, true).query;
+
+				var queryObj = self.getQueryObject(resp.headers.location);
+				
 				// DEVELOPMENT ONLY
 				// console.log(queryObj);
 
@@ -95,7 +102,7 @@ var scrapeStopAndShop = scraper.extend({
 				var circularPagesData = self.getPageMetadata(body, self.config.dataProcessors.dataParser, self.PageMetadataObject);
 
 				// DEVELOPMENT ONLY
-				console.log("Found " + circularPagesData.length + " pages!");
+				// console.log("Found " + circularPagesData.length + " pages!");
 				// console.log(circularPagesData);
 
 				callback(circularPagesData);
@@ -209,7 +216,7 @@ var scrapeStopAndShop = scraper.extend({
 		});
 	}, 
 
-	handleCircularPageResults: function (pagesArray, callback) {
+	handleCircularPageData: function (pagesArray, callback) {
 		
 		var pageIDs = [], 
 			self = this;
@@ -238,6 +245,8 @@ var scrapeStopAndShop = scraper.extend({
 
 			self.processPageDataObjects(results, allProducts, self.getDate, self.collectAllProducts);
 
+			self.logScrapeResults(allProducts.products);
+
 			callback(allProducts);
 		
 		});
@@ -249,13 +258,13 @@ var scrapeStopAndShop = scraper.extend({
 		var self = this, 
 			config = this.config;
 
-		this.getPromotionID(config.urls.urlForPromotionID, function (results) {
+		this.getPromotionID({url: config.urls.urlForPromotionID, followRedirect: false}, function (results) {
 			
 			config.parameters.promotionID = results.promotionid;
 
 			self.getCircularPageData(config.urls.pagesDataLocation + results.promotionid, function (results) {
 				
-				self.handleCircularPageResults(results, callback); 
+				self.handleCircularPageData(results, callback); 
 			});
 		});
 		 
