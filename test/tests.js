@@ -304,8 +304,8 @@ describe("CacheDataLocator Constructor", function () {
 
 	it("Should return an object.", function () {
 		
-		expect(testCDL.hostnameLoc).to.equal("placeOne");
-		expect(testCDL.pathnameLoc).to.equal("placeTwo");
+		expect(testCDL.host).to.equal("placeOne");
+		expect(testCDL.pathname).to.equal("placeTwo");
 		expect(testCDL.parameters).to.be.an('array');
 		expect(testCDL.parameters[0]).to.equal("param1");
 	
@@ -320,11 +320,11 @@ describe("UrlObject Constructor", function () {
 		CacheDataLocator = require('../src/CacheDataLocator');
 
 	var testCache = {
-		hostnames: {
+		host: {
 			webpage: 'fake.webpage.com', 
 			api: 'not.real.api.com'
 		}, 
-		pathnames: {
+		pathname: {
 			forPromotionID: '/some/pathname', 
 			forPageData: '/another/nonexistent/path.aspx', 
 			forProductData: '/fake/pathname.aspx'

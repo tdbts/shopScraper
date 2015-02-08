@@ -1,6 +1,6 @@
 module.exports = function (hostnameLoc, pathnameLoc, parameters) {
 
-	this.hostnameLoc = hostnameLoc;
-	this.pathnameLoc = pathnameLoc;
+	this.host = hostnameLoc;
+	this.pathname = pathnameLoc;
 	this.parameters = parameters;
 };
