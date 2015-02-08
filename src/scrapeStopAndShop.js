@@ -2,7 +2,10 @@ var request = require('request'),
 	async = require('async'), 
 	url = require('url'), 
 	scraper = require('./scraper'), 
-	Product = require('./Product'), 
+	applyConstructor = require('./applyConstructor'), 
+	Product = require('./Product'),
+	CacheDataLocator = require('./CacheDataLocator'), 
+	UrlObject = require('./UrlObject'),  
 	_ = require('underscore');
 
 var scrapeStopAndShop = scraper.extend({
@@ -10,9 +13,30 @@ var scrapeStopAndShop = scraper.extend({
 	config: {
 		storeName: "Stop And Shop", 
 		urls: {
+			configForPromotionID: ['webpage', 'forPromotionID', ['storeid']], 
+			configForPagesData: ['api', 'forPageData', ['campaignid', 'storeid', 'promotionid']], 
+			configForProductData: ['api', 'forProductData', ['campaignid', 'storeid', 'resultset', 'pageid']], 
 			urlForPromotionID: "http://stopandshop.shoplocal.com/StopandShop/BrowseByPage?storeid=2599015", 
 			pagesDataLocation: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=", 
 			baseForPagesURL: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&resultset=full&pageid=", 
+		}, 
+		url: {
+			host: {
+				webpage: 'stopandshop.shoplocal.com', 
+				api: 'scapi.shoplocal.com'
+			}, 
+			pathname: {
+				forPromotionID: '/StopandShop/BrowseByPage', 
+				forPageData: '/stopandshop/2012.2/json/getpromotionpages.aspx', 
+				forProductData: '/stopandshop/2012.2/json/getpromotionpagelistings.aspx'
+			}, 
+			parameters: {
+				campaignid: '5e018ae35636a4e2', 
+				storeid: '2599015', 
+				resultset: 'full', 
+				pageid: null, 
+				promotionid: null
+			}
 		}, 
 		parameters: {
 			promotionID: null
@@ -161,11 +185,32 @@ var scrapeStopAndShop = scraper.extend({
 		return pageData;
 	}, 
 
+	createURL: function (urlConfig, configCache, modifier) {
+		
+		var dataLocator = applyConstructor(CacheDataLocator, urlConfig), 
+			urlObj = new UrlObject(), 
+			resultURL;
+
+		urlObj.getConfigAndSetValues(configCache, dataLocator);
+		modifier(urlObj);
+
+		resultURL = url.format(urlObj);
+
+		return resultURL;
+	}, 
+
 	getProductsFromPage: function (pageID, callback) {
 		
-		var self = scrapeStopAndShop;
+		var self = scrapeStopAndShop, 
+			config = self.config;
 
-		request(self.config.urls.baseForPagesURL + pageID, function (err, resp, body) {
+		var pageURL = self.createURL(config.urls.configForProductData, config.url, function (obj) {
+			return obj.query.pageid = pageID;
+		});
+
+		// self.config.urls.baseForPagesURL + pageID
+		
+		request(pageURL, function (err, resp, body) {
 			
 			self.handleError(err);
 
