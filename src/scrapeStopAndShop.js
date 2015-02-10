@@ -16,11 +16,8 @@ var scrapeStopAndShop = scraper.extend({
 			configForPromotionID: ['webpage', 'forPromotionID', ['storeid']], 
 			configForPagesData: ['api', 'forPageData', ['campaignid', 'storeid', 'promotionid']], 
 			configForProductData: ['api', 'forProductData', ['campaignid', 'storeid', 'resultset', 'pageid']], 
-			urlForPromotionID: "http://stopandshop.shoplocal.com/StopandShop/BrowseByPage?storeid=2599015", 
-			pagesDataLocation: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpages.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&promotionid=", 
-			baseForPagesURL: "http://scapi.shoplocal.com/stopandshop/2012.2/json/getpromotionpagelistings.aspx?campaignid=5e018ae35636a4e2&storeid=2599015&resultset=full&pageid=", 
 		}, 
-		url: {
+		urlFragments: {
 			host: {
 				webpage: 'stopandshop.shoplocal.com', 
 				api: 'scapi.shoplocal.com'
@@ -37,9 +34,6 @@ var scrapeStopAndShop = scraper.extend({
 				pageid: null, 
 				promotionid: null
 			}
-		}, 
-		parameters: {
-			promotionID: null
 		}, 
 		dataProcessors: {
 			jsonSource: null, 
@@ -63,11 +57,11 @@ var scrapeStopAndShop = scraper.extend({
 		return url.parse(objLocation, true).query;
 	}, 
 
-	getPromotionID: function (requestConfig, callback) {
+	getPromotionID: function (promotionIDurl, callback) {
 
 		var self = this;
 
-		request(requestConfig, function (err, resp) {
+		request(promotionIDurl, function (err, resp) {
 			
 			self.handleError(err, "An error occured getting this " + self.config.storeName + " location's  promotion ID number.");
 
@@ -192,7 +186,10 @@ var scrapeStopAndShop = scraper.extend({
 			resultURL;
 
 		urlObj.getConfigAndSetValues(configCache, dataLocator);
-		modifier(urlObj);
+
+		if (modifier) {
+			modifier(urlObj);			
+		}
 
 		resultURL = url.format(urlObj);
 
@@ -204,15 +201,13 @@ var scrapeStopAndShop = scraper.extend({
 		var self = scrapeStopAndShop, 
 			config = self.config;
 
-		var pageURL = self.createURL(config.urls.configForProductData, config.url, function (obj) {
+		var pageURL = self.createURL(config.urls.configForProductData, config.urlFragments, function (obj) {
 			return obj.query.pageid = pageID;
 		});
 
-		// self.config.urls.baseForPagesURL + pageID
-		
 		request(pageURL, function (err, resp, body) {
 			
-			self.handleError(err);
+			self.handleError(err, "There was a problem getting products from page: " + pageID);
 
 			if (!err && resp.statusCode === 200) {
 
@@ -262,49 +257,60 @@ var scrapeStopAndShop = scraper.extend({
 		});
 	}, 
 
+	asyncMapOverData: function (arr, func, resultHandler, callback) {
+		
+		var self = this;
+
+		return async.map(arr, func, function (err, results) {
+			
+			self.handleError(err, "There was an error asynchronously mapping over the data!");
+
+			resultHandler(results, callback);
+		});
+	}, 
+
+	coordinatePageDataProcessing: function (pageDataArray, callback) {
+		
+		var self = scrapeStopAndShop;
+		
+		// DEVELOPMENT ONLY
+		// console.log(pageDataArray);
+		console.log("Found " + pageDataArray.length + " pages for this week's sales!");
+
+		var allProducts = new scrapeStopAndShop.CircularPageData();
+
+		self.processPageDataObjects(pageDataArray, allProducts, self.getDate, self.collectAllProducts);
+
+		self.logScrapeResults(allProducts.products);
+
+		callback(allProducts);
+	}, 
+
 	handleCircularPageData: function (pagesArray, callback) {
 		
-		var pageIDs = [], 
-			self = this;
+		var pageIDs = []; 
 
 		this.getPageIDs(pagesArray, pageIDs, "pageID");
 
-		// DEVELOPMENT ONLY
-		// console.log(pageIDs);
-
-		async.map(pageIDs, this.getProductsFromPage, function (err, results) {
-			
-			self.handleError(err, "There was an error mapping over the page IDs!");
-
-			// DEVELOPMENT ONLY
-			// console.log(results);
-			console.log("Found " + results.length + " pages for this week's sales!");
-			console.log(results.map(function (page) {
-				return page.products.length;
-			}));
-
-			var allProducts = new self.CircularPageData();
-
-			self.processPageDataObjects(results, allProducts, self.getDate, self.collectAllProducts);
-
-			self.logScrapeResults(allProducts.products);
-
-			callback(allProducts);
-		
-		});
+		this.asyncMapOverData(pageIDs, this.getProductsFromPage, this.coordinatePageDataProcessing, callback);
 
 	},  
 
 	scrape: function (callback) {
 		
 		var self = this, 
-			config = this.config;
+			config = this.config, 
+			urlForPromotionID = self.createURL(config.urls.configForPromotionID, config.urlFragments);
 
-		this.getPromotionID({url: config.urls.urlForPromotionID, followRedirect: false}, function (results) {
+		this.getPromotionID({url: urlForPromotionID, followRedirect: false}, function (results) {
 			
-			config.parameters.promotionID = results.promotionid;
+			var urlForPagesData;
 
-			self.getCircularPageData(config.urls.pagesDataLocation + results.promotionid, function (results) {
+			config.urlFragments.parameters.promotionid = results.promotionid;
+
+			urlForPagesData = self.createURL(config.urls.configForPagesData, config.urlFragments);
+			
+			self.getCircularPageData(urlForPagesData, function (results) {
 				
 				self.handleCircularPageData(results, callback); 
 			});

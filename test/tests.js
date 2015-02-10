@@ -406,5 +406,20 @@ describe("UrlObject Constructor", function () {
 });
 
 
+// Testing '../src/scrapeStopAndShop.js'
+describe("Stop and Shop Scraper", function () {
+	
+	var scrapeStopAndShop = require('../src/scrapeStopAndShop');
 
+	it("Should parse a GET request url string to get an object representation of its query.", function () {
+		
+		var fakeURL = "http://www.fakesite.com/api/search?param1=value1&param2=45";
 
+		var result = scrapeStopAndShop.getQueryObject(fakeURL);
+
+		expect(result).to.be.an('object');
+		expect(result.param1).to.equal("value1");
+		expect(result.param2).to.equal("45");
+	});
+
+});
