@@ -283,7 +283,6 @@ describe("Big Y Scraper", function () {
 
 		var circularData = scrapeBigY.handleRequestResults(null, fakeResponseObject, fakeData);
 
-		var log = scrapeBigY.logScrapeResults.getCall(0);
 		expect(circularData.startDate).to.equal("Thursday, January 29th 2015");
 		expect(circularData.products.length).to.equal(2);
 		expect(circularData.products[0].imageUrl).to.equal("http://fakeURL/products/1");
