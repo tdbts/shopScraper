@@ -4,55 +4,14 @@ var request = require('request'),
 	getPromotionID = require('./sp_getPromotionID'),
 	getPagesMetadata = require('./sp_getPagesMetadata'),    
 	Product = require('./Product'),  
-	UrlCreator = require('./UrlCreator');
-
-var urlConfigs = {
-	forPromotionID: ['webpage', 'forPromotionID', ['storeid']], 
-	forPagesData: ['api', 'forPageData', ['campaignid', 'storeid', 'promotionid']], 
-	forProductData: ['api', 'forProductData', ['campaignid', 'storeid', 'resultset', 'pageid']], 
-};
-
-var urlFragments = {
-	host: {
-		webpage: 'stopandshop.shoplocal.com', 
-		api: 'scapi.shoplocal.com'
-	}, 
-	pathname: {
-		forPromotionID: '/StopandShop/BrowseByPage', 
-		forPageData: '/stopandshop/2012.2/json/getpromotionpages.aspx', 
-		forProductData: '/stopandshop/2012.2/json/getpromotionpagelistings.aspx'
-	}, 
-	parameters: {
-		campaignid: '5e018ae35636a4e2', 
-		storeid: '2599015', 
-		resultset: 'full', 
-		pageid: null, 
-		promotionid: null
-	}
-};
-
-var stopAndShopURLs = new UrlCreator(urlConfigs, urlFragments);
-
+	PageParser = require('./PageParser'),
+	getProducts = require('./sp_getProducts'), 
+	stopAndShopURLs = require('./stopAndShopURLs');
 
 var scrapeStopAndShop = scraper.extend({
 
 	config: {
-		storeName: "Stop And Shop", 
-		dataProcessors: {
-			jsonSource: null, 
-			dataParser: function () {
-				return scrapeStopAndShop.locateAndParsePageData.apply(scrapeStopAndShop, arguments);
-			}, 
-			dateGetter: function () {
-				return scrapeStopAndShop.getDateFromPage.apply(scrapeStopAndShop, arguments);
-			}, 
-			dateParser: function () {
-				return scrapeStopAndShop.parseDate.apply(scrapeStopAndShop, arguments);
-			}, 
-			productCollector: function () {
-				return scrapeStopAndShop.collectPageProductObjects.apply(scrapeStopAndShop, arguments);
-			}
-		}
+		storeName: "Stop And Shop"
 	}, 
 
 	locateAndParsePageData: function (jsonSource) {
@@ -104,40 +63,6 @@ var scrapeStopAndShop = scraper.extend({
 		}
 
 		return pageData;
-	}, 
-
-	getProductsFromPage: function (pageID, callback) {
-		
-		var self = scrapeStopAndShop;
-
-		var pageURL = stopAndShopURLs.getUrl('forProductData', function (obj) {
-			return obj.query.pageid = pageID;
-		});
-
-		request(pageURL, function (err, resp, body) {
-			
-			self.handleError(err, "There was a problem getting products from page: " + pageID);
-
-			if (!err && resp.statusCode === 200) {
-
-				var config = self.config.dataProcessors;
-				config.jsonSource = body;
-
-				var pageData = self.gatherPageData(config, self.CircularPageData);
-
-				// DEVELOPMENT ONLY
-				// console.log(pageData);
-				callback(null, pageData);
-			}
-		});
-	},
-
-	getPageIDs: function (sourceArray, dest, key) {
-		
-		sourceArray.map(function (page) {
-
-			return dest.push(page[key]);
-		});
 	}, 
 
 	collectAllProducts: function (src, dest) {
@@ -195,14 +120,6 @@ var scrapeStopAndShop = scraper.extend({
 		callback(allProducts);
 	}, 
 
-	handleCircularPageData: function (pagesMetadata, callback) {
-		
-		var pageIDs = pagesMetadata.getPageIDs();
-
-		this.asyncMapOverData(pageIDs, this.getProductsFromPage, this.coordinatePageDataProcessing, callback);
-
-	},  
-
 	scrape: function (callback) {
 		
 		var self = this, 
@@ -216,9 +133,11 @@ var scrapeStopAndShop = scraper.extend({
 
 			urlForPagesData = stopAndShopURLs.getUrl('forPagesData');
 			
-			getPagesMetadata.scrape(urlForPagesData, function (results) {
+			getPagesMetadata.scrape(urlForPagesData, function (pagesMetadata) {
 				
-				self.handleCircularPageData(results, callback); 
+				var pageIDs = pagesMetadata.getPageIDs();
+
+				self.asyncMapOverData(pageIDs, getProducts.scrape, self.coordinatePageDataProcessing, callback); 
 			});
 		});
 		 

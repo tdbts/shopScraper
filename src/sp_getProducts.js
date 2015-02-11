@@ -1,0 +1,41 @@
+var scraper = require('./scraper'), 
+	stopAndShopURLs = require('./stopAndShopURLs'), 
+	PageParser = require('./PageParser');
+
+var getProducts = scraper.extend({
+	config: {
+		storeName: "Stop and Shop", 
+		pageid: null
+	},
+
+	handlePageData: function (err, resp, body) {
+		var self = getProducts;
+
+		self.handleError(err, "There was a problem getting products from page: " + self.config.pageid);
+
+		if (!err && resp.statusCode === 200) {
+
+			var page = new PageParser(body), 
+				pageData = page.getPageData();
+
+			return pageData;
+		}
+	},  
+
+	scrape: function (pageID, callback) {
+		var self = getProducts; 
+		
+		self.config.pageid = pageID;
+
+		var pageURL = stopAndShopURLs.getUrl('forProductData', function (obj) {
+			return obj.query.pageid = pageID;
+		});
+
+		self.makeRequest(pageURL, self.handlePageData, function (result) {
+			callback(null, result);
+		});
+	}		
+
+});
+
+module.exports = getProducts;
