@@ -1,40 +1,43 @@
 var request = require('request'), 
 	async = require('async'), 
 	url = require('url'), 
-	scraper = require('./scraper'), 
-	applyConstructor = require('./applyConstructor'), 
-	Product = require('./Product'),
-	CacheDataLocator = require('./CacheDataLocator'), 
-	UrlObject = require('./UrlObject'),  
+	scraper = require('./scraper'),  
+	Product = require('./Product'),  
+	UrlCreator = require('./UrlCreator'), 
 	_ = require('underscore');
+
+var urlConfigs = {
+	forPromotionID: ['webpage', 'forPromotionID', ['storeid']], 
+	forPagesData: ['api', 'forPageData', ['campaignid', 'storeid', 'promotionid']], 
+	forProductData: ['api', 'forProductData', ['campaignid', 'storeid', 'resultset', 'pageid']], 
+};
+
+var urlFragments = {
+	host: {
+		webpage: 'stopandshop.shoplocal.com', 
+		api: 'scapi.shoplocal.com'
+	}, 
+	pathname: {
+		forPromotionID: '/StopandShop/BrowseByPage', 
+		forPageData: '/stopandshop/2012.2/json/getpromotionpages.aspx', 
+		forProductData: '/stopandshop/2012.2/json/getpromotionpagelistings.aspx'
+	}, 
+	parameters: {
+		campaignid: '5e018ae35636a4e2', 
+		storeid: '2599015', 
+		resultset: 'full', 
+		pageid: null, 
+		promotionid: null
+	}
+};
+
+var stopAndShopURLs = new UrlCreator(urlConfigs, urlFragments);
+
 
 var scrapeStopAndShop = scraper.extend({
 
 	config: {
 		storeName: "Stop And Shop", 
-		urls: {
-			configForPromotionID: ['webpage', 'forPromotionID', ['storeid']], 
-			configForPagesData: ['api', 'forPageData', ['campaignid', 'storeid', 'promotionid']], 
-			configForProductData: ['api', 'forProductData', ['campaignid', 'storeid', 'resultset', 'pageid']], 
-		}, 
-		urlFragments: {
-			host: {
-				webpage: 'stopandshop.shoplocal.com', 
-				api: 'scapi.shoplocal.com'
-			}, 
-			pathname: {
-				forPromotionID: '/StopandShop/BrowseByPage', 
-				forPageData: '/stopandshop/2012.2/json/getpromotionpages.aspx', 
-				forProductData: '/stopandshop/2012.2/json/getpromotionpagelistings.aspx'
-			}, 
-			parameters: {
-				campaignid: '5e018ae35636a4e2', 
-				storeid: '2599015', 
-				resultset: 'full', 
-				pageid: null, 
-				promotionid: null
-			}
-		}, 
 		dataProcessors: {
 			jsonSource: null, 
 			dataParser: function () {
@@ -179,29 +182,11 @@ var scrapeStopAndShop = scraper.extend({
 		return pageData;
 	}, 
 
-	createURL: function (urlConfig, configCache, modifier) {
-		
-		var dataLocator = applyConstructor(CacheDataLocator, urlConfig), 
-			urlObj = new UrlObject(), 
-			resultURL;
-
-		urlObj.getConfigAndSetValues(configCache, dataLocator);
-
-		if (modifier) {
-			modifier(urlObj);			
-		}
-
-		resultURL = url.format(urlObj);
-
-		return resultURL;
-	}, 
-
 	getProductsFromPage: function (pageID, callback) {
 		
-		var self = scrapeStopAndShop, 
-			config = self.config;
+		var self = scrapeStopAndShop;
 
-		var pageURL = self.createURL(config.urls.configForProductData, config.urlFragments, function (obj) {
+		var pageURL = stopAndShopURLs.getUrl('forProductData', function (obj) {
 			return obj.query.pageid = pageID;
 		});
 
@@ -299,16 +284,15 @@ var scrapeStopAndShop = scraper.extend({
 	scrape: function (callback) {
 		
 		var self = this, 
-			config = this.config, 
-			urlForPromotionID = self.createURL(config.urls.configForPromotionID, config.urlFragments);
+			urlForPromotionID = stopAndShopURLs.getUrl('forPromotionID');
 
 		this.getPromotionID({url: urlForPromotionID, followRedirect: false}, function (results) {
 			
 			var urlForPagesData;
 
-			config.urlFragments.parameters.promotionid = results.promotionid;
+			stopAndShopURLs.addFragment('parameters', {promotionid: results.promotionid});
 
-			urlForPagesData = self.createURL(config.urls.configForPagesData, config.urlFragments);
+			urlForPagesData = stopAndShopURLs.getUrl('forPagesData');
 			
 			self.getCircularPageData(urlForPagesData, function (results) {
 				
