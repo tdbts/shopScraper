@@ -431,7 +431,7 @@ describe("URL Creator Module", function () {
 		};
 
 	var testCreator = new UrlCreator(testConfigs, testFragments);
-
+	// console.log(testCreator);
 	it("Should be able to store data upon construction.", function () {
 		
 		expect(testCreator.configs).to.exist.and.equal(testConfigs);
@@ -450,14 +450,20 @@ describe("URL Creator Module", function () {
 
 		testCreator.addConfig('thirdConfig', fakeNewConfig);
 
-		expect(testCreator.thirdConfig).to.equal(fakeNewConfig);		
+		expect(testCreator.configs.thirdConfig).to.equal(fakeNewConfig);		
 		
 		testCreator.addFragment('pathname', fakeNewPathnameObj);
 		testCreator.addFragment('parameters', fakeNewParameters);
 
-		expect(testCreator.pathname.forNothing).to.equal(fakeNewPathnameObj.forNothing);
-		expect(testCreator.parameters.userid).to.equal(fakeNewParameters.userid);
-		expect(testCreator.parameters.secretNumber).to.equal(fakeNewParameters.secretNumber);
+		expect(testCreator.fragments.pathname.forNothing).to.equal(fakeNewPathnameObj.forNothing);
+		expect(testCreator.fragments.parameters.userid).to.equal(fakeNewParameters.userid);
+		expect(testCreator.fragments.parameters.secretNumber).to.equal(fakeNewParameters.secretNumber);
+		
+	});
+
+	it("Should throw an error if the given url role does not exist.", function () {
+		
+		expect(testCreator.addFragment('nonexistentUrlPiece', {name: "val"})).to.throw;
 	
 	});
 
