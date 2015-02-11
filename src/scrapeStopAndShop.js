@@ -1,10 +1,10 @@
 var request = require('request'), 
 	async = require('async'), 
-	url = require('url'), 
-	scraper = require('./scraper'),  
+	scraper = require('./scraper'),
+	getPromotionID = require('./sp_getPromotionID'),
+	getPagesMetadata = require('./sp_getPagesMetadata'),    
 	Product = require('./Product'),  
-	UrlCreator = require('./UrlCreator'), 
-	_ = require('underscore');
+	UrlCreator = require('./UrlCreator');
 
 var urlConfigs = {
 	forPromotionID: ['webpage', 'forPromotionID', ['storeid']], 
@@ -54,82 +54,6 @@ var scrapeStopAndShop = scraper.extend({
 			}
 		}
 	}, 
-
-	getQueryObject: function (objLocation) {
-		
-		return url.parse(objLocation, true).query;
-	}, 
-
-	getPromotionID: function (promotionIDurl, callback) {
-
-		var self = this;
-
-		request(promotionIDurl, function (err, resp) {
-			
-			self.handleError(err, "An error occured getting this " + self.config.storeName + " location's  promotion ID number.");
-
-			if (!err && resp.statusCode >= 300 && resp.statusCode < 400) {
-
-				// DEVELOPMENT ONLY
-				// console.log(resp.statusCode);
-				// console.log(resp.toJSON());
-
-				var queryObj = self.getQueryObject(resp.headers.location);
-				
-				// DEVELOPMENT ONLY
-				// console.log(queryObj);
-
-				var promotionIDobj = _.pick(queryObj, 'promotionid');
-				// DEVELOPMENT ONLY
-				// console.log(promotionIDobj);
-
-				callback(promotionIDobj);
-			}
-		});
-
-	},
-
-	PageMetadataObject: function (pageID, endDate, image) {
-		this.pageID = pageID; 
-		this.endDate = endDate; 
-		this.image = image;
-	}, 
-
-	getPageMetadata: function (dataSource, dataParser, MetadataObjConstructor) {
-		
-		var pageMetadataSource = dataParser(dataSource), 
-			circularPagesData = [];
-
-		pageMetadataSource.map(function (page) {
-			circularPagesData.push(new MetadataObjConstructor(page.pageid, page.enddate, page.imageurl));
-		});
-
-		return circularPagesData; 
-	}, 
-
-	getCircularPageData: function (circularPageDataURL, callback) {
-		
-		var self = this;
-
-		request(circularPageDataURL, function (err, resp, body) {
-			
-			self.handleError(err, "There was an error getting the circular page metadata.");
-
-			if (!err && resp.statusCode === 200) {
-
-				// DEVELOPMENT ONLY
-				// console.log(body)
-
-				var circularPagesData = self.getPageMetadata(body, self.config.dataProcessors.dataParser, self.PageMetadataObject);
-
-				// DEVELOPMENT ONLY
-				// console.log("Found " + circularPagesData.length + " pages!");
-				// console.log(circularPagesData);
-
-				callback(circularPagesData);
-			}
-		});
-	},
 
 	locateAndParsePageData: function (jsonSource) {
 		
@@ -286,7 +210,7 @@ var scrapeStopAndShop = scraper.extend({
 		var self = this, 
 			urlForPromotionID = stopAndShopURLs.getUrl('forPromotionID');
 
-		this.getPromotionID({url: urlForPromotionID, followRedirect: false}, function (results) {
+		getPromotionID.scrape({url: urlForPromotionID, followRedirect: false}, function (results) {
 			
 			var urlForPagesData;
 
@@ -294,7 +218,7 @@ var scrapeStopAndShop = scraper.extend({
 
 			urlForPagesData = stopAndShopURLs.getUrl('forPagesData');
 			
-			self.getCircularPageData(urlForPagesData, function (results) {
+			getPagesMetadata.scrape(urlForPagesData, function (results) {
 				
 				self.handleCircularPageData(results, callback); 
 			});

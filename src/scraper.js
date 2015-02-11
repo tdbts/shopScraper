@@ -9,6 +9,13 @@ var scraper = requester.extend({
 		return this.config.storeName;
 	}, 
 	
+	locateAndParsePageData: function (jsonSource) {
+	
+		var json = JSON.parse(jsonSource);
+
+		return json.content.collection.shift().data;
+	}, 
+
 	logScrapeResults: function (productsArray) {
 		
 		console.log("Scraped " + productsArray.length + " products from this week's " + 
