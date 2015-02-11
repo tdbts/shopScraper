@@ -195,11 +195,9 @@ var scrapeStopAndShop = scraper.extend({
 		callback(allProducts);
 	}, 
 
-	handleCircularPageData: function (pagesArray, callback) {
+	handleCircularPageData: function (pagesMetadata, callback) {
 		
-		var pageIDs = []; 
-
-		this.getPageIDs(pagesArray, pageIDs, "pageID");
+		var pageIDs = pagesMetadata.getPageIDs();
 
 		this.asyncMapOverData(pageIDs, this.getProductsFromPage, this.coordinatePageDataProcessing, callback);
 

@@ -1,4 +1,5 @@
-var scraper = require('./scraper');
+var scraper = require('./scraper'), 
+	CacheForPagesMetadata = require('./CacheForPagesMetadata');
 
 var getPagesMetadata = scraper.extend({
 	config: {
@@ -14,10 +15,10 @@ var getPagesMetadata = scraper.extend({
 	parsePagesMetadata: function (dataSource, dataParser, MetadataObjConstructor) {
 		
 		var pageMetadataSource = dataParser(dataSource), 
-			circularPagesData = [];
+			circularPagesData = new CacheForPagesMetadata();
 
 		pageMetadataSource.map(function (page) {
-			circularPagesData.push(new MetadataObjConstructor(page.pageid, page.enddate, page.imageurl));
+			circularPagesData.data.push(new MetadataObjConstructor(page.pageid, page.enddate, page.imageurl));
 		});
 
 		return circularPagesData; 
