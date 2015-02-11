@@ -1,13 +1,7 @@
-var _ = require('underscore'), 
-	moment = require('moment');
+var moment = require('moment'), 
+	requester = require('./requester');  
 
-module.exports = { 
-	config: {},
-	
-	extend: function (child) {
-		return _.extend({}, this, child);	
-	}, 
-	
+var scraper = requester.extend({ 	
 	scrape: function () {}, 
 
 	getStoreName: function () {
@@ -24,11 +18,7 @@ module.exports = {
 	parseDate: function (givenDate) {
 		
 		return moment(givenDate).format("dddd, MMMM Do YYYY");
-	}, 
-	
-	handleError: function (err, message) {
-		if (err) {
-			return new Error(message + "\n" + err);
-		}
 	}
-};
+});
+
+module.exports = scraper;

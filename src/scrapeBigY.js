@@ -1,5 +1,4 @@
-var request = require('request'), 
-	scraper = require('./scraper'), 
+var scraper = require('./scraper'), 
 	Product = require('./Product');
 
 var scrapeBigY = scraper.extend({
@@ -55,7 +54,7 @@ var scrapeBigY = scraper.extend({
 
 	handleRequestResults: function (err, resp, body) {
 		
-		var self = this;
+		var self = scrapeBigY;
 		
 		self.handleError(err);
 
@@ -88,12 +87,7 @@ var scrapeBigY = scraper.extend({
 		var self = this, 
 			config = this.config;
 
-		self.urlRequest(request, config.circularDataLocation + config.storeIDNumber, function (err, resp, body) {
-			
-			var circularData = self.handleRequestResults(err, resp, body);
-
-			callback(circularData);
-		});
+		this.makeRequest(config.circularDataLocation + config.storeIDNumber, self.handleRequestResults, callback);
 	}, 
 
 });
