@@ -520,7 +520,7 @@ describe("URL Creator Module", function () {
 
 });
 
-
+// Testing '../src/CacheForPagesMetadata.js'
 describe("Cache for pages metadata object.", function () {
 
 	var CacheForPagesMetadata = require('../src/CacheForPagesMetadata'), 
@@ -546,3 +546,74 @@ describe("Cache for pages metadata object.", function () {
 });
 
 
+// Testing '../src/CircularPageData.js'
+describe("Constructor for circular page data.", function () {
+	
+	var CircularPageData = require('../src/CircularPageData');
+
+	it("Should create an object with three properties.", function () {
+		
+		var testDataObj = new CircularPageData("02/12/2015", "02/19/2015", ["chips", "soda"]);	
+		
+		expect(testDataObj.startDate).to.equal("02/12/2015");
+		expect(testDataObj.products).to.be.an('array').and.have.length(2);
+		expect(testDataObj.products[1]).to.equal("soda");
+	});
+
+	it("Should fall back to default values if none are provided.", function () {
+		
+		var testDataObj = new CircularPageData();
+
+		expect(testDataObj.startDate).to.equal('');
+		expect(testDataObj.products).to.be.an('array').and.have.length(0);
+	
+	});
+
+});
+
+
+// Testing '../src/sp_getPromotionID.js'
+describe("Module to get Stop and Shop Promotion ID.", function () {
+	
+	var getPromotionID = require('../src/sp_getPromotionID');
+	var fakeResponse = {
+		statusCode: 304, 
+		headers: {
+			location: "http://www.fakesite.com/path/to/data?param1=monkey&promotionid=11105"
+		}
+	};
+
+	it("Should have a config property containing an object with a storeName property.", function () {
+		
+		expect(getPromotionID.config.storeName).to.equal("Stop and Shop");
+	
+	});
+
+	it("Should be able to get the query object of a url.", function () {
+		
+		var testURL = "http://www.fakesite.com/path/to/data?param1=turtle&param2=123", 
+			queryObj = getPromotionID.getQueryObject(testURL);
+
+		expect(queryObj).to.be.an('object');
+		expect(queryObj.param1).to.equal("turtle");
+		expect(queryObj.param2).to.equal("123");
+	
+	});
+
+	it("Should parse a request response to get the promotionID object.", function () {
+
+		var resultObj = getPromotionID.parseRequestResults(null, fakeResponse);
+
+		expect(resultObj).to.be.an('object');
+		expect(resultObj.promotionid).to.equal("11105");
+	
+	});
+
+	it("Should handle errors that occur when making the request.", function () {
+
+		expect(getPromotionID.parseRequestResults("Test Error")).to.throw;
+		expect(getPromotionID.parseRequestResults(null, fakeResponse)).to.not.throw;
+		
+	});
+
+});

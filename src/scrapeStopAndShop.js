@@ -2,8 +2,8 @@ var async = require('async'),
 	scraper = require('./scraper'),
 	getPromotionID = require('./sp_getPromotionID'),
 	getPagesMetadata = require('./sp_getPagesMetadata'),    
-	CircularPageData = require('./CircularPageData'), 
 	getProducts = require('./sp_getProducts'), 
+	CircularPageData = require('./CircularPageData'), 
 	stopAndShopURLs = require('./stopAndShopURLs');
 
 var scrapeStopAndShop = scraper.extend({

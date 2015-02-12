@@ -7,8 +7,8 @@ var getPromotionID = scraper.extend({
 		storeName: "Stop and Shop", 
 	}, 
 
-	getQueryObject: function (urlLocation) {
-		return url.parse(urlLocation, true).query;
+	getQueryObject: function (urlToParse) {
+		return url.parse(urlToParse, true).query;
 	},
 
 	parseRequestResults: function (err, resp) {
