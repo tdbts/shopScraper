@@ -72,30 +72,37 @@ var scrapeStopAndShop = scraper.extend({
 		var self = this, 
 			urlForPromotionID = stopAndShopURLs.getUrl('forPromotionID');
 
-		getPromotionID.scrape({url: urlForPromotionID, followRedirect: false}, function (err, results) {
-			
-			if (!err) {
+		async.waterfall([
 
+			function (cb) {
+				getPromotionID.scrape({url: urlForPromotionID, followRedirect: false}, cb);
+			},
+
+			function (results, cb) {
+				
 				var urlForPagesData;
 
 				stopAndShopURLs.addFragment('parameters', {promotionid: results.promotionid});
 
 				urlForPagesData = stopAndShopURLs.getUrl('forPagesData');
-				
-				getPagesMetadata.scrape(urlForPagesData, function (err, pagesMetadata) {
-					
-					if (!err) {
 
-						var pageIDs = pagesMetadata.getPageIDs();
+				getPagesMetadata.scrape(urlForPagesData, cb);
+			
+			},
 
-						self.asyncMapOverData(pageIDs, getProducts.scrape, self.coordinatePageDataProcessing, callback); 
-					}
+			function (pagesMetadata, cb) {
 
-				});
+				var pageIDs = pagesMetadata.getPageIDs();
+
+				self.asyncMapOverData(pageIDs, getProducts.scrape, self.coordinatePageDataProcessing, cb);
+			
 			}
+		], 
 
-		});
-		 
+
+		function (err, results) {
+			callback(err, results);
+		}); 
 	}
 
 });
