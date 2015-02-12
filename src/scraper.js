@@ -13,7 +13,7 @@ var scraper = requester.extend({
 	
 		var json = JSON.parse(jsonSource);
 
-		return json.content.collection.shift().data;
+		return json.content.collection[0].data;
 	}, 
 
 	logScrapeResults: function (productsArray) {

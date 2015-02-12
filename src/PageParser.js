@@ -13,7 +13,7 @@ PageParser.prototype.getDateFromPage = function (productDataArray, type) {
 	var prop = type === 'start' ? "listingstart" 
 		: type === 'end' ? "listingend" : void 0;
 
-	return productDataArray.shift()[prop];	
+	return productDataArray[0][prop];	
 };
 
 PageParser.prototype.collectPageProductObjects = function (src, dest, ProductConstructor) {
@@ -31,7 +31,7 @@ PageParser.prototype.collectPageProductObjects = function (src, dest, ProductCon
 PageParser.prototype.getPageData = function () {
 	var pageData = new CircularPageData(), 
 		productJsonArray = this.locateAndParsePageData(this.data);
-
+		
 	if (productJsonArray && productJsonArray.length > 0) {
 
 		pageData.startDate = this.parseDate(this.getDateFromPage(productJsonArray, 'start'));
