@@ -1,8 +1,9 @@
 // tests.js 
 var chai = require('chai'),
 	sinon = require('sinon'), 
+	nock = require('nock'), 
 	expect = chai.expect,
-	should = chai.should();
+	should = chai.should(); 
 
 // Testing '../views/Viewbase.js'
 describe('Viewbase constructor', function () {
@@ -88,10 +89,10 @@ describe("Product constructor", function () {
 
 });
 
-// Testing '../src/scraper.js'
-describe("Scraper Base Object", function () {
+// Testing '../src/requester.js'
+describe("Requester Object", function () {
 	
-	var scraper = require('../src/scraper');
+	var requester = require('../src/requester');
 
 	it("Should be extensible.", function () {
 		
@@ -105,13 +106,54 @@ describe("Scraper Base Object", function () {
 			}
 		};
 
-		var extension = scraper.extend(childObj);
+		var extension = requester.extend(childObj);
 
 		expect(extension).to.have.a.property('prop1');
 		expect(extension.prop2).to.be.a('function');
 		expect(extension.scrape()).to.equal("Scrape successful!");
 
+	});	
+
+	it("Should make a request.", function () {
+		
+		var processorSpy = sinon.spy(), 
+			urlNock = nock('http://www.twitter.com')
+				.get('/')
+				.reply(200, "Whatup bitch!");
+
+		var fakeHandler = function (err, resp) {
+
+			if (!err && resp.statusCode === 200) {
+				return resp.body;
+			}
+		};
+
+		requester.makeRequest('http://www.twitter.com', fakeHandler, function (result) {
+			return expect(result).to.equal("Whatup bitch!");
+		});
+	
 	});
+
+	it("Should handle errors.", function () {
+		
+		expect(requester.handleError("Test Error", "Scraper returned an error: ")).to.throw;
+	});	
+
+	it("Should return the request module in order to create new request-oriented methods.", function () {
+		
+		var result = requester.getRequester(), 
+			request = require('request');
+
+		expect(result).to.equal(request);
+	
+	});
+
+});
+
+// Testing '../src/scraper.js'
+describe("Scraper Base Object", function () {
+	
+	var scraper = require('../src/scraper');
 
 	it("Should return the store name.", function () {
 		
@@ -153,11 +195,6 @@ describe("Scraper Base Object", function () {
 		expect(scraper.parseDate("2015-08-03")).to.equal("Monday, August 3rd 2015");
 		expect(scraper.parseDate("8/3/2015")).to.equal("Monday, August 3rd 2015");
 
-	});
-
-	it("Should handle errors.", function () {
-		
-		expect(scraper.handleError("Test Error", "Scraper returned an error: ")).to.throw;
 	});
 
 });

@@ -1,10 +1,8 @@
-var request = require('request'), 
-	async = require('async'), 
+var async = require('async'), 
 	scraper = require('./scraper'),
 	getPromotionID = require('./sp_getPromotionID'),
 	getPagesMetadata = require('./sp_getPagesMetadata'),    
-	Product = require('./Product'),  
-	PageParser = require('./PageParser'),
+	CircularPageData = require('./CircularPageData'), 
 	getProducts = require('./sp_getProducts'), 
 	stopAndShopURLs = require('./stopAndShopURLs');
 
@@ -12,57 +10,6 @@ var scrapeStopAndShop = scraper.extend({
 
 	config: {
 		storeName: "Stop And Shop"
-	}, 
-
-	locateAndParsePageData: function (jsonSource) {
-		
-		var json = JSON.parse(jsonSource);
-
-		return json.content.collection.shift().data;
-	}, 
-
-	collectPageProductObjects: function (src, dest, ProductConstructor) {
-		
-		return src.map(function (product) {
-			
-			dest.push(new ProductConstructor(
-				product.title, 
-				product.description, 
-				product.price + " " + product.pricequalifier, 
-				product.image
-			));
-		});
-	}, 
-
-	getDateFromPage: function (productDataArray, type) {
-
-		var prop = type === 'start' ? "listingstart" 
-			: type === 'end' ? "listingend" : void 0;
-
-		return productDataArray.shift()[prop];
-
-	}, 
-
-	CircularPageData: function (startDate, endDate, products) {
-		this.startDate = startDate || '';
-		this.endDate = endDate || '';
-		this.products = products || [];
-	}, 
-
-	gatherPageData: function (config, PageDataConstructor) {
-		
-		var pageData = new PageDataConstructor(),
-			productData = config.dataParser(config.jsonSource);
-
-		if (productData && productData.length > 0) {
-
-			pageData.startDate = config.dateParser(config.dateGetter(productData, 'start'));
-			pageData.endDate = config.dateParser(config.dateGetter(productData, 'end'));
-
-			config.productCollector(productData, pageData.products, Product);
-		}
-
-		return pageData;
 	}, 
 
 	collectAllProducts: function (src, dest) {
@@ -111,7 +58,7 @@ var scrapeStopAndShop = scraper.extend({
 		// console.log(pageDataArray);
 		console.log("Found " + pageDataArray.length + " pages for this week's sales!");
 
-		var allProducts = new scrapeStopAndShop.CircularPageData();
+		var allProducts = new CircularPageData();
 
 		self.processPageDataObjects(pageDataArray, allProducts, self.getDate, self.collectAllProducts);
 
