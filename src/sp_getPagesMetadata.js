@@ -7,9 +7,9 @@ var getPagesMetadata = scraper.extend({
 	}, 
 
 	PageMetadataObject: function (pageID, endDate, image) {
-		this.pageID = pageID; 
-		this.endDate = endDate; 
-		this.image = image;
+		this.pageID = pageID || ''; 
+		this.endDate = endDate || ''; 
+		this.image = image || null;
 	}, 
 
 	parsePagesMetadata: function (dataSource, dataParser, MetadataObjConstructor) {
@@ -26,22 +26,19 @@ var getPagesMetadata = scraper.extend({
 
 	handlePagesMetadata: function (err, resp, body) {
 		
-		var self = getPagesMetadata;
+		var self = getPagesMetadata, 
+			result;
 
-		self.handleError(err, "There was an error getting the " + self.config.storeName + " circular's page metadata.");
+		var error = self.handleError(err, "There was an error getting the " + self.config.storeName + " circular's page metadata.");
 
 		if (!err && resp.statusCode === 200) {
-			// DEVELOPMENT ONLY
-			// console.log(body)
 
 			var circularPagesData = self.parsePagesMetadata(body, self.locateAndParsePageData, self.PageMetadataObject);
 
-			// DEVELOPMENT ONLY
-			// console.log("Found " + circularPagesData.length + " pages!");
-			// console.log(circularPagesData);
-
-			return circularPagesData;			
+			result = circularPagesData;			
 		}
+
+		return error || result;
 	}, 
 
 	scrape: function (url, callback) {

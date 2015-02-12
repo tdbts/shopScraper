@@ -116,8 +116,7 @@ describe("Requester Object", function () {
 
 	it("Should make a request.", function () {
 		
-		var processorSpy = sinon.spy(), 
-			urlNock = nock('http://www.twitter.com')
+		var urlNock = nock('http://www.twitter.com')
 				.get('/')
 				.reply(200, "Wus good, man!");
 
@@ -614,6 +613,81 @@ describe("Module to get Stop and Shop Promotion ID.", function () {
 		expect(getPromotionID.parseRequestResults("Test Error")).to.throw;
 		expect(getPromotionID.parseRequestResults(null, fakeResponse)).to.not.throw;
 		
+	});
+
+	it("Should be able to make a request that does not follow redirect and which calls parseRequestResults on the result.", function () {
+		
+		var fakeURL = 'http://redirecter.com';
+
+		nock(fakeURL)
+			.get('/')
+			.reply(302, undefined, {
+				'Location': 'http://redirecter.com/New/Path?promotionid=98765'
+			})
+			.get('/New/Path')
+			.reply(200, "Here is the result from the redirect.");
+
+		getPromotionID.scrape({url: fakeURL, followRedirect: false}, function (err, resultObj) {
+			if (expect(resultObj).to.be.an('object') && expect(resultObj.promotionid).to.equal("98765")) {
+				return true;
+			}
+		});
+
+		nock.restore();
+
+	});
+
+});
+
+
+// Testing '../src/sp_getPagesMetadata.js'
+describe("Module to get Metadata from Pages.", function () {
+	
+	var getPagesMetadata = require('../src/sp_getPagesMetadata');
+
+	it("Should be able to instantiate a new PageMetadataObject.", function () {
+		
+		var testMetadataObj = new getPagesMetadata.PageMetadataObject('123', '02/27/2015');
+
+		expect(testMetadataObj.pageID).to.equal('123');
+		expect(testMetadataObj.endDate).to.equal('02/27/2015');	
+	
+	});
+
+	it("Should be able to parse the page's metadata.", function () {
+		
+		var fakeJson = JSON.stringify({
+			content: {
+				collection: [{
+					data: [
+					{
+						pageid: '12345', 
+						enddate: '02/29/2016', 
+						imageurl: '/fake/picture/location.jpg'
+					}, 
+					{
+						pageid: '11367', 
+						enddate: '01/01/1900', 
+						imageurl: '/another/fake/pic.jpg'
+					}]
+				}]
+			}
+		});
+
+		var self = getPagesMetadata;
+		var metadata = self.parsePagesMetadata(fakeJson, self.locateAndParsePageData, self.PageMetadataObject);
+
+		expect(metadata).to.be.an('object');
+		expect(metadata.data[1].pageID).to.equal('11367');
+	
+	});
+
+	it("Should return an error if the request fails.", function () {
+		
+		var result = getPagesMetadata.handlePagesMetadata("Test error", null);
+
+		console.log(result);
+	
 	});
 
 });
