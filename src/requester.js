@@ -14,7 +14,7 @@ module.exports = {
 			
 			var result = processor(err, resp, body);
 
-			callback(result);
+			callback(err, result);
 		});
 	}, 
 

@@ -26,14 +26,16 @@ router.get('/', function (req, res) {
 
 router.get('/BigY', function (req, res) {
 
-	scrapeBigY.scrape(function (data) {
-		
-		res.render('productListings', { 
-			storeName: "Big Y", 
-			startDate: data.startDate, 
-			endDate: data.endDate,  
-			products: data.products
-		});
+	scrapeBigY.scrape(function (err, data) {
+
+		if (!err) {
+			res.render('productListings', { 
+				storeName: "Big Y", 
+				startDate: data.startDate, 
+				endDate: data.endDate,  
+				products: data.products
+			});
+		}
 
 	});
 
@@ -55,14 +57,17 @@ router.get('/ShopRite', function (req, res) {
 
 router.get('/StopAndShop', function (req, res) {
 	
-	scrapeStopAndShop.scrape(function (data) {
+	scrapeStopAndShop.scrape(function (err, data) {
 
-		res.render('productListings', { 
-			storeName: "Stop and Shop", 
-			startDate: 	data.startDate, 
-			endDate: data.endDate, 
-			products: data.products
-		});
+		if (!err) {
+			res.render('productListings', { 
+				storeName: "Stop and Shop", 
+				startDate: 	data.startDate, 
+				endDate: data.endDate, 
+				products: data.products
+			});
+		}
+
 	});
 });
 

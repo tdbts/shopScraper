@@ -31,8 +31,8 @@ var getProducts = scraper.extend({
 			return obj.query.pageid = pageID;
 		});
 
-		self.makeRequest(pageURL, self.handlePageData, function (result) {
-			callback(null, result);
+		self.makeRequest(pageURL, self.handlePageData, function (err, result) {
+			callback(err, result);
 		});
 	}		
 

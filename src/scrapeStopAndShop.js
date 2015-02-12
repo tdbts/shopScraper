@@ -46,11 +46,11 @@ var scrapeStopAndShop = scraper.extend({
 			
 			self.handleError(err, "There was an error asynchronously mapping over the data!");
 
-			resultHandler(results, callback);
+			resultHandler(err, results, callback);
 		});
 	}, 
 
-	coordinatePageDataProcessing: function (pageDataArray, callback) {
+	coordinatePageDataProcessing: function (err, pageDataArray, callback) {
 		
 		var self = scrapeStopAndShop;
 		
@@ -64,7 +64,7 @@ var scrapeStopAndShop = scraper.extend({
 
 		self.logScrapeResults(allProducts.products);
 
-		callback(allProducts);
+		callback(err, allProducts);
 	}, 
 
 	scrape: function (callback) {
@@ -72,20 +72,28 @@ var scrapeStopAndShop = scraper.extend({
 		var self = this, 
 			urlForPromotionID = stopAndShopURLs.getUrl('forPromotionID');
 
-		getPromotionID.scrape({url: urlForPromotionID, followRedirect: false}, function (results) {
+		getPromotionID.scrape({url: urlForPromotionID, followRedirect: false}, function (err, results) {
 			
-			var urlForPagesData;
+			if (!err) {
 
-			stopAndShopURLs.addFragment('parameters', {promotionid: results.promotionid});
+				var urlForPagesData;
 
-			urlForPagesData = stopAndShopURLs.getUrl('forPagesData');
-			
-			getPagesMetadata.scrape(urlForPagesData, function (pagesMetadata) {
+				stopAndShopURLs.addFragment('parameters', {promotionid: results.promotionid});
+
+				urlForPagesData = stopAndShopURLs.getUrl('forPagesData');
 				
-				var pageIDs = pagesMetadata.getPageIDs();
+				getPagesMetadata.scrape(urlForPagesData, function (err, pagesMetadata) {
+					
+					if (!err) {
 
-				self.asyncMapOverData(pageIDs, getProducts.scrape, self.coordinatePageDataProcessing, callback); 
-			});
+						var pageIDs = pagesMetadata.getPageIDs();
+
+						self.asyncMapOverData(pageIDs, getProducts.scrape, self.coordinatePageDataProcessing, callback); 
+					}
+
+				});
+			}
+
 		});
 		 
 	}
