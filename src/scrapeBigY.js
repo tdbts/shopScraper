@@ -1,5 +1,6 @@
 var scraper = require('./scraper'), 
-	Product = require('./Product');
+	Product = require('./Product'), 
+	CircularPageData = require('./CircularPageData');
 
 var scrapeBigY = scraper.extend({
 
@@ -17,9 +18,9 @@ var scrapeBigY = scraper.extend({
 		return this.parseDate(sourceObject[prop]); 
 	}, 
 
-	getContainerObj: function (source) {
+	locateAndParsePageData: function (jsonSource) {
 		
-		return JSON.parse(source).pop();
+		return JSON.parse(jsonSource).pop();
 	}, 
 
 	getProductData: function (source, ProductConstructor) {
@@ -43,33 +44,22 @@ var scrapeBigY = scraper.extend({
 		});
 	}, 
 
-	urlRequest: function (requester, url, callback) {
-		 
-		 requester(url, function (err, resp, body) {
-		 	
-		 	callback(err, resp, body);
-		 });
-
-	}, 
-
 	handleRequestResults: function (err, resp, body) {
 		
 		var self = scrapeBigY;
 		
-		self.handleError(err);
+		self.handleError(err, "There was an error making the request to the " + self.config.storeName + " api!");
 
 		if (!err && resp.statusCode === 200) {
 
-			var containerObj = self.getContainerObj(body);
+			var containerObj = self.locateAndParsePageData(body);
 
 			// DEVELOPMENT ONLY
 			// console.log(containerObj);
 
-			var circularData = {
-				startDate: self.getDate(containerObj, 'start'), 
-				endDate: self.getDate(containerObj, 'end'), 
-				products: []
-			};
+			var startDate = self.getDate(containerObj, 'start'), 
+				endDate = self.getDate(containerObj, 'end'), 
+				circularData = new CircularPageData(startDate, endDate);
 
 			self.getProducts(containerObj, circularData.products, self.getProductData);
 

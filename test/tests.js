@@ -166,6 +166,22 @@ describe("Scraper Base Object", function () {
 		expect(testScraper.getStoreName()).to.equal("Try N' Save");
 	});
 
+	it("Should locate and parse desired data, given json source.", function () {
+		
+		var fakeJson = JSON.stringify({
+					content: {
+						collection: [{data: ["data1", "data2"]}]
+					}
+				});
+
+		var result = scraper.locateAndParsePageData(fakeJson);
+
+		expect(result).to.be.an('array');
+		expect(result).to.have.length(2);
+		expect(result[0]).to.equal("data1");
+	
+	});
+
 	it("Should log the results of the scrape.", function () {
 		
 		var products = ["thing1", "thing2"], 
@@ -218,7 +234,7 @@ describe("Big Y Scraper", function () {
 	it("Given JSON data consisting of an array with a single container object, it should return the container object.", function () {
 		
 		var mockJSON = JSON.stringify([{prop1: "value1", prop2: 32}]), 
-			containerObj = scrapeBigY.getContainerObj(mockJSON);
+			containerObj = scrapeBigY.locateAndParsePageData(mockJSON);
 
 		expect(containerObj).to.be.an('object');
 		expect(containerObj.prop1).to.exist.and.equal("value1");
@@ -257,27 +273,6 @@ describe("Big Y Scraper", function () {
 		
 		expect(destination.length).to.equal(3);
 		expect(destination[2]).to.equal("bacon");
-
-	});
-
-	it("Should perform http requests and call a callback on the result.", function () {
-		
-		var server = sinon.fakeServer.create(), 
-			testCallback = sinon.spy(), 
-			request = require('request');
-
-		server.respondWith("GET", '/api/fakeData.json', [
-			200, 
-			{"Content-Type": "application/json"}, 
-			JSON.stringify([{"prop1": "value1", "prop2": 32}])
-		]);
-
-		scrapeBigY.urlRequest(request, '/api/fakeData.json', testCallback);
-		server.respond();
-
-		expect(testCallback.called).to.be.true;
-
-		server.restore();
 
 	});
 
@@ -523,5 +518,31 @@ describe("URL Creator Module", function () {
 	
 	});
 
+});
+
+
+describe("Cache for pages metadata object.", function () {
+
+	var CacheForPagesMetadata = require('../src/CacheForPagesMetadata'), 
+		testMetadataCache = new CacheForPagesMetadata();
+
+	it("Should create an object with a property data which holds an array.", function () {
+		
+		expect(testMetadataCache.data).to.be.an('array');
+
+	});
+
+	it("Should return the page IDs of its contained metadata.", function () {
+		
+		testMetadataCache.data.push({pageID: "12345"}, {pageID: "8675309"});
+
+		var ids = testMetadataCache.getPageIDs();
+
+		expect(ids).to.be.an('array').and.have.length(2);
+		expect(ids[1]).to.equal("8675309");
+	
+	});
 
 });
+
+
