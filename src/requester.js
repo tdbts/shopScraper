@@ -11,8 +11,11 @@ module.exports = {
 	makeRequest: function (url, processor, callback) {
 		
 		request(url, function (err, resp, body) {
-			
-			var result = processor(err, resp, body);
+			var result = null;
+
+			if (!err) {
+				result = processor(err, resp, body);
+			}
 
 			callback(err, result);
 		});

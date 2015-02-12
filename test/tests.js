@@ -119,7 +119,7 @@ describe("Requester Object", function () {
 		var processorSpy = sinon.spy(), 
 			urlNock = nock('http://www.twitter.com')
 				.get('/')
-				.reply(200, "Whatup bitch!");
+				.reply(200, "Wus good, man!");
 
 		var fakeHandler = function (err, resp) {
 
@@ -128,8 +128,8 @@ describe("Requester Object", function () {
 			}
 		};
 
-		requester.makeRequest('http://www.twitter.com', fakeHandler, function (result) {
-			return expect(result).to.equal("Whatup bitch!");
+		requester.makeRequest('http://www.twitter.com', fakeHandler, function (err, result) {
+			return expect(result).to.equal("Wus good, man!");
 		});
 	
 	});
