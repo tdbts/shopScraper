@@ -22,9 +22,13 @@ module.exports = {
 	}, 
 
 	handleError: function (err, message) {
+		var result = null;
+
 		if (err) {
-			return new Error(message + "\n" + err);
+			result = new Error(message + "\n" + err);
 		}
+
+		return result;
 	}, 
 
 	getRequester: function () {

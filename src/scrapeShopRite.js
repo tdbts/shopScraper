@@ -1,8 +1,7 @@
-var request = require('request'), 
-	cheerio = require('cheerio'), 
+var cheerio = require('cheerio'), 
 	scraper = require('./scraper'),
-	shopRiteDomData = require('./shopRiteDomData'),  
-	Product = require('./Product'),
+	shopRiteDomData = require('./shopRiteDomData'),
+	getCircularNumberOfPages = require('./sr_getCircularNumberOfPages'), 
 	CircularPageData = require('./CircularPageData'),  
 	async = require('async');
 
@@ -11,150 +10,68 @@ var scrapeShopRite = scraper.extend({
 	config: {
 		storeName: "Shop Rite", 
 		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/2/", 
-		pageNumberLocation: 'span.pages', 
-		startDateLocation: {
-			element: 'div#CircularValidDates', 
-			attribute: 'data-start', 
-			indexes: [0, 8]
-		}, 
-		endDateLocation: {
-			element: 'div#CircularValidDates', 
-			attribute: 'data-end', 
-			indexes: [0, 8]
-		}, 
-		product: {
-			containerLocation: '.tooltip', 
-			nameLocation: 'p.itemTitle', 
-			descriptionLocation: 'p.itemBrand', 
-			priceLocation: 'p.itemPrice', 
-			imageLocation: {
-				element: 'img.itemImage', 
-				attribute: 'src'
-			}
+		pageNumberLocation: 'span.pages'
+	}, 
+
+	handlePageData: function (err, resp, body) {
+
+		if (!err && resp.statusCode === 200) {
+		
+			var $ = cheerio.load(body),
+				pageData = new CircularPageData();
+			
+			pageData.startDate = shopRiteDomData.getDate($, 'start');
+			pageData.endDate = shopRiteDomData.getDate($, 'end');
+
+			shopRiteDomData.collectProducts($, pageData.products);
+
+			// DEVELOPMENT ONLY
+			// console.log(pageData);
+			return pageData;			
 		}
-	}, 
-
-	getCircularNumberOfPages: function (body) {
-		
-		var $ = cheerio.load(body); 
-		var pageNumbers = [];
-
-		$(this.config.pageNumberLocation).map(function (index, span) {
-			pageNumbers.push(Number($(span).text()));
-		});
-
-		// DEVELOPMENT ONLY
-		// console.log(pageNumbers);
-
-		var numberOfPages = pageNumbers.reduce(function (prev, curr) {
-			return curr > prev ? curr : prev;
-		});
-
-		// DEVELOPMENT ONLY
-		console.log("The number of pages in this week's circular is " + numberOfPages);
-
-		return numberOfPages;
-	}, 
-
-	createPagesArray: function (maxPage) {
-		
-		var pages = []; 
-
-		for (var i = 1; i <= maxPage; i++) {
-			pages.push(i);
-		}
-
-		return pages;
-	}, 
-
-	getDate: function (dateConfig, $) {
-		
-		if ($) {
-
-			return $(dateConfig.element)
-				.attr(dateConfig.attribute)
-				.slice(dateConfig.indexes[0], dateConfig.indexes[1]);
-		} 
-	}, 
-
-	getText: function (selector, textLocation) {
-		return selector.find(textLocation).text();
-	}, 
-
-	getImageUrl: function (selector, imageElement, imageAttribute) {
-		 return selector.find(imageElement).attr(imageAttribute);
 	}, 
 
 	scrapePage: function (pageNumber, callback) {
 		
 		var self = scrapeShopRite;
 
-		request(self.config.baseURL + pageNumber, function (err, resp, body) {
+		self.makeRequest(self.config.baseURL + pageNumber, self.handlePageData, callback);
+
+	}, 
+
+	collectAllProducts: function (data, resultsObj, dateParser) {
+		
+		data.map(function (page) {
+			resultsObj.startDate = resultsObj.startDate || dateParser(page.startDate);
+			resultsObj.endDate = resultsObj.endDate || dateParser(page.endDate);
 			
-			self.handleError(err, "An error occured making the URL request.");
-
-			if (!err && resp.statusCode === 200) {
-
-				var $ = cheerio.load(body); 
-				var pageData = new CircularPageData();
-				
-				pageData.startDate = self.getDate(self.config.startDateLocation, $);
-				pageData.endDate = self.getDate(self.config.endDateLocation, $);
-
-				var productConfig = self.config.product;
-
-				$(productConfig.containerLocation).map(function () {
-					var name = shopRiteDomData.getProductText($(this), 'name'), 
-						price = shopRiteDomData.getProductText($(this), 'price'), 
-						description = shopRiteDomData.getProductText($(this), 'description'), 	
-						image = self.getImageUrl($(this), productConfig.imageLocation.element, productConfig.imageLocation.attribute);
-
-					if (name && price && image) {
-						pageData.products.push(new Product(name, price, description, image));
-					}
-
-				});
-
-				// DEVELOPMENT ONLY
-				// console.log(pageData);
-				callback(null, pageData);
-
-			}
-
+			page.products.map(function (product) {
+				resultsObj.products.push(product);
+			});
 		});
 
 	}, 
 
 	scrapeCircular: function (pagesArray, callback) {
-		
+
 		var self = this;
 
-		async.map(pagesArray, self.scrapePage, function (err, results) {
+		async.map(pagesArray, self.scrapePage, function (err, pagesDataArray) {
 			
-			self.handleError("There was an error mapping over the page numbers!");
+			var error = self.handleError("There was an error mapping over the page numbers!");
 
 			// DEVELOPMENT ONLY
 			// console.log(JSON.stringify(results));
 			// console.log(results.length);
 
-			var finalResults = {
-				startDate: '', 
-				endDate: '', 
-				products: []
-			};
+			var circularData = new CircularPageData();
 
-			results.map(function (page) {
-				finalResults.startDate = finalResults.startDate || page.startDate;
-				finalResults.endDate = finalResults.endDate || page.endDate;
-				page.products.map(function (product) {
-					finalResults.products.push(product);
-				});
-			});
+			self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
 
 			// DEVELOPMENT ONLY
-			// console.log(finalResults);
-			console.log("Found " + finalResults.products.length + " products in this week's circular!");
-			callback(finalResults);
+			// console.log(circularData);
+			console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
+			callback(error, circularData);
 
 		});
 
@@ -164,15 +81,8 @@ var scrapeShopRite = scraper.extend({
 		
 		var self = this;
 	
-		request(this.config.baseURL, function (err, resp, body) {
-			
-			self.handleError(err, "An error occurred making the URL request.");
-
-			var numberOfPages = self.getCircularNumberOfPages(body);
-			var pagesArray = self.createPagesArray(numberOfPages);
-
+		getCircularNumberOfPages.scrape(this.config.baseURL, function (err, pagesArray) {
 			self.scrapeCircular(pagesArray, callback);
-
 		});
 
 	}

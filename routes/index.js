@@ -43,7 +43,7 @@ router.get('/BigY', function (req, res) {
 
 router.get('/ShopRite', function (req, res) {
 	
-	scrapeShopRite.scrape(function (data) {
+	scrapeShopRite.scrape(function (err, data) {
 		
 		res.render('productListings', {
 			storeName: "ShopRite",  

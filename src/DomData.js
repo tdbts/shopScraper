@@ -25,7 +25,24 @@ DomData.prototype.getProductText = function (selector, property) {
 };
 
 DomData.prototype.collectProducts = function (_$, dest) {
-		
+	var self = this,  
+		imageConfig = self.config.product.image,
+		container = self.config.product.container, 
+		name, price, description, image;
+
+	_$(container).map(function () {
+		name = self.getProductText(_$(this), 'name');
+		price = self.getProductText(_$(this), 'price'); 
+		description = self.getProductText(_$(this), 'description'); 
+		image = self.getImageUrl(_$(this), imageConfig.element, imageConfig.attribute);
+
+		if (name && price && image) {
+			dest.push(new Product(name, price, description, image));
+		}	
+	});
+
+	return;
+
 };
 
 module.exports = DomData;
