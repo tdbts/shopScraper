@@ -1,27 +1,95 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'start' ]
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'update', '-g', 'nodemon' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.33
 4 verbose node symlink /usr/bin/node
-5 verbose run-script [ 'prestart', 'start', 'poststart' ]
-6 info prestart shopScraper@0.0.0
-7 info start shopScraper@0.0.0
-8 verbose unsafe-perm in lifecycle true
-9 info shopScraper@0.0.0 Failed to exec start script
-10 error shopScraper@0.0.0 start: `node ./bin/www`
-10 error Exit status 8
-11 error Failed at the shopScraper@0.0.0 start script.
-11 error This is most likely a problem with the shopScraper package,
-11 error not with npm itself.
-11 error Tell the author that this fails on your system:
-11 error     node ./bin/www
-11 error You can get their info via:
-11 error     npm owner ls shopScraper
-11 error There is likely additional logging output above.
-12 error System Linux 3.13.0-44-generic
-13 error command "/usr/bin/node" "/usr/bin/npm" "start"
-14 error cwd /home/tdbts/Documents/Hckr/projects/apps/shopScraper
-15 error node -v v0.10.33
-16 error npm -v 1.4.28
-17 error code ELIFECYCLE
-18 verbose exit [ 1, true ]
+5 verbose request where is /nodemon
+6 verbose request registry https://registry.npmjs.org/
+7 verbose request id f366a9f78d5a5cf5
+8 verbose url raw /nodemon
+9 verbose url resolving [ 'https://registry.npmjs.org/', './nodemon' ]
+10 verbose url resolved https://registry.npmjs.org/nodemon
+11 verbose request where is https://registry.npmjs.org/nodemon
+12 info trying registry request attempt 1 at 12:02:01
+13 verbose etag "8X6FA00IQ39RTMKFUANNT9XKB"
+14 http GET https://registry.npmjs.org/nodemon
+15 http 200 https://registry.npmjs.org/nodemon
+16 silly registry.get cb [ 200,
+16 silly registry.get   { date: 'Fri, 13 Feb 2015 17:02:02 GMT',
+16 silly registry.get     server: 'CouchDB/1.6.1 (Erlang OTP/R14B04)',
+16 silly registry.get     etag: '"OSO5JMJHNBHZAWFR8RVBFR4L"',
+16 silly registry.get     'content-type': 'application/json',
+16 silly registry.get     'cache-control': 'max-age=60',
+16 silly registry.get     'content-length': '147137',
+16 silly registry.get     'accept-ranges': 'bytes',
+16 silly registry.get     via: '1.1 varnish',
+16 silly registry.get     age: '35',
+16 silly registry.get     'x-served-by': 'cache-dfw1826-DFW',
+16 silly registry.get     'x-cache': 'HIT',
+16 silly registry.get     'x-cache-hits': '1',
+16 silly registry.get     'x-timer': 'S1423846922.240259,VS0,VE1',
+16 silly registry.get     vary: 'Accept',
+16 silly registry.get     'keep-alive': 'timeout=10, max=50',
+16 silly registry.get     connection: 'Keep-Alive' } ]
+17 info outdated updating [ [ '/usr/lib', 'nodemon', '1.3.6', '1.3.7', '1.3.7', 'latest' ] ]
+18 verbose install where,what [ '/usr/lib', [ 'nodemon@1.3.7' ] ]
+19 verbose cache add [ 'nodemon@1.3.7', null ]
+20 verbose cache add name=undefined spec="nodemon@1.3.7" args=["nodemon@1.3.7",null]
+21 verbose parsed url { protocol: null,
+21 verbose parsed url   slashes: null,
+21 verbose parsed url   auth: null,
+21 verbose parsed url   host: null,
+21 verbose parsed url   port: null,
+21 verbose parsed url   hostname: null,
+21 verbose parsed url   hash: null,
+21 verbose parsed url   search: null,
+21 verbose parsed url   query: null,
+21 verbose parsed url   pathname: 'nodemon@1.3.7',
+21 verbose parsed url   path: 'nodemon@1.3.7',
+21 verbose parsed url   href: 'nodemon@1.3.7' }
+22 verbose cache add name="nodemon" spec="1.3.7" args=["nodemon","1.3.7"]
+23 verbose parsed url { protocol: null,
+23 verbose parsed url   slashes: null,
+23 verbose parsed url   auth: null,
+23 verbose parsed url   host: null,
+23 verbose parsed url   port: null,
+23 verbose parsed url   hostname: null,
+23 verbose parsed url   hash: null,
+23 verbose parsed url   search: null,
+23 verbose parsed url   query: null,
+23 verbose parsed url   pathname: '1.3.7',
+23 verbose parsed url   path: '1.3.7',
+23 verbose parsed url   href: '1.3.7' }
+24 verbose addNamed [ 'nodemon', '1.3.7' ]
+25 verbose addNamed [ '1.3.7', '1.3.7' ]
+26 silly lockFile fec6bbf0-nodemon-1-3-7 nodemon@1.3.7
+27 verbose lock nodemon@1.3.7 /home/tdbts/.npm/fec6bbf0-nodemon-1-3-7.lock
+28 verbose registry.get https://registry.npmjs.org/nodemon not expired, no request
+29 silly lockFile bcea1563-js-org-nodemon-nodemon-1-3-7-tgz https://registry.npmjs.org/nodemon/-/nodemon-1.3.7.tgz
+30 verbose lock https://registry.npmjs.org/nodemon/-/nodemon-1.3.7.tgz /home/tdbts/.npm/bcea1563-js-org-nodemon-nodemon-1-3-7-tgz.lock
+31 verbose addRemoteTarball [ 'https://registry.npmjs.org/nodemon/-/nodemon-1.3.7.tgz',
+31 verbose addRemoteTarball   '447bc2e01bf499cbf5853f9937496e0a04835449' ]
+32 info retry fetch attempt 1 at 12:02:02
+33 verbose fetch to= /tmp/npm-15733-27_ZqMcm/registry.npmjs.org/nodemon/-/nodemon-1.3.7.tgz
+34 http GET https://registry.npmjs.org/nodemon/-/nodemon-1.3.7.tgz
+35 http 200 https://registry.npmjs.org/nodemon/-/nodemon-1.3.7.tgz
+36 silly lockFile bcea1563-js-org-nodemon-nodemon-1-3-7-tgz https://registry.npmjs.org/nodemon/-/nodemon-1.3.7.tgz
+37 silly lockFile bcea1563-js-org-nodemon-nodemon-1-3-7-tgz https://registry.npmjs.org/nodemon/-/nodemon-1.3.7.tgz
+38 silly lockFile fec6bbf0-nodemon-1-3-7 nodemon@1.3.7
+39 silly lockFile fec6bbf0-nodemon-1-3-7 nodemon@1.3.7
+40 error Error: EACCES, mkdir '/home/tdbts/.npm/nodemon/1.3.7'
+40 error  { [Error: EACCES, mkdir '/home/tdbts/.npm/nodemon/1.3.7']
+40 error   errno: 3,
+40 error   code: 'EACCES',
+40 error   path: '/home/tdbts/.npm/nodemon/1.3.7' }
+41 error Please try running this command again as root/Administrator.
+42 error System Linux 3.13.0-45-generic
+43 error command "/usr/bin/node" "/usr/bin/npm" "update" "-g" "nodemon"
+44 error cwd /home/tdbts/Documents/Hckr/projects/apps/shopScraper
+45 error node -v v0.10.33
+46 error npm -v 1.4.28
+47 error path /home/tdbts/.npm/nodemon/1.3.7
+48 error code EACCES
+49 error errno 3
+50 error stack Error: EACCES, mkdir '/home/tdbts/.npm/nodemon/1.3.7'
+51 verbose exit [ 3, true ]

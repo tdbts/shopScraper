@@ -1,10 +1,15 @@
 var request = require('request'), 
 	cheerio = require('cheerio'), 
+	scraper = require('./scraper'),
+	shopRiteDomData = require('./shopRiteDomData'),  
+	Product = require('./Product'),
+	CircularPageData = require('./CircularPageData'),  
 	async = require('async');
 
-var scrapeShopRite = {
+var scrapeShopRite = scraper.extend({
 
 	config: {
+		storeName: "Shop Rite", 
 		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/2/", 
 		pageNumberLocation: 'span.pages', 
 		startDateLocation: {
@@ -72,6 +77,14 @@ var scrapeShopRite = {
 		} 
 	}, 
 
+	getText: function (selector, textLocation) {
+		return selector.find(textLocation).text();
+	}, 
+
+	getImageUrl: function (selector, imageElement, imageAttribute) {
+		 return selector.find(imageElement).attr(imageAttribute);
+	}, 
+
 	scrapePage: function (pageNumber, callback) {
 		
 		var self = scrapeShopRite;
@@ -83,11 +96,7 @@ var scrapeShopRite = {
 			if (!err && resp.statusCode === 200) {
 
 				var $ = cheerio.load(body); 
-				var pageData = {
-					startDate: '', 
-					endDate: '', 
-					products: []
-				};
+				var pageData = new CircularPageData();
 				
 				pageData.startDate = self.getDate(self.config.startDateLocation, $);
 				pageData.endDate = self.getDate(self.config.endDateLocation, $);
@@ -95,20 +104,13 @@ var scrapeShopRite = {
 				var productConfig = self.config.product;
 
 				$(productConfig.containerLocation).map(function () {
-					
-					var name = $(this).find(productConfig.nameLocation).text(), 
-						price = $(this).find(productConfig.priceLocation).text(), 
-						description = $(this).find(productConfig.descriptionLocation).text(), 
-						image = $(this).find(productConfig.imageLocation.element)
-							.attr(productConfig.imageLocation.attribute);	
-					
-					if (name && price && description && image) {
-						pageData.products.push({
-							productName: name, 
-							productDescription: description || "No description provided.", 
-							price: price, 
-							imageUrl: image
-						});
+					var name = shopRiteDomData.getProductText($(this), 'name'), 
+						price = shopRiteDomData.getProductText($(this), 'price'), 
+						description = shopRiteDomData.getProductText($(this), 'description'), 	
+						image = self.getImageUrl($(this), productConfig.imageLocation.element, productConfig.imageLocation.attribute);
+
+					if (name && price && image) {
+						pageData.products.push(new Product(name, price, description, image));
 					}
 
 				});
@@ -173,16 +175,9 @@ var scrapeShopRite = {
 
 		});
 
-	},  
-
-	handleError: function (err, message) {
-		
-		if (err) {
-			return new Error(message + "\n" + err);
-		}
-
 	}
-};
+
+});
 
 
 
