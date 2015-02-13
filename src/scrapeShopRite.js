@@ -9,6 +9,7 @@ var scrapeShopRite = scraper.extend({
 
 	config: {
 		storeName: "Shop Rite", 
+		// "PseudoStoreID" is same as data-clientanalyticslabel attribute of store hrefs!
 		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/2/", 
 		pageNumberLocation: 'span.pages'
 	}, 
