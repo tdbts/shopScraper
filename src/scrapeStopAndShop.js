@@ -99,7 +99,6 @@ var scrapeStopAndShop = scraper.extend({
 			}
 		], 
 
-
 		function (err, results) {
 			callback(err, results);
 		}); 
