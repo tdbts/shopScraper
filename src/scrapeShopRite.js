@@ -1,7 +1,6 @@
-var cheerio = require('cheerio'), 
-	scraper = require('./scraper'),
-	shopRiteDomData = require('./shopRiteDomData'),
+var scraper = require('./scraper'),
 	getCircularNumberOfPages = require('./sr_getCircularNumberOfPages'), 
+	scrapePage = require('./sr_scrapePage'), 
 	CircularPageData = require('./CircularPageData'),  
 	async = require('async');
 
@@ -12,32 +11,6 @@ var scrapeShopRite = scraper.extend({
 		// "PseudoStoreID" is same as data-clientanalyticslabel attribute of store hrefs!
 		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/2/", 
 		pageNumberLocation: 'span.pages'
-	}, 
-
-	handlePageData: function (err, resp, body) {
-
-		if (!err && resp.statusCode === 200) {
-		
-			var $ = cheerio.load(body),
-				pageData = new CircularPageData();
-			
-			pageData.startDate = shopRiteDomData.getDate($, 'start');
-			pageData.endDate = shopRiteDomData.getDate($, 'end');
-
-			shopRiteDomData.collectProducts($, pageData.products);
-
-			// DEVELOPMENT ONLY
-			// console.log(pageData);
-			return pageData;			
-		}
-	}, 
-
-	scrapePage: function (pageNumber, callback) {
-		
-		var self = scrapeShopRite;
-
-		self.makeRequest(self.config.baseURL + pageNumber, self.handlePageData, callback);
-
 	}, 
 
 	collectAllProducts: function (data, resultsObj, dateParser) {
@@ -57,20 +30,16 @@ var scrapeShopRite = scraper.extend({
 
 		var self = this;
 
-		async.map(pagesArray, self.scrapePage, function (err, pagesDataArray) {
-			
-			var error = self.handleError("There was an error mapping over the page numbers!");
+		scrapePage.setBaseURL(this.config.baseURL);
 
-			// DEVELOPMENT ONLY
-			// console.log(JSON.stringify(results));
-			// console.log(results.length);
+		async.map(pagesArray, scrapePage.scrape, function (err, pagesDataArray) {
+
+			var error = self.handleError("There was an error mapping over the page numbers!");
 
 			var circularData = new CircularPageData();
 
 			self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
 
-			// DEVELOPMENT ONLY
-			// console.log(circularData);
 			console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
 			callback(error, circularData);
 
@@ -89,7 +58,6 @@ var scrapeShopRite = scraper.extend({
 	}
 
 });
-
 
 
 module.exports = scrapeShopRite;

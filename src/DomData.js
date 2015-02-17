@@ -24,25 +24,31 @@ DomData.prototype.getProductText = function (selector, property) {
 	return this.getText(selector, this.config.product[property]);
 };
 
+DomData.prototype.getProductData = function (currentItem) {
+	var imageConfig = this.config.product.image,
+		itemData = {};
+
+	itemData.name = this.getProductText(currentItem, 'name');
+	itemData.price = this.getProductText(currentItem, 'price');
+	itemData.description = this.getProductText(currentItem, 'description');
+	itemData.image = this.getImageUrl(currentItem, imageConfig.element, imageConfig.attribute);
+
+	return itemData;
+};
+
 DomData.prototype.collectProducts = function (_$, dest) {
-	var self = this,  
-		imageConfig = self.config.product.image,
-		container = self.config.product.container, 
-		name, price, description, image;
+	var self = this, 
+		container = self.config.product.container;
 
 	_$(container).map(function () {
-		name = self.getProductText(_$(this), 'name');
-		price = self.getProductText(_$(this), 'price'); 
-		description = self.getProductText(_$(this), 'description'); 
-		image = self.getImageUrl(_$(this), imageConfig.element, imageConfig.attribute);
+		var itemData = self.getProductData(_$(this));
 
-		if (name && price && image) {
-			dest.push(new Product(name, price, description, image));
+		if (itemData.name && itemData.price && itemData.image) {
+			dest.push(new Product(itemData.name, itemData.price, itemData.description, itemData.image));
 		}	
 	});
 
 	return;
-
 };
 
 module.exports = DomData;
