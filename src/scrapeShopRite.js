@@ -38,6 +38,8 @@ var scrapeShopRite = scraper.extend({
 
 			self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
 
+			circularData.storeName = self.config.storeName;
+
 			console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
 			
 			callback(err, circularData);
