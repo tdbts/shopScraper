@@ -45,12 +45,14 @@ router.get('/ShopRite', function (req, res) {
 	
 	scrapeShopRite.scrape(function (err, data) {
 		
-		res.render('productListings', {
-			storeName: "ShopRite",  
-			startDate: data.startDate, 
-			endDate: data.endDate, 
-			products: data.products
-		});
+		if (!err) {
+			res.render('productListings', {
+				storeName: "ShopRite",  
+				startDate: data.startDate, 
+				endDate: data.endDate, 
+				products: data.products
+			});
+		}
 	});
 
 });

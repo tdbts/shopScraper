@@ -62,6 +62,8 @@ var scrapeStopAndShop = scraper.extend({
 
 		self.processPageDataObjects(pageDataArray, allProducts, self.getDate, self.collectAllProducts);
 
+		allProducts.storeName = self.config.storeName;
+
 		self.logScrapeResults(allProducts.products);
 
 		callback(err, allProducts);

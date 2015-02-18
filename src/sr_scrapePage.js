@@ -15,6 +15,7 @@ var scrapePage = scraper.extend({
 	}, 
 
 	handlePageData: function (err, resp, body) {
+		var self = scrapePage;
 
 		if (!err && resp.statusCode === 200) {
 		
@@ -25,6 +26,8 @@ var scrapePage = scraper.extend({
 			pageData.endDate = shopRiteDomData.getDate($, 'end');
 
 			shopRiteDomData.collectProducts($, pageData.products);
+
+			pageData.storeName = self.config.storeName;
 
 			// DEVELOPMENT ONLY
 			// console.log(pageData);

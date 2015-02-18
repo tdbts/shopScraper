@@ -34,15 +34,13 @@ var scrapeShopRite = scraper.extend({
 
 		async.map(pagesArray, scrapePage.scrape, function (err, pagesDataArray) {
 
-			var error = self.handleError("There was an error mapping over the page numbers!");
-
 			var circularData = new CircularPageData();
 
 			self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
 
 			console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
-			callback(error, circularData);
-
+			
+			callback(err, circularData);
 		});
 
 	},
