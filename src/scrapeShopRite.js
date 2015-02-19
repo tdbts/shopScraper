@@ -35,7 +35,7 @@ var scrapeShopRite = scraper.extend({
 		async.map(pagesArray, scrapePage.scrape, function (err, pagesDataArray) {
 
 			var circularData = new CircularPageData();
-
+			
 			self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
 
 			circularData.storeName = self.config.storeName;
