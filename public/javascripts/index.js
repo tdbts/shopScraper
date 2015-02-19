@@ -1,5 +1,7 @@
 var $ = require('jquery'), 
-	_ = require('underscore');
+	_ = require('underscore'), 
+	React = require('react'), 
+	Alert = require('react-bootstrap').Alert;
 	
 $(document).ready(function() {
 
