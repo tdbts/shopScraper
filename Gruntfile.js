@@ -17,13 +17,25 @@ module.exports = function (grunt) {
 	            src: 'Gruntfile.js'
 	        },
 	        lib: {
-	            src: ['src/*.js']
+	            src: ['src/*.js', 'public/javascripts/*.js', '!public/javascripts/bundle.js']
 	        }
 	    }, 
 
 		nodemon: {
 			dev: {
 				script: 'app.js'
+			}
+		}, 
+
+		browserify: {
+			main: {
+				options: {
+					bundleOptions: {
+						debug: true
+					}
+				}, 
+				src: ['public/javascripts/*.js'], 
+				dest: ['public/javascripts/bundle.js']
 			}
 		}, 
 
@@ -44,7 +56,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-nodemon');
+	grunt.loadNpmTasks('grunt-browserify');
 
-	grunt.registerTask('default', ['mochaTest', 'jshint', 'nodemon']);
+	grunt.registerTask('default', ['mochaTest', 'jshint', 'nodemon', 'browserify']);
 };
 
