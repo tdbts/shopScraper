@@ -1,6 +1,7 @@
 var express = require('express'),
 	router = express.Router(),
 	renderListings = require('../src/renderListings'),
+	storeLogoData = require('../src/storeLogoData'), 
 	scrapeBigY = require('../src/scrapeBigY'),
 	scrapeShopRite = require('../src/scrapeShopRite'),
 	scrapeStopAndShop = require('../src/scrapeStopAndShop');
@@ -9,12 +10,7 @@ var express = require('express'),
 /* GET home page. */
 router.get('/', function (req, res) {
 	
-	res.render('index', {
-		title: "Welcome to ShopScraper", 
-		bigYLogo: '/images/big_y_logo.jpeg', 
-		stopAndShopLogo: '/images/stop_and_shop_logo.jpeg',
-		shopRiteLogo: '/images/shop_rite_logo.jpeg'
-	});
+	res.render('index');
 
 });
 
@@ -31,6 +27,11 @@ router.get('/ShopRite', function (req, res) {
 router.get('/StopAndShop', function (req, res) {
 	
 	renderListings(res, scrapeStopAndShop);
+});
+
+router.get('/ShopScraperNavigation', function (req, res) {
+
+	res.send(storeLogoData);	
 });
 
 
