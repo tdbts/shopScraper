@@ -1,10 +1,21 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+#navbar {
+	height: 50px;
 }
 
 a {
   color: #00B7FF;
+}
+
+.fa-2x {
+	font-size: 1.75em;
+}
+
+#content {
+	padding-left: 50px;
 }
 
 .product_image {
@@ -13,3 +24,4 @@ a {
 	max-width: 200px;
 	max-height: 200px;
 }
+

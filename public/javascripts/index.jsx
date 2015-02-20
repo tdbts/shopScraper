@@ -69,5 +69,5 @@ var StoreLogoData = [
 // 	}
 // });
 
-React.render(React.createElement(ShopChooser, {stores: StoreLogoData}), document.getElementById('store_navigation_container'));
+React.render(<ShopChooser stores={StoreLogoData} />, document.getElementById('store_navigation_container'));
 // React.render(<TestReact />, document.getElementById('store_navigation_container'));
