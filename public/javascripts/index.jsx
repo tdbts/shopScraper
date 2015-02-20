@@ -1,13 +1,9 @@
 /** @jsx React.DOM */
 
 var React = require('react'), 
-	// StoreNavigationLogo = require('./StoreNavigationLogo'), 
-	// ShopLogoRow = require('./ShopLogoRow'), 
-	// ShopChooser = require('./ShopChooser'), 
-	// TestReact = require('./TestReact');
 	ShopChooser = require('../javascripts/ShopChooser');
 	
-var StoreLogoData = [
+var storeLogoData = [
 	{
 		storeID: "0", 
 		storeName: "Big Y", 
@@ -34,40 +30,5 @@ var StoreLogoData = [
 	} 
 ];
 
-// var StoreNavigationLogo = React.createClass({
-// 	render: function () {
-// 		return (
-// 			<div id={this.props.store.containerID} className="col-md-3 col-xs-6">
-// 				<img id={this.props.store.imageID} className="store_logo" src={this.props.store.imageURL} alt={this.props.store.storeName} />
-// 					<a href={this.props.store.storeHref}></a>
-// 			</div>
-// 		);	
-// 	}
-// });
 
-// var ShopLogoRow = React.createClass({
-// 	render: function () {
-// 		var logos = [];
-// 		this.props.stores.forEach(function (store) {
-// 			logos.push(<StoreNavigationLogo store={store} />)
-// 		});
-// 		return (
-// 			<div id="shop_row" className="row">
-// 				{logos}
-// 			</div>
-// 		);
-// 	}
-// });
-
-// var ShopChooser = React.createClass({
-// 	render: function () {
-// 		return (
-// 			<div>
-// 				<ShopLogoRow />
-// 			</div>
-// 		);
-// 	}
-// });
-
-React.render(<ShopChooser stores={StoreLogoData} />, document.getElementById('store_navigation_container'));
-// React.render(<TestReact />, document.getElementById('store_navigation_container'));
+React.render(<ShopChooser stores={storeLogoData} />, document.getElementById('store_navigation_container'));

@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var renderListings = require('../src/renderListings');
-var scrapeBigY = require('../src/scrapeBigY');
-var scrapeShopRite = require('../src/scrapeShopRite');
-var scrapeStopAndShop = require('../src/scrapeStopAndShop');
+var express = require('express'),
+	router = express.Router(),
+	renderListings = require('../src/renderListings'),
+	scrapeBigY = require('../src/scrapeBigY'),
+	scrapeShopRite = require('../src/scrapeShopRite'),
+	scrapeStopAndShop = require('../src/scrapeStopAndShop');
 
 
 /* GET home page. */
