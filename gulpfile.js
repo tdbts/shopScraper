@@ -4,24 +4,23 @@ var gulp = require('gulp'),
 	nodemon = require('gulp-nodemon'), 
 	mocha = require('gulp-mocha'),
 	mochaReporter = require('mocha-pretty-spec-reporter'), 
-	uglify = require('gulp-uglify'),
-	htmlReplace = require('gulp-html-replace'),  
+	// uglify = require('gulp-uglify'),
+	// htmlReplace = require('gulp-html-replace'),  
 	source = require('vinyl-source-stream'), 
 	browserify = require('browserify'), 
-	watchify = require('watchify'), 
-	reactify = require('reactify'), 
-	react = require('gulp-react'), 
-	streamify = require('gulp-streamify'); 
+	// watchify = require('watchify'), 
+	// reactify = require('reactify'), 
+	// streamify = require('gulp-streamify') 
+	react = require('gulp-react'); 
 
-gulp.task('transform', function () {
+gulp.task('transform', ['test'], function () {
 	gulp.src(['public/javascripts/*.jsx'])
 		.pipe(react())
 		.pipe(gulp.dest('public/javascripts'));	
 });
 
-gulp.task('browserify', function () {
+gulp.task('browserify', ['transform'], function () {
 	return browserify('./public/javascripts/index.js')
-		// .transform(reactify)
 		.bundle()
 		.on('error', function (err) {
 			console.log(err.toString());
@@ -30,32 +29,6 @@ gulp.task('browserify', function () {
 		.pipe(source('bundle.js'))
 		.pipe(gulp.dest('./public/dist'));
 });
-
-// gulp.task('copy', function () {
-// 	gulp.src('index.html')
-// 		.pipe(gulp.dest('public/dist'));	
-// });
-
-// gulp.task('watch', function () {
-// 	gulp.watch('index.html', ['copy']);
-
-// 	var watcher = watchify(browserify({
-// 		entries: ['./public/javascripts/index.js'], 
-// 		transform: [reactify], 
-// 		debug: true, 
-// 		cache: {}, packageCache: {}, fullPaths: true
-// 	}));
-
-// 	return watcher.on('update', function () {
-// 		watcher.bundle()
-// 			.pipe(source('bundle.js'))
-// 			.pipe(gulp.dest('public/dist'));
-// 			console.log('Sources updated.');		
-// 	})
-// 		.bundle()
-// 		.pipe(source('build.js'))
-// 		.pipe(gulp.dest('public/dist'));
-// });
 
 gulp.task('jshint', function () {
 	gulp.src([
@@ -71,12 +44,11 @@ gulp.task('jshint', function () {
 gulp.task('watch', function () {
 	var sourcefiles = [
 		'src/*.js', 
-		'public/javascripts/*.js', 
-		'public/javascripts/bundle.js', 
+		'public/javascripts/*.js',  
 		'gulpfile.js'
 	];
 
-	gulp.watch(sourcefiles, ['jshint', 'test']);
+	gulp.watch(sourcefiles, ['jshint']);
 
 });
 
@@ -85,7 +57,7 @@ gulp.task('test', function () {
 		.pipe(mocha({reporter: mochaReporter}));	
 });
 
-gulp.task('server-restart', function () {
+gulp.task('server-restart', ['browserify'], function () {
 	nodemon({
 		script: './bin/www', 
 		ext: 'js jsx html', 
@@ -105,5 +77,5 @@ gulp.task('server-restart', function () {
 		});	
 });
 
-gulp.task('default', ['jshint', 'test']);
-gulp.task('dev', ['watch', 'server-restart']);
+gulp.task('default', ['watch']);
+gulp.task('build', ['test', 'transform', 'browserify', 'server-restart']);
