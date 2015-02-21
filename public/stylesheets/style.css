@@ -6,12 +6,16 @@ body {
 	height: 50px;
 }
 
+#navbar_container {
+	width: 98%;
+}
+
 a {
   color: #00B7FF;
 }
 
 .fa-2x {
-	font-size: 1.75em;
+	font-size: 1.55em;
 }
 
 #content {

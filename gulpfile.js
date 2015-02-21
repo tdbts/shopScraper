@@ -44,12 +44,17 @@ gulp.task('jshint', function () {
 gulp.task('watch', function () {
 	var sourcefiles = [
 		'src/*.js', 
-		'public/javascripts/*.js',  
+		'public/javascripts/*.js',
+		'!public/src/bootstrap.min.js',   
 		'gulpfile.js'
 	];
 
 	gulp.watch(sourcefiles, ['jshint']);
 
+});
+
+gulp.task('watch', function () {
+	gulp.watch('public/javascripts/*.jsx', ['transform']);
 });
 
 gulp.task('test', function () {
@@ -59,7 +64,8 @@ gulp.task('test', function () {
 
 gulp.task('server-restart', ['browserify'], function () {
 	nodemon({
-		script: './bin/www', 
+		script: './bin/www',
+		// script: './app.js',  
 		ext: 'js jsx html', 
 		env: {
 			'NODE_ENV': 'development'
