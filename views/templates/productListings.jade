@@ -6,13 +6,17 @@ block content
 
 	h3 #{storeName} Flyer for #{startDate} to #{endDate} 
 
-	.products_container
-		//- p= products
-		ul 
+	.products_container.col-md-3
+		
+		ul.products_ul 
 			each product in products
 				.product_info
-					li 
-						h3.product_name Product: #{product.productName}
-						p.product_desciption Description : #{product.productDescription}
-						p.product_price Price: #{product.price}
-						img.product_image(src=product.imageUrl)
+					li
+						.container_product_name
+							h3.product_name Product: #{product.productName}
+						.container_product_description
+							p.product_desciption Description : #{product.productDescription}
+						.container_product_price
+							p.product_price Price: #{product.price}
+						.container_product_image
+							img.product_image(src=product.imageUrl)
