@@ -1,15 +1,52 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+#navbar {
+	height: 50px;
+}
+
+#navbar_container {
+	width: 98%;
 }
 
 a {
   color: #00B7FF;
 }
 
-.product_image {
+.fa-2x {
+	font-size: 1.55em;
+}
+
+#content {
+	padding-left: 50px;
+}
+
+ul.products_ul {
+	list-style-type: none;
+	padding-left: 0;
+}
+
+.products_container {
+	border: 2px solid black;
+}
+
+.product_info {
+	border-bottom: 1px solid black;
+	padding: 5px;
+}
+
+/*.product_image {
 	min-width: 100px;
 	min-height: 100px;
 	max-width: 200px;
 	max-height: 200px;
+}
+*/
+img.product_image {
+    padding-left: 20%;
+    max-height: 200px;
+    max-width: 300px;
+    min-height: 175px;
+    min-width: 185px;
 }

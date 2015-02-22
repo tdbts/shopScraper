@@ -28,9 +28,13 @@ module.exports = function (grunt) {
 		}, 
 
 		browserify: {
-			main: {
-				src: ['public/javascripts/index.js'], 
-				dest: 'public/javascripts/bundle.js'
+			dist: {
+				files: {
+					'public/javascripts/bundle.js': ['public/javascripts/*.{js,jsx}', '!public/javascripts/bundle.js']
+				}
+			}, 
+			options: {
+				transform: ['reactify']
 			}
 		}, 
 

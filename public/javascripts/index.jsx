@@ -17,7 +17,7 @@ $(document).ready(function() {
 		url: '/ShopScraperNavigation', 
 		
 		success: function (storeLogoData) {
-			React.render(React.createElement(ShopChooser, {stores: storeLogoData}), document.getElementById('store_navigation_container'));	
+			React.render(<ShopChooser stores={storeLogoData} />, document.getElementById('store_navigation_container'));	
 		}
 	});
 
