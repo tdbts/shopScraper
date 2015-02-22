@@ -44,7 +44,7 @@ DomData.prototype.collectProducts = function (_$, dest) {
 		var itemData = self.getProductData(_$(this));
 
 		if (itemData.name && itemData.price && itemData.image) {
-			dest.push(new Product(itemData.name, itemData.price, itemData.description, itemData.image));
+			dest.push(new Product(itemData.name, itemData.description, itemData.price, itemData.image));
 		}	
 	});
 
