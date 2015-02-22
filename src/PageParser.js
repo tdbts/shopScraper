@@ -22,7 +22,7 @@ PageParser.prototype.getProperImageSize = function (str) {
 
 PageParser.prototype.collectPageProductObjects = function (src, dest, ProductConstructor) {
 	var self = this;
-
+	
 	return src.map(function (product) {
 		
 		dest.push(new ProductConstructor(
