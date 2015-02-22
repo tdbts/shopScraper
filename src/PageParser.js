@@ -16,14 +16,20 @@ PageParser.prototype.getDateFromPage = function (productDataArray, type) {
 	return productDataArray[0][prop];	
 };
 
+PageParser.prototype.getProperImageSize = function (str) {
+	return str.replace(/li\/[0-9][0-9]./, "li/200.");
+};
+
 PageParser.prototype.collectPageProductObjects = function (src, dest, ProductConstructor) {
+	var self = this;
+
 	return src.map(function (product) {
 		
 		dest.push(new ProductConstructor(
 			product.title, 
 			product.description, 
 			product.price + " " + product.pricequalifier, 
-			product.image
+			self.getProperImageSize(product.image)
 		));
 	});	
 };
