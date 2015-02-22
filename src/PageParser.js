@@ -29,7 +29,6 @@ PageParser.prototype.collectPageProductObjects = function (src, dest, ProductCon
 			product.title, 
 			product.description, 
 			product.price + " " + product.pricequalifier, 
-			// product.image.replace(/li\/[0-9][0-9]./, "li/200.");
 			self.getProperImageSize(product.image)
 		));
 	});	
