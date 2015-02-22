@@ -36,17 +36,10 @@ ul.products_ul {
 	padding: 5px;
 }
 
-/*.product_image {
-	min-width: 100px;
-	min-height: 100px;
-	max-width: 200px;
-	max-height: 200px;
-}
-*/
 img.product_image {
     padding-left: 20%;
-    max-height: 200px;
-    max-width: 300px;
-    min-height: 175px;
-    min-width: 185px;
+    max-height: 75%;
+    max-width: 75%;
+    min-height: 25%;
+    min-width: 25%;
 }
