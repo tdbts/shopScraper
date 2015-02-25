@@ -3,8 +3,10 @@ html
 	head
 		meta(charset="UTF-8")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
-		link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
-		link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css")
+		//- link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
+		link(rel="stylesheet" href="lib/font_awesome/css/font-awesome.min.css")
+		//- link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css")
+		link(rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css")
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		title= title
 	body
@@ -48,9 +50,11 @@ html
 
 		#content
 			block content
-		script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+		//- script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+		script(src="lib/jQuery/jquery-2.1.3.min.js")
 		//- script(src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js")
-		script(src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
+		//- script(src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
+		script(src="lib/bootstrap/js/bootstrap.min.js")
 		//- script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js")
 		//- script(type="text/js" src="index.js")
 		block scripts
