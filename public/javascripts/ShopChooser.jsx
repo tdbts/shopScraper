@@ -3,6 +3,7 @@ var React = require('react'),
 
 var ShopChooser = React.createClass({
 	render: function () {
+		
 		return (
 			<div>
 				<ShopLogoRow stores={this.props.stores} />

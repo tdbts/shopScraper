@@ -9,17 +9,18 @@ window.$ = window.jQuery = require('jquery');
 
 $(document).ready(function() {
 
-	// This is throwing an error because the way my html is set up, the ajax call 
-	// below will run on every page load, including the calls to the other routes.   
-	$.ajax({	
-		type: "GET",
+	// I just feel like there has got to be a better way to conditionally load 
+	// the ajax depending on the url path
+	if (window.location.pathname === "/") {
+		$.ajax({	
+			type: "GET",
 
-		url: '/ShopScraperNavigation', 
-		
-		success: function (storeLogoData) {
-			React.render(React.createElement(ShopChooser, {stores: storeLogoData}), document.getElementById('store_navigation_container'));	
-		}
-	});
-
+			url: '/ShopScraperNavigation', 
+			
+			success: function (storeLogoData) {
+				React.render(React.createElement(ShopChooser, {stores: storeLogoData}), document.getElementById('store_navigation_container'));	
+			}
+		});
+	}   
 
 });

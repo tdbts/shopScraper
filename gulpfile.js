@@ -44,8 +44,7 @@ gulp.task('jshint', function () {
 gulp.task('watch', function () {
 	var sourcefiles = [
 		'src/*.js', 
-		'public/javascripts/*.js',
-		'!public/src/bootstrap.min.js',   
+		'public/javascripts/*.js',   
 		'gulpfile.js'
 	];
 
@@ -64,8 +63,7 @@ gulp.task('test', function () {
 
 gulp.task('server-restart', ['browserify'], function () {
 	nodemon({
-		script: './bin/www',
-		// script: './app.js',  
+		script: './bin/www',  
 		ext: 'js jsx html', 
 		env: {
 			'NODE_ENV': 'development'

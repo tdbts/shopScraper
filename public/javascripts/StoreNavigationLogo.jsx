@@ -2,6 +2,7 @@ var React = require('react');
 
 var StoreNavigationLogo = React.createClass({
 	render: function () {
+		
 		return (
 			<div id={this.props.store.containerID} className="col-md-3 col-xs-6">
 				<a href={this.props.store.storeHref}>

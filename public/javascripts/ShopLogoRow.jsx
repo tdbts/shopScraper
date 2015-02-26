@@ -4,9 +4,11 @@ var React = require('react'),
 var ShopLogoRow = React.createClass({
 	render: function () {
 		var logos = [];
+		
 		this.props.stores.forEach(function (store) {
 			logos.push(<StoreNavigationLogo key={store.storeID} store={store} />)
 		});
+
 		return (
 			<div id="shop_row" className="row">
 				{logos}

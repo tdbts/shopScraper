@@ -11,17 +11,25 @@ window.$ = window.jQuery = require('jquery');
 $(document).ready(function() {
 
 	// This is throwing an error because the way my html is set up, the ajax call 
-	// below will run on every page load, including the calls to the other routes.   
-	$.ajax({	
-		type: "GET",
+	// below will run on every page load, including the calls to the other routes.
+	// --> Problem "averted" using Jade templates --> 'bundle.js' file only loads 
+	// when 'index' template is rendered.  However, I can see now that this fix 
+	// will not hold.  What happens when I need to load the bundle for the other 
+	// routes??  I'll get the same exact problem, thus this is not the way to 
+	// handle this issue.  Rather, I need to find a way to conditionally make this 
+	// ajax call, depending upon something like window.location, or something else  
+	// more reliable.
+	if (window.location.pathname === "/") {
+		$.ajax({	
+			type: "GET",
 
-		url: '/ShopScraperNavigation', 
-		
-		success: function (storeLogoData) {
-			React.render(React.createElement(ShopChooser, {stores: storeLogoData}), document.getElementById('store_navigation_container'));	
-		}
-	});
-
+			url: '/ShopScraperNavigation', 
+			
+			success: function (storeLogoData) {
+				React.render(React.createElement(ShopChooser, {stores: storeLogoData}), document.getElementById('store_navigation_container'));	
+			}
+		});
+	}   
 
 });
 
@@ -27525,6 +27533,7 @@ var React = require('react'),
 
 var ShopChooser = React.createClass({displayName: "ShopChooser",
 	render: function () {
+		
 		return (
 			React.createElement("div", null, 
 				React.createElement(ShopLogoRow, {stores: this.props.stores})
@@ -27541,9 +27550,11 @@ var React = require('react'),
 var ShopLogoRow = React.createClass({displayName: "ShopLogoRow",
 	render: function () {
 		var logos = [];
+		
 		this.props.stores.forEach(function (store) {
 			logos.push(React.createElement(StoreNavigationLogo, {key: store.storeID, store: store}))
 		});
+
 		return (
 			React.createElement("div", {id: "shop_row", className: "row"}, 
 				logos
@@ -27558,6 +27569,7 @@ var React = require('react');
 
 var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo",
 	render: function () {
+		
 		return (
 			React.createElement("div", {id: this.props.store.containerID, className: "col-md-3 col-xs-6"}, 
 				React.createElement("a", {href: this.props.store.storeHref}, 

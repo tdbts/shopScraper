@@ -18,19 +18,10 @@ var getPromotionID = scraper.extend({
 
 		if (!err && resp.statusCode >= 300 && resp.statusCode < 400) {
 
-			// DEVELOPMENT ONLY
-			// console.log(resp.statusCode);
-			// console.log(resp.toJSON());
-
 			var queryObj = self.getQueryObject(resp.headers.location);
 			
-			// DEVELOPMENT ONLY
-			// console.log(queryObj);
-
 			var promotionIDobj = _.pick(queryObj, 'promotionid');
-			// DEVELOPMENT ONLY
-			// console.log(promotionIDobj);
-
+			
 			return promotionIDobj;
 		}		
 	}, 	
