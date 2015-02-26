@@ -53,7 +53,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('watch', function () {
-	gulp.watch('public/javascripts/*.jsx', ['transform']);
+	gulp.watch('public/javascripts/*.jsx', ['bundle']);
 });
 
 gulp.task('test', function () {
@@ -82,4 +82,5 @@ gulp.task('server-restart', ['browserify'], function () {
 });
 
 gulp.task('default', ['watch']);
+gulp.task('bundle', ['test', 'transform', 'browserify']);
 gulp.task('build', ['test', 'transform', 'browserify', 'server-restart']);

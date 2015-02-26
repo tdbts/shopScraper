@@ -89,66 +89,66 @@ describe("Product constructor", function () {
 
 });
 
-// Testing '../src/requester.js'
-describe("Requester Object", function () {
+// // Testing '../src/requester.js'
+// describe("Requester Object", function () {
 	
-	var requester = require('../src/requester');
+// 	var requester = require('../src/requester');
 
-	it("Should be extensible.", function () {
+// 	it("Should be extensible.", function () {
 		
-		var childObj = {
-			prop1: "value1", 
-			prop2: function () {
-				return "value2";
-			}, 
-			scrape: function () {
-				return "Scrape successful!";
-			}
-		};
+// 		var childObj = {
+// 			prop1: "value1", 
+// 			prop2: function () {
+// 				return "value2";
+// 			}, 
+// 			scrape: function () {
+// 				return "Scrape successful!";
+// 			}
+// 		};
 
-		var extension = requester.extend(childObj);
+// 		var extension = requester.extend(childObj);
 
-		expect(extension).to.have.a.property('prop1');
-		expect(extension.prop2).to.be.a('function');
-		expect(extension.scrape()).to.equal("Scrape successful!");
+// 		expect(extension).to.have.a.property('prop1');
+// 		expect(extension.prop2).to.be.a('function');
+// 		expect(extension.scrape()).to.equal("Scrape successful!");
 
-	});	
+// 	});	
 
-	it("Should make a request.", function () {
+// 	it("Should make a request.", function () {
 		
-		var urlNock = nock('http://www.twitter.com')
-				.get('/')
-				.reply(200, "Wus good, man!");
+// 		var urlNock = nock('http://www.twitter.com')
+// 				.get('/')
+// 				.reply(200, "Wus good, man!");
 
-		var fakeHandler = function (err, resp) {
+// 		var fakeHandler = function (err, resp) {
 
-			if (!err && resp.statusCode === 200) {
-				return resp.body;
-			}
-		};
+// 			if (!err && resp.statusCode === 200) {
+// 				return resp.body;
+// 			}
+// 		};
 
-		requester.makeRequest('http://www.twitter.com', fakeHandler, function (err, result) {
-			return expect(result).to.equal("Wus good, man!");
-		});
+// 		requester.makeRequest('http://www.twitter.com', fakeHandler, function (err, result) {
+// 			return expect(result).to.equal("Wus good, man!");
+// 		});
 	
-	});
+// 	});
 
-	it("Should handle errors.", function () {
+// 	it("Should handle errors.", function () {
 		
-		expect(requester.handleError("Test Error", "Scraper returned an error: ")).to.throw;
-	});	
+// 		expect(requester.handleError("Test Error", "Scraper returned an error: ")).to.throw;
+// 	});	
 
-// This test throws errors -- find a better way to test whether this unit.
-	// it("Should return the request module in order to create new request-oriented methods.", function () {
+// // This test throws errors -- find a better way to test whether this unit.
+// 	// it("Should return the request module in order to create new request-oriented methods.", function () {
 		
-	// 	var result = requester.getRequester(), 
-	// 		request = require('request');
+// 	// 	var result = requester.getRequester(), 
+// 	// 		request = require('request');
 
-	// 	expect(result).to.equal(request);
+// 	// 	expect(result).to.equal(request);
 	
-	// });
+// 	// });
 
-});
+// });
 
 // Testing '../src/scraper.js'
 describe("Scraper Base Object", function () {

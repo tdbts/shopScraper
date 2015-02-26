@@ -10,15 +10,8 @@ window.$ = window.jQuery = require('jquery');
 
 $(document).ready(function() {
 
-	// This is throwing an error because the way my html is set up, the ajax call 
-	// below will run on every page load, including the calls to the other routes.
-	// --> Problem "averted" using Jade templates --> 'bundle.js' file only loads 
-	// when 'index' template is rendered.  However, I can see now that this fix 
-	// will not hold.  What happens when I need to load the bundle for the other 
-	// routes??  I'll get the same exact problem, thus this is not the way to 
-	// handle this issue.  Rather, I need to find a way to conditionally make this 
-	// ajax call, depending upon something like window.location, or something else  
-	// more reliable.
+	// I just feel like there has got to be a better way to conditionally load 
+	// the ajax depending on the url path
 	if (window.location.pathname === "/") {
 		$.ajax({	
 			type: "GET",
