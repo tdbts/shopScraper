@@ -70,7 +70,7 @@ gulp.task('server-restart', ['browserify'], function () {
 		}
 	})
 		.on('start', ['watch'])
-		.on('change', ['watch'])
+		.on('change', ['bundle'])
 		.on('restart', function () {
 			var date = new Date(), 
 				hour = date.getHours(), 

@@ -27526,7 +27526,7 @@ var React = require('react'),
 
 var ShopChooser = React.createClass({displayName: "ShopChooser",
 	render: function () {
-		
+
 		return (
 			React.createElement("div", null, 
 				React.createElement(ShopLogoRow, {stores: this.props.stores})
@@ -27536,6 +27536,7 @@ var ShopChooser = React.createClass({displayName: "ShopChooser",
 });
 
 module.exports = ShopChooser;
+
 },{"./ShopLogoRow":151,"react":149}],151:[function(require,module,exports){
 var React = require('react'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo');

@@ -3,7 +3,7 @@ var React = require('react'),
 
 var ShopChooser = React.createClass({displayName: "ShopChooser",
 	render: function () {
-		
+
 		return (
 			React.createElement("div", null, 
 				React.createElement(ShopLogoRow, {stores: this.props.stores})
