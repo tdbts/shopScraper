@@ -1,8 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react'), 
-	ShopChooser = require('../javascripts/ShopChooser'), 
-	StoreCircularComponent = require('../javascripts/StoreCircularComponent'), 	
+	ShopChooser = require('../javascripts/ShopChooser'),  	
 	$ = require('jquery');
 
 window.$ = window.jQuery = require('jquery');
