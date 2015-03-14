@@ -68,6 +68,8 @@ var scrapeBigY = scraper.extend({
 			
 			circularData.storeName = self.config.storeName;
 
+			self.assignIDsToProducts(circularData.products);
+			
 			self.logScrapeResults(circularData.products);
 
 			return circularData;	

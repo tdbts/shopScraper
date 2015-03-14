@@ -3,6 +3,7 @@
 
 var React = require('react'), 
 	ShopChooser = require('../javascripts/ShopChooser'), 
+	StoreCircularComponent = require('../javascripts/StoreCircularComponent'), 	
 	$ = require('jquery');
 
 window.$ = window.jQuery = require('jquery');
@@ -11,7 +12,10 @@ window.$ = window.jQuery = require('jquery');
 $(document).ready(function() {
 
 	// I just feel like there has got to be a better way to conditionally load 
-	// the ajax depending on the url path
+	// the ajax depending on the url path.
+	// Ultimately, this code will use the logged-in user's data from MongoDB to 
+	// determine which store's logos to get from the backend...well, actually, the final 
+	// version of this webapp won't have this logo placeholder at all.  
 	if (window.location.pathname === "/") {
 		$.ajax({	
 			type: "GET",
@@ -19,14 +23,24 @@ $(document).ready(function() {
 			url: '/ShopScraperNavigation', 
 			
 			success: function (storeLogoData) {
+
 				React.render(React.createElement(ShopChooser, {stores: storeLogoData}), document.getElementById('store_navigation_container'));	
+			
+				$('.container_store_logo_navigation').on('click', function () {
+
+					var ajaxRoute = $(this).attr('data-ajax_route');
+					
+					$.get(ajaxRoute, function (responseData) {
+						React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('test_store_components_container'));
+					});
+				});
 			}
 		});
 	}   
 
 });
 
-},{"../javascripts/ShopChooser":150,"jquery":3,"react":149}],2:[function(require,module,exports){
+},{"../javascripts/ShopChooser":151,"../javascripts/StoreCircularComponent":153,"jquery":3,"react":149}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -27521,6 +27535,31 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":31}],150:[function(require,module,exports){
+var React = require('react');
+
+var ProductComponent = React.createClass({displayName: "ProductComponent",
+	render: function () {
+		return (
+			React.createElement("div", {className: "product_info"}, 
+				React.createElement("div", {className: "container_product_name"}, 
+					React.createElement("h3", {className: "product_name"}, this.props.product.productName)
+				), 
+				React.createElement("div", {className: "container_product_description"}, 
+					React.createElement("p", {className: "product_description"}, this.props.product.productDescription)
+				), 
+				React.createElement("div", {className: "container_product_price"}, 
+					React.createElement("p", {className: "product_price"}, this.props.product.price)
+				), 
+				React.createElement("div", {className: "container_product_image"}, 
+					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
+				)
+			)
+		)
+	}
+});
+
+module.exports = ProductComponent;
+},{"react":149}],151:[function(require,module,exports){
 var React = require('react'), 
 	ShopLogoRow = require('./ShopLogoRow');
 
@@ -27537,7 +27576,7 @@ var ShopChooser = React.createClass({displayName: "ShopChooser",
 
 module.exports = ShopChooser;
 
-},{"./ShopLogoRow":151,"react":149}],151:[function(require,module,exports){
+},{"./ShopLogoRow":152,"react":149}],152:[function(require,module,exports){
 var React = require('react'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo');
 
@@ -27558,15 +27597,60 @@ var ShopLogoRow = React.createClass({displayName: "ShopLogoRow",
 });
 
 module.exports = ShopLogoRow;
-},{"./StoreNavigationLogo":152,"react":149}],152:[function(require,module,exports){
+},{"./StoreNavigationLogo":154,"react":149}],153:[function(require,module,exports){
+var React = require('react'), 
+	ProductComponent = require('./ProductComponent');
+
+var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
+	// getInitialState: function () {
+	// 	return {
+	// 		circularData: ''
+	// 	};
+	// }, 
+
+	// componentDidMount: function () {
+	// 	 $.get(this.props.urlForData, function (responseData) {
+	// 	 	if (this.isMounted()) {
+	// 	 		this.setState({
+	// 	 			circularData: responseData
+	// 	 		});
+	// 	 	}
+	// 	 }.bind(this));
+	// }, 
+
+	render: function () {
+		var storeProducts = [];
+
+		this.props.circularData.products.forEach(function (productData) {
+			storeProducts.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}))
+		});
+
+		return (
+			React.createElement("div", {className: "store_circular_component col-md-3"}, 
+				React.createElement("div", {className: "store_header_component"}, 
+					React.createElement("h1", {className: "header_store_name"}, this.props.circularData.storeName)
+				), 
+				React.createElement("div", {className: "store_circular_date_component"}, 
+					React.createElement("h4", {className: "store_valid_dates"}, React.createElement("em", null, "Valid from ", this.props.circularData.startDate, " to ", this.props.circularData.endDate))
+				), 
+				React.createElement("div", {className: "container_circular_products"}, 
+					storeProducts
+				)
+			)
+		)
+	}
+});
+
+module.exports = StoreCircularComponent;
+},{"./ProductComponent":150,"react":149}],154:[function(require,module,exports){
 var React = require('react');
 
 var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo",
 	render: function () {
 		
 		return (
-			React.createElement("div", {id: this.props.store.containerID, className: "col-md-3 col-xs-6"}, 
-				React.createElement("a", {href: this.props.store.storeHref}, 
+			React.createElement("div", {"data-ajax_route": this.props.store.storeHref, id: this.props.store.containerID, className: "container_store_logo_navigation col-md-3 col-xs-6"}, 
+				React.createElement("a", {href: "#", className: "store_navigation_link"}, 
 					React.createElement("img", {id: this.props.store.imageID, className: "store_logo", src: this.props.store.imageURL, alt: this.props.store.storeName})
 				)
 			)

@@ -13,13 +13,13 @@ var gulp = require('gulp'),
 	// streamify = require('gulp-streamify') 
 	react = require('gulp-react'); 
 
-gulp.task('transform', ['test'], function () {
+gulp.task('transform', function () {
 	gulp.src(['public/javascripts/*.jsx'])
 		.pipe(react())
-		.pipe(gulp.dest('public/javascripts'));	
+		.pipe(gulp.dest('public/javascripts'));
 });
 
-gulp.task('browserify', ['transform'], function () {
+gulp.task('browserify', function () {
 	return browserify('./public/javascripts/index.js')
 		.bundle()
 		.on('error', function (err) {
@@ -44,16 +44,16 @@ gulp.task('jshint', function () {
 gulp.task('watch', function () {
 	var sourcefiles = [
 		'src/*.js', 
-		'public/javascripts/*.js',   
+		'public/javascripts/*.js',    
 		'gulpfile.js'
 	];
 
-	gulp.watch(sourcefiles, ['jshint']);
+	gulp.watch(sourcefiles, ['browserify']);
 
 });
 
 gulp.task('watch', function () {
-	gulp.watch('public/javascripts/*.jsx', ['bundle']);
+	gulp.watch('public/javascripts/*.jsx', ['transform', 'browserify']);
 });
 
 gulp.task('test', function () {
@@ -61,16 +61,16 @@ gulp.task('test', function () {
 		.pipe(mocha({reporter: mochaReporter}));	
 });
 
-gulp.task('server-restart', ['browserify'], function () {
+gulp.task('server-restart', function () {
 	nodemon({
 		script: './bin/www',  
-		ext: 'js jsx html', 
+		ext: 'js jsx html json', 
 		env: {
 			'NODE_ENV': 'development'
 		}
 	})
-		.on('start', ['watch'])
-		.on('change', ['bundle'])
+		// .on('start', ['bundle'])
+		// .on('change', ['bundle'])
 		.on('restart', function () {
 			var date = new Date(), 
 				hour = date.getHours(), 

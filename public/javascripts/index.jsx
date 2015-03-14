@@ -2,6 +2,7 @@
 
 var React = require('react'), 
 	ShopChooser = require('../javascripts/ShopChooser'), 
+	StoreCircularComponent = require('../javascripts/StoreCircularComponent'), 	
 	$ = require('jquery');
 
 window.$ = window.jQuery = require('jquery');
@@ -21,7 +22,17 @@ $(document).ready(function() {
 			url: '/ShopScraperNavigation', 
 			
 			success: function (storeLogoData) {
+
 				React.render(<ShopChooser stores={storeLogoData} />, document.getElementById('store_navigation_container'));	
+			
+				$('.container_store_logo_navigation').on('click', function () {
+
+					var ajaxRoute = $(this).attr('data-ajax_route');
+					
+					$.get(ajaxRoute, function (responseData) {
+						React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('test_store_components_container'));
+					});
+				});
 			}
 		});
 	}   

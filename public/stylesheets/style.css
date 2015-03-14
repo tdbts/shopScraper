@@ -22,9 +22,33 @@ a {
 	padding-left: 50px;
 }
 
+/* PLACEHOLDER */
+#store_navigation_container {
+	margin-top: 50px;
+	margin-left: 20%;
+}
+/* PLACEHOLDER */
+
 ul.products_ul {
 	list-style-type: none;
 	padding-left: 0;
+}
+
+.store_circular_component {
+	border: 2px solid black;
+}
+
+.header_store_name {
+    border-bottom: 2px solid black;
+    font-weight: bold;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.store_valid_dates {
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+    text-align: center;
 }
 
 .products_container {
@@ -43,3 +67,4 @@ img.product_image {
     min-height: 25%;
     min-width: 25%;
 }
+

@@ -16,6 +16,13 @@ var scraper = requester.extend({
 		return json.content.collection[0].data;
 	}, 
 
+	assignIDsToProducts: function (productsArray) {
+
+		productsArray.forEach(function (item, index) {
+			return item.shsc_id = index.toString();
+		});	
+	}, 
+
 	logScrapeResults: function (productsArray) {
 		
 		console.log("Scraped " + productsArray.length + " products from this week's " + 
