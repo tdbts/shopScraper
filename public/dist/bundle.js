@@ -26,14 +26,14 @@ $(document).ready(function() {
 
 				React.render(React.createElement(ShopChooser, {stores: storeLogoData}), document.getElementById('store_navigation_container'));	
 			
-				$('.container_store_logo_navigation').on('click', function () {
+				// $('.container_store_logo_navigation').on('click', function () {
 
-					var ajaxRoute = $(this).attr('data-ajax_route');
+				// 	var ajaxRoute = $(this).attr('data-ajax_route');
 					
-					$.get(ajaxRoute, function (responseData) {
-						React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('test_store_components_container'));
-					});
-				});
+				// 	$.get(ajaxRoute, function (responseData) {
+				// 		React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('test_store_components_container'));
+				// 	});
+				// });
 			}
 		});
 	}   
@@ -27559,11 +27559,24 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 });
 
 module.exports = ProductComponent;
+
 },{"react":149}],151:[function(require,module,exports){
 var React = require('react'), 
-	ShopLogoRow = require('./ShopLogoRow');
+	ShopLogoRow = require('./ShopLogoRow'), 
+	StoreCircularComponent = require('./StoreCircularComponent');
 
 var ShopChooser = React.createClass({displayName: "ShopChooser",
+	componentDidMount: function () {
+		$('.container_store_logo_navigation').on('click', function () {
+
+			var ajaxRoute = $(this).attr('data-ajax_route');
+			
+			$.get(ajaxRoute, function (responseData) {
+				React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('test_store_components_container'));
+			});
+		});		
+	}, 
+
 	render: function () {
 
 		return (
@@ -27576,7 +27589,7 @@ var ShopChooser = React.createClass({displayName: "ShopChooser",
 
 module.exports = ShopChooser;
 
-},{"./ShopLogoRow":152,"react":149}],152:[function(require,module,exports){
+},{"./ShopLogoRow":152,"./StoreCircularComponent":153,"react":149}],152:[function(require,module,exports){
 var React = require('react'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo');
 
@@ -27645,7 +27658,7 @@ module.exports = StoreCircularComponent;
 },{"./ProductComponent":150,"react":149}],154:[function(require,module,exports){
 var React = require('react');
 
-var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo",
+var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo", 
 	render: function () {
 		
 		return (

@@ -1,6 +1,6 @@
 var React = require('react');
 
-var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo",
+var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo", 
 	render: function () {
 		
 		return (
