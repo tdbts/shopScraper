@@ -4,6 +4,7 @@ var gulp = require('gulp'),
 	nodemon = require('gulp-nodemon'), 
 	mocha = require('gulp-mocha'),
 	mochaReporter = require('mocha-pretty-spec-reporter'), 
+	notify = require('gulp-notify'), 
 	// uglify = require('gulp-uglify'),
 	// htmlReplace = require('gulp-html-replace'),  
 	source = require('vinyl-source-stream'), 
@@ -16,6 +17,7 @@ var gulp = require('gulp'),
 gulp.task('transform', function () {
 	gulp.src(['public/javascripts/*.jsx'])
 		.pipe(react())
+		.on('error', console.log.bind(console))
 		.pipe(gulp.dest('public/javascripts'));
 });
 
@@ -23,7 +25,11 @@ gulp.task('browserify', function () {
 	return browserify('./public/javascripts/index.js')
 		.bundle()
 		.on('error', function (err) {
-			console.log(err.toString());
+			// console.log(err.toString());
+			notify.onError({
+				message: "<%= error.message %>"
+			}).apply(this, arguments);
+
 			this.emit('end'); 
 		})
 		.pipe(source('bundle.js'))
