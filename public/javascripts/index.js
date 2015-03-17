@@ -2,11 +2,8 @@
 
 var React = require('react'), 
 	ShopChooser = require('../javascripts/ShopChooser'),
-	Navigation = require('../javascripts/Navigation');   	
-	// $ = require('jquery');
-
-// window.$ = window.jQuery = require('jquery');
-
+	Navigation = require('../javascripts/Navigation'), 
+	ThreeColumnsView = require('../javascripts/ThreeColumnsView'); 	
 
 $(document).ready(function() {
 
@@ -30,4 +27,5 @@ $(document).ready(function() {
 
 	React.render(React.createElement(Navigation, null), document.getElementById('navigation_wrapper'));
 
+	React.render(React.createElement(ThreeColumnsView, null), document.getElementById('window_wrapper'));
 });

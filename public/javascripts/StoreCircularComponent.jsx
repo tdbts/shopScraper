@@ -26,7 +26,7 @@ var StoreCircularComponent = React.createClass({
 		});
 
 		return (
-			<div className="store_circular_component col-md-3">
+			<div className="store_circular_component">
 				<div className="store_header_component">
 					<h1 className="header_store_name">{this.props.circularData.storeName}</h1>
 				</div>

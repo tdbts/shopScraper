@@ -3,11 +3,8 @@
 
 var React = require('react'), 
 	ShopChooser = require('../javascripts/ShopChooser'),
-	Navigation = require('../javascripts/Navigation');   	
-	// $ = require('jquery');
-
-// window.$ = window.jQuery = require('jquery');
-
+	Navigation = require('../javascripts/Navigation'), 
+	ThreeColumnsView = require('../javascripts/ThreeColumnsView'); 	
 
 $(document).ready(function() {
 
@@ -31,9 +28,10 @@ $(document).ready(function() {
 
 	React.render(React.createElement(Navigation, null), document.getElementById('navigation_wrapper'));
 
+	React.render(React.createElement(ThreeColumnsView, null), document.getElementById('window_wrapper'));
 });
 
-},{"../javascripts/Navigation":150,"../javascripts/ShopChooser":153,"react":148}],2:[function(require,module,exports){
+},{"../javascripts/Navigation":153,"../javascripts/ShopChooser":156,"../javascripts/ThreeColumnsView":161,"react":148}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -18323,6 +18321,62 @@ module.exports = require('./lib/React');
 },{"./lib/React":30}],149:[function(require,module,exports){
 var React = require('react');
 
+var CollapsibleListItem = React.createClass({displayName: "CollapsibleListItem",
+	render: function () {
+		return (
+			React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, this.props.text))
+		)
+	}
+});
+
+module.exports = CollapsibleListItem;
+
+},{"react":148}],150:[function(require,module,exports){
+var React = require('react'), 
+	CollapsibleListItem = require('./CollapsibleListItem');
+
+var CollapsibleUnorderedList = React.createClass({displayName: "CollapsibleUnorderedList",
+	render: function () {
+		var subCategories = [];
+
+		this.props.subCategories.forEach(function (subCategory) {
+			subCategories.push(React.createElement(CollapsibleListItem, {key: subCategory.key, text: subCategory.text}));
+		});
+
+		return (
+			React.createElement("ul", {id: this.props.domID, className: "nav collapse panel_suboptions"}, 
+				subCategories
+			)	
+		)
+	}
+});
+
+module.exports = CollapsibleUnorderedList;
+
+},{"./CollapsibleListItem":149,"react":148}],151:[function(require,module,exports){
+var React = require('react'), 
+	CollapsibleUnorderedList = require('./CollapsibleUnorderedList');
+
+var CollapsingPanelOption = React.createClass({displayName: "CollapsingPanelOption",
+	render: function () {
+		var targetHref = "#" + this.props.config.targetID, 
+			fontAwesomeClassName = "fa " + this.props.config.fontAwesomeIcon + " fa-fw";
+		return (
+			React.createElement("li", {className: "collapsing_panel_option"}, 
+				React.createElement("a", {className: "side_panel_option collapse_anchor", "data-toggle": "collapse", href: targetHref}, 
+					React.createElement("span", {className: fontAwesomeClassName}), " ", this.props.config.optionName, React.createElement("span", {className: "fa arrow"})
+				), 
+				React.createElement(CollapsibleUnorderedList, {domID: this.props.config.targetID, subCategories: this.props.config.subCategories})
+			)
+		)
+	}
+});
+
+module.exports = CollapsingPanelOption;
+
+},{"./CollapsibleUnorderedList":150,"react":148}],152:[function(require,module,exports){
+var React = require('react');
+
 var Navbar = React.createClass({displayName: "Navbar",
 	render: function () {
 		return (
@@ -18387,7 +18441,7 @@ var Navbar = React.createClass({displayName: "Navbar",
 });
 
 module.exports = Navbar;
-},{"react":148}],150:[function(require,module,exports){
+},{"react":148}],153:[function(require,module,exports){
 var React = require('react'), 
 	Navbar = require('./Navbar'), 
 	SidePanel = require('./SidePanel');
@@ -18404,7 +18458,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 });
 
 module.exports = Navigation;
-},{"./Navbar":149,"./SidePanel":155,"react":148}],151:[function(require,module,exports){
+},{"./Navbar":152,"./SidePanel":158,"react":148}],154:[function(require,module,exports){
 var React = require('react');
 
 var ProductComponent = React.createClass({displayName: "ProductComponent",
@@ -18430,7 +18484,7 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 
 module.exports = ProductComponent;
 
-},{"react":148}],152:[function(require,module,exports){
+},{"react":148}],155:[function(require,module,exports){
 /* 
 * SearchField component requires FontAwesome for the magnifying glass icon.
 */
@@ -18453,7 +18507,7 @@ var SearchField = React.createClass({displayName: "SearchField",
 });
 
 module.exports = SearchField;
-},{"react":148}],153:[function(require,module,exports){
+},{"react":148}],156:[function(require,module,exports){
 var React = require('react'), 
 	ShopLogoRow = require('./ShopLogoRow'), 
 	StoreCircularComponent = require('./StoreCircularComponent');
@@ -18482,7 +18536,7 @@ var ShopChooser = React.createClass({displayName: "ShopChooser",
 
 module.exports = ShopChooser;
 
-},{"./ShopLogoRow":154,"./StoreCircularComponent":156,"react":148}],154:[function(require,module,exports){
+},{"./ShopLogoRow":157,"./StoreCircularComponent":159,"react":148}],157:[function(require,module,exports){
 var React = require('react'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo');
 
@@ -18503,29 +18557,14 @@ var ShopLogoRow = React.createClass({displayName: "ShopLogoRow",
 });
 
 module.exports = ShopLogoRow;
-},{"./StoreNavigationLogo":157,"react":148}],155:[function(require,module,exports){
+},{"./StoreNavigationLogo":160,"react":148}],158:[function(require,module,exports){
 var React = require('react'), 
-	SearchField = require('./SearchField');
+	SearchField = require('./SearchField'),  
+	CollapsingPanelOption = require('./CollapsingPanelOption');
 
 var SidePanel = React.createClass({displayName: "SidePanel",
-	toggleActiveClass: function (eventName, classManipulationMethod) {
-		$('.panel_suboptions').on(eventName, function () {
-			var parentListItem = $(this).parents('.collapsing_list_item');
-
-			if (parentListItem.length === 1) {
-				$(parentListItem)[classManipulationMethod]('active');
-			}
-		});
-	}, 
-
 	componentDidMount: function () {
-		// this.toggleActiveClass('show.bs.collapse', 'addClass');
-		// this.toggleActiveClass('hide.bs.collapse', 'removeClass');
-
-		// $('.panel_suboptions').on('shown.bs.collapse', function (e) {
-		// 	$(this).parent().siblings('.collapsing_list_item').find('.panel_suboptions').removeClass('in');
-		// });
-		
+		/* *** Source: metisMenu.js *** */
 		$('#side-menu').find('li').has('ul').children('a').on('click', function (e) {
 			e.preventDefault();
 
@@ -18535,6 +18574,40 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 	}, 
 
 	render: function () {
+		var dashboardSubCategories = [{text: "Add Store", key: "0"}, {text: "Swap Store", key: "1"}, {text: "Add Favorite", key: "2"}], 
+			favoritesSubCategories = [{text: "Brawny", key: "0"}, {text: "Oreo", key: "1"}, {text: "Chicken Broth", key: "2"}, {text: "Beer", key: "3"}], 
+			listsSubCategories = [{text: "Stop & Shop", key: "0"}, {text: "Shop Rite", key: "1"}], 
+			settingsSubCategories = [{text: "Display", key: "0"}, {text: "Search", key: "1"}, {text: "Notifications", key: "2"}, {text: "Defaults", key: "3"}];
+
+		var dashboardOptionConfig = {
+			optionName: "Dashboard", 
+			targetID: "dashboard_panel_option", 
+			fontAwesomeIcon: "fa-dashboard", 
+			subCategories: dashboardSubCategories
+			},
+			
+			favoritesOptionConfig = {
+				optionName: "Favorites", 
+				targetID: "favorites_panel_option", 
+				fontAwesomeIcon: "fa-thumbs-up", 
+				subCategories: favoritesSubCategories
+			}, 
+
+			listsOptionConfig = {
+				optionName: "Lists", 
+				targetID: "lists_panel_option", 
+				fontAwesomeIcon: "fa-edit", 
+				subCategories: listsSubCategories
+			}, 
+
+			settingsOptionConfig = {
+				optionName: "Settings", 
+				targetID: "settings_panel_option", 
+				fontAwesomeIcon: "fa-cog", 
+				subCategories: settingsSubCategories
+			};
+
+
 		return (
 		    React.createElement("div", {className: "navbar-default sidebar", role: "navigation"}, 
 		        React.createElement("div", {className: "sidebar-nav navbar-collapse"}, 
@@ -18542,42 +18615,13 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 		                React.createElement("li", {className: "sidebar-search"}, 
 		                    React.createElement(SearchField, null)
 		                ), 
-		                React.createElement("li", {className: "collapsing_list_item"}, 
-		                    React.createElement("a", {className: "side_panel_option collapse_anchor", "data-toggle": "collapse", href: "#dashboard_panel_option"}, React.createElement("span", {className: "fa fa-dashboard fa-fw"}), " Dashboard", React.createElement("span", {className: "fa arrow"})), 
-		                    React.createElement("ul", {id: "dashboard_panel_option", className: "nav collapse panel_suboptions"}, 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Add Store")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Swap Store")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Add Favorite"))
-		                    )
-		                ), 
-		                React.createElement("li", {className: "collapsing_list_item"}, 
-		                    React.createElement("a", {className: "side_panel_option collapse_anchor", "data-toggle": "collapse", href: "#favorites_panel_option"}, React.createElement("span", {className: "fa fa-thumbs-up fa-fw"}), " Favorites", React.createElement("span", {className: "fa arrow"})), 
-		                    React.createElement("ul", {id: "favorites_panel_option", className: "nav collapse panel_suboptions"}, 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Brawny")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Oreo")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Chicken Broth")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Beer"))
-		                    )
-		                ), 
+		                React.createElement(CollapsingPanelOption, {config: dashboardOptionConfig}), 
+		                React.createElement(CollapsingPanelOption, {config: favoritesOptionConfig}), 
 		                React.createElement("li", null, 
 		                    React.createElement("a", {className: "side_panel_option", href: "#"}, React.createElement("span", {className: "fa fa-user fa-fw"}), " User")
 		                ), 
-		                React.createElement("li", {className: "collapsing_list_item"}, 
-		                    React.createElement("a", {className: "side_panel_option collapse_anchor", "data-toggle": "collapse", href: "#lists_panel_option"}, React.createElement("span", {className: "fa fa-edit fa-fw"}), " Lists", React.createElement("span", {className: "fa arrow"})), 
-		                    React.createElement("ul", {id: "lists_panel_option", className: "nav collapse panel_suboptions"}, 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Stop & Shop")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Shop Rite"))
-		                    )
-		                ), 
-		                React.createElement("li", {className: "collapsing_list_item"}, 
-		                    React.createElement("a", {className: "side_panel_option collapse_anchor", "data-toggle": "collapse", href: "#settings_panel_option"}, React.createElement("span", {className: "fa fa-cog fa-fw"}), " Settings", React.createElement("span", {className: "fa arrow"})), 
-		                    React.createElement("ul", {id: "settings_panel_option", className: "nav collapse panel_suboptions"}, 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Display")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Search")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Notifications")), 
-		                        React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, "Defaults"))
-		                    )
-		                ), 
+		                React.createElement(CollapsingPanelOption, {config: listsOptionConfig}), 
+		                React.createElement(CollapsingPanelOption, {config: settingsOptionConfig}), 
 		                React.createElement("li", null, 
 		                    React.createElement("a", {className: "side_panel_option", href: "#"}, React.createElement("span", {className: "fa fa-history fa-fw"}), " History")
 		                )
@@ -18589,7 +18633,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 });
 
 module.exports = SidePanel;
-},{"./SearchField":152,"react":148}],156:[function(require,module,exports){
+},{"./CollapsingPanelOption":151,"./SearchField":155,"react":148}],159:[function(require,module,exports){
 var React = require('react'), 
 	ProductComponent = require('./ProductComponent');
 
@@ -18618,7 +18662,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 		});
 
 		return (
-			React.createElement("div", {className: "store_circular_component col-md-3"}, 
+			React.createElement("div", {className: "store_circular_component"}, 
 				React.createElement("div", {className: "store_header_component"}, 
 					React.createElement("h1", {className: "header_store_name"}, this.props.circularData.storeName)
 				), 
@@ -18634,7 +18678,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 });
 
 module.exports = StoreCircularComponent;
-},{"./ProductComponent":151,"react":148}],157:[function(require,module,exports){
+},{"./ProductComponent":154,"react":148}],160:[function(require,module,exports){
 var React = require('react');
 
 var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo", 
@@ -18654,4 +18698,46 @@ module.exports = StoreNavigationLogo;
 
 
 
-},{"react":148}]},{},[1]);
+},{"react":148}],161:[function(require,module,exports){
+var React = require('react'), 
+	StoreCircularComponent = require('./StoreCircularComponent');
+
+var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
+	componentDidMount: function () {
+		$.get('/api/BigY', function (responseData) {
+			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_one'));
+		});
+
+		$.get('/api/StopAndShop', function (responseData) {
+			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_two'));
+		});			
+		
+		$.get('/api/ShopRite', function (responseData) {
+			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_three'));
+		});
+	}, 
+
+	render: function () {
+		return (
+			React.createElement("div", {id: "three_columns_view"}, 
+				React.createElement("div", {id: "container_three_columns", className: "container"}, 
+					React.createElement("div", {id: "three_columns_row", className: "row"}, 
+						React.createElement("div", {className: "col-md-1"}), 
+						React.createElement("div", {id: "column_one", className: "col-md-3"}
+						), 
+						React.createElement("div", {className: "col-md-1"}), 
+						React.createElement("div", {id: "column_two", className: "col-md-3"}
+						), 
+						React.createElement("div", {className: "col-md-1"}), 
+						React.createElement("div", {id: "column_three", className: "col-md-3"}
+						)
+					)
+				)
+			)
+		)
+	}
+});
+
+module.exports = ThreeColumnsView;
+
+},{"./StoreCircularComponent":159,"react":148}]},{},[1]);

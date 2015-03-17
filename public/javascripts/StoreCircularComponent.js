@@ -26,7 +26,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 		});
 
 		return (
-			React.createElement("div", {className: "store_circular_component col-md-3"}, 
+			React.createElement("div", {className: "store_circular_component"}, 
 				React.createElement("div", {className: "store_header_component"}, 
 					React.createElement("h1", {className: "header_store_name"}, this.props.circularData.storeName)
 				), 

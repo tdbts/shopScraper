@@ -43,30 +43,37 @@ ul.products_ul {
 }
 
 .store_circular_component {
-	border: 2px solid black;
+	border: 2px solid #777;
 }
 
 .header_store_name {
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #777;
     font-weight: bold;
     padding-bottom: 10px;
     text-align: center;
 }
 
 .store_valid_dates {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #777;
     padding-bottom: 10px;
     text-align: center;
 }
 
 .products_container {
-	border: 2px solid black;
+	border: 2px solid #777;
 }
 
 .product_info {
-	border-bottom: 1px solid black;
-	padding: 5px;
+	border-bottom: 1px solid #777;
+    padding: 5px;
+	padding-top: 0px;
 }
+
+.product_name {
+    padding-top: 0px;
+}
+
+
 
 img.product_image {
     padding-left: 20%;
@@ -174,4 +181,10 @@ body {
 /* ADDITIONS TO SIDE-MENU */
 .panel_suboption {
     padding-left: 30px;
+}
+
+
+/* WINDOW CSS */
+#container_three_columns {
+    margin-top: 20px;
 }
