@@ -18519,11 +18519,18 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 	}, 
 
 	componentDidMount: function () {
-		this.toggleActiveClass('show.bs.collapse', 'addClass');
-		this.toggleActiveClass('hide.bs.collapse', 'removeClass');
+		// this.toggleActiveClass('show.bs.collapse', 'addClass');
+		// this.toggleActiveClass('hide.bs.collapse', 'removeClass');
 
-		$('.panel_suboptions').on('shown.bs.collapse', function (e) {
-			$(this).parent().siblings('.collapsing_list_item').find('.panel_suboptions').removeClass('in');
+		// $('.panel_suboptions').on('shown.bs.collapse', function (e) {
+		// 	$(this).parent().siblings('.collapsing_list_item').find('.panel_suboptions').removeClass('in');
+		// });
+		
+		$('#side-menu').find('li').has('ul').children('a').on('click', function (e) {
+			e.preventDefault();
+
+			$(this).parent('li').toggleClass('active').children('ul').collapse('toggle');
+			$(this).parent('li').siblings().removeClass('active').children('ul.in').collapse('hide');
 		});
 	}, 
 
