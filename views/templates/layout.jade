@@ -3,55 +3,27 @@ html
 	head
 		meta(charset="UTF-8")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
-		link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
-		link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css")
+		//- link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
+		link(rel="stylesheet" href="/lib/font_awesome/css/font-awesome.min.css")
+		//- link(rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css")
+		link(rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css")
 		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', href='/stylesheets/sb-admin-2.css')
 		title= title
 	body
-		#wrapper
-			#navbar.nav.navbar-inverse
-				#navbar_container.container
-					.navbar-header
-						button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#myNavbar")
-							span.icon-bar
-							span.icon-bar
-							span.icon-bar
-						a.navbar-brand(href="/") Shop Scraper
-					#myNavbar.navbar-collapse.collapse(style="height: 1px")
-						ul.nav.navbar-nav
-							li#home_li.active.navbar_navText
-								a.navbar_link(href="/") Home
-							li#shops_li.dropdown.navbar_navText 
-								a.dropdown-toggle.navbar_link(href="#" data-toggle="dropdown") Shops 
-									span.caret 
-								ul.dropdown-menu
-									li.navbar_store_link
-										a(href="/BigY") Big Y 
-									li.navbar_store_link
-										a(href="/StopAndShop") Stop & Shop
-									li.navbar_store_link 
-										a(href="/ShopRite") ShopRite
-							li#about_li.navbar_navText
-								a.navbar_link(href="#") About									
-						ul.nav.navbar-nav.navbar-right
-							li 
-								a#email_icon_link.navbar_icon(href="#")
-									span.fa.fa-envelope.fa-2x(data-toggle="tooltip" data-placement="bottom" title="Email")
-							li
-								a#github_icon_link.navbar_icon(href="#")
-									span.fa.fa-github.fa-2x(data-toggle="tooltip" data-placement="bottom" title="Github Source Code")
-							li 
-								a#login_icon.link_icon.navbar_icon(href="#")
-									span.fa.fa-sign-in.fa-2x(data-toggle="tooltip" data-placement="botton" title="Log In")
-
-
+		#navigation_wrapper
 
 		#content
 			block content
-		script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+		//- script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+		script(src="/lib/jQuery/jquery-2.1.3.min.js")
 		//- script(src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js")
-		script(src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
+		//- script(src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js")
+		script(src="/lib/bootstrap/js/bootstrap.min.js")
+		//- script(src="/lib/ui-template/metisMenu.js")
+		script(src="/lib/ui-template/sb-admin-2.js")
 		//- script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.12.2/react.js")
 		//- script(type="text/js" src="index.js")
-		block scripts
+		script(src="/dist/bundle.js")
+		//- block scripts
 		

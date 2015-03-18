@@ -64,8 +64,10 @@ var scrapeStopAndShop = scraper.extend({
 
 		allProducts.storeName = self.config.storeName;
 
-		self.logScrapeResults(allProducts.products);
+		self.assignIDsToProducts(allProducts.products);
 
+		self.logScrapeResults(allProducts.products);
+		
 		callback(err, allProducts);
 	}, 
 

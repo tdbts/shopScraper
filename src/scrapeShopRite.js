@@ -9,7 +9,7 @@ var scrapeShopRite = scraper.extend({
 	config: {
 		storeName: "Shop Rite", 
 		// "PseudoStoreID" is same as data-clientanalyticslabel attribute of store hrefs!
-		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/2/", 
+		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/1/", 
 		pageNumberLocation: 'span.pages'
 	}, 
 
@@ -38,8 +38,10 @@ var scrapeShopRite = scraper.extend({
 			
 			self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
 
-			circularData.storeName = self.config.storeName;
+			circularData.storeName = self.config.storeName; 
 
+			self.assignIDsToProducts(circularData.products);
+			
 			console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
 			
 			callback(err, circularData);

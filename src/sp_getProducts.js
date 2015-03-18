@@ -1,3 +1,7 @@
+/* Stop & Shop - The store circulars for Stop & Shop are rendered on the server 
+and divided up into about a dozen or so different pages.  This module collects the 
+product data for an individual page of the circular. */
+
 var scraper = require('./scraper'), 
 	stopAndShopURLs = require('./stopAndShopURLs'), 
 	PageParser = require('./PageParser');

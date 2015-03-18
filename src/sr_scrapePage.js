@@ -30,7 +30,7 @@ var scrapePage = scraper.extend({
 			pageData.storeName = self.config.storeName;
 
 			// DEVELOPMENT ONLY
-			// console.log(pageData);
+			console.log(pageData.products[0]);
 			return pageData;			
 		}
 	}, 
@@ -38,7 +38,8 @@ var scrapePage = scraper.extend({
 	scrape: function (pageNumber, callback) {
 		
 		var self = scrapePage;
-
+		var url = self.config.baseURL + pageNumber;
+		console.log(url);
 		self.makeRequest(self.config.baseURL + pageNumber, self.handlePageData, callback);
 	}
 
