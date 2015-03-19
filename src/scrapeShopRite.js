@@ -7,10 +7,7 @@ var scraper = require('./scraper'),
 var scrapeShopRite = scraper.extend({
 
 	config: {
-		storeName: "Shop Rite", 
-		// "PseudoStoreID" is same as data-clientanalyticslabel attribute of store hrefs!
-		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/1/", 
-		pageNumberLocation: 'span.pages'
+		storeName: "Shop Rite" 
 	}, 
 
 	collectAllProducts: function (data, resultsObj, dateParser) {
@@ -30,7 +27,8 @@ var scrapeShopRite = scraper.extend({
 
 		var self = this;
 
-		scrapePage.setBaseURL(this.config.baseURL);
+		// DEPRECATED NOW THAT WE EXTEND SCRAPER CONFIGS WITH SERVER DATA
+		// scrapePage.setBaseURL(this.config.baseURL);
 
 		async.map(pagesArray, scrapePage.scrape, function (err, pagesDataArray) {
 
@@ -49,9 +47,14 @@ var scrapeShopRite = scraper.extend({
 
 	},
 
-	scrape: function (callback) {
+	scrape: function (data, callback) {
 		
 		var self = this;
+
+		// this.extendConfig(data);
+		[this, getCircularNumberOfPages, scrapePage].forEach(function (scraper) {
+			scraper.extendConfig(data);
+		});
 	
 		getCircularNumberOfPages.scrape(this.config.baseURL, function (err, pagesArray) {
 			self.scrapeCircular(pagesArray, callback);

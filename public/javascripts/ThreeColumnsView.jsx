@@ -34,7 +34,7 @@ var ThreeColumnsView = React.createClass({
 					</div>
 				</div>
 			</div>
-		)
+		);
 	}
 });
 

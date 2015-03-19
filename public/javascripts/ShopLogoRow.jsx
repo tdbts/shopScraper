@@ -6,7 +6,7 @@ var ShopLogoRow = React.createClass({
 		var logos = [];
 		
 		this.props.stores.forEach(function (store) {
-			logos.push(<StoreNavigationLogo key={store.storeID} store={store} />)
+			logos.push(<StoreNavigationLogo key={store.storeID} store={store} />);
 		});
 
 		return (

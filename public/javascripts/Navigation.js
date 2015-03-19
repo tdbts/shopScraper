@@ -9,7 +9,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 	        	React.createElement(Navbar, null), 
 	        	React.createElement(SidePanel, null)
 	        )			
-		)
+		);
 	}
 });
 

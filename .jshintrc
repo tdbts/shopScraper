@@ -1,5 +1,8 @@
 {
   "globals": {
+    "$": false, 
+    "jQuery": false, 
+    "document": false,
     "module": true,
     "define": true,
     "requirejs": true,

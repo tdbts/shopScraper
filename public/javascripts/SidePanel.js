@@ -68,7 +68,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 		            )
 		        )
 		    )
-		)
+		);
 	}
 });
 

@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react'), 
-	ShopChooser = require('../javascripts/ShopChooser'),
+	// ShopChooser = require('../javascripts/ShopChooser'),
 	Navigation = require('../javascripts/Navigation'), 
 	ThreeColumnsView = require('../javascripts/ThreeColumnsView'); 	
 

@@ -4,7 +4,7 @@ var async = require('async'),
 	getPagesMetadata = require('./sp_getPagesMetadata'),    
 	getProducts = require('./sp_getProducts'), 
 	CircularPageData = require('./CircularPageData'), 
-	stopAndShopURLs = require('./stopAndShopURLs');
+	UrlCreator = require('./UrlCreator');
 
 var scrapeStopAndShop = scraper.extend({
 
@@ -71,9 +71,10 @@ var scrapeStopAndShop = scraper.extend({
 		callback(err, allProducts);
 	}, 
 
-	scrape: function (callback) {
+	scrape: function (data, callback) {
 		
 		var self = this, 
+			stopAndShopURLs = new UrlCreator(data.urlConfigs, data.urlFragments),
 			urlForPromotionID = stopAndShopURLs.getUrl('forPromotionID');
 
 		async.waterfall([
@@ -97,6 +98,8 @@ var scrapeStopAndShop = scraper.extend({
 			function (pagesMetadata, cb) {
 
 				var pageIDs = pagesMetadata.getPageIDs();
+
+				getProducts.extendConfig(data);
 
 				self.asyncMapOverData(pageIDs, getProducts.scrape, self.coordinatePageDataProcessing, cb);
 			

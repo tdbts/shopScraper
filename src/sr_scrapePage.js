@@ -1,6 +1,6 @@
 var cheerio = require('cheerio'), 
 	CircularPageData = require('./CircularPageData'), 
-	shopRiteDomData = require('./shopRiteDomData'), 
+	DomData = require('./DomData'), 
 	scraper = require('./scraper');
 
 var scrapePage = scraper.extend({
@@ -15,7 +15,8 @@ var scrapePage = scraper.extend({
 	}, 
 
 	handlePageData: function (err, resp, body) {
-		var self = scrapePage;
+		var self = scrapePage,
+			shopRiteDomData = new DomData(self.config.domData);
 
 		if (!err && resp.statusCode === 200) {
 		

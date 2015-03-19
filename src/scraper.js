@@ -1,12 +1,34 @@
 var moment = require('moment'), 
-	requester = require('./requester');  
+	requester = require('./requester'), 
+	_ = require('underscore');
 
 var scraper = requester.extend({ 	
 	scrape: function () {}, 
 
+	setConfigData: function (key, value) {
+		if (!this.config) {
+			this.config = {};
+		}
+
+		return this.config[key] = value;
+	}, 
+
+	getConfigData: function (key) {
+		
+		return this.config[key]; 
+	}, 
+
+	extendConfig: function (dataObject) {
+		if (!this.config) {
+			this.config = {};
+		}
+
+		return this.config = _.extend(this.config, dataObject);
+	}, 
+
 	getStoreName: function () {
 		
-		return this.config.storeName;
+		return this.getConfigData('storeName');
 	}, 
 	
 	locateAndParsePageData: function (jsonSource) {

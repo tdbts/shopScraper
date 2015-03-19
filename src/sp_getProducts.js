@@ -2,8 +2,8 @@
 and divided up into about a dozen or so different pages.  This module collects the 
 product data for an individual page of the circular. */
 
-var scraper = require('./scraper'), 
-	stopAndShopURLs = require('./stopAndShopURLs'), 
+var scraper = require('./scraper'),  
+	UrlCreator = require('./UrlCreator'), 
 	PageParser = require('./PageParser');
 
 var getProducts = scraper.extend({
@@ -27,9 +27,11 @@ var getProducts = scraper.extend({
 	},  
 
 	scrape: function (pageID, callback) {
-		var self = getProducts; 
-		
-		self.config.pageid = pageID;
+		var self = getProducts, 
+			config = self.config, 
+			stopAndShopURLs = new UrlCreator(config.urlConfigs, config.urlFragments);
+
+		self.setConfigData('pageid', pageID);
 
 		var pageURL = stopAndShopURLs.getUrl('forProductData', function (obj) {
 			return obj.query.pageid = pageID;
