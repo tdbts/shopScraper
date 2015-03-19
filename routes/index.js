@@ -29,14 +29,14 @@ router.get('/stores/:storeName', function (req, res) {
 
 router.get('/api/:storeName', function (req, res) {
 	 
-	 var storeName = req.params.storeName;
+	var storeName = req.params.storeName;
 
-	 storeRouteMapper[storeName].scrape(function (err, circularData) {
+	storeRouteMapper[storeName].scrape(function (err, circularData) {
 	 	
 	 	if (!err) {
 		 	res.json(circularData);
-	 	}
-	 });
+		}
+	});
 });
 
 // *************************************************
