@@ -15,7 +15,8 @@ var myStoreData = {
 
 	ShopRite: {
 		// "PseudoStoreID" is same as data-clientanalyticslabel attribute of store hrefs!
-		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/1/", 
+		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/", 
+		circularNumber: "1/", 
 		pageNumberLocation: 'span.pages', 
 		domData: {
 			pageNumberLocation: 'span.pages', 

@@ -40,7 +40,7 @@ var scrapePage = scraper.extend({
 		
 		var self = scrapePage;
 		
-		self.makeRequest(self.config.baseURL + pageNumber, self.handlePageData, callback);
+		self.makeRequest(self.config.baseURL + self.config.circularNumber + pageNumber, self.handlePageData, callback);
 	}
 
 });
