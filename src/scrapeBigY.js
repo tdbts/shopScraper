@@ -5,9 +5,7 @@ var scraper = require('./scraper'),
 var scrapeBigY = scraper.extend({
 
 	config: {
-		storeName: "Big Y", 
-		circularDataLocation: "http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?size=768&storeId=",
-		storeIDNumber: "30"  	
+		storeName: "Big Y"	
 	}, 
 
 	getDate: function (sourceObject, dateType) {
@@ -76,12 +74,14 @@ var scrapeBigY = scraper.extend({
 		}
 	}, 
 	
-	scrape: function (callback) {
+	scrape: function (data, callback) {
 		
 		var self = this, 
 			config = this.config;
 
-		this.makeRequest(config.circularDataLocation + config.storeIDNumber, self.handleRequestResults, callback);
+		this.extendConfig(data);
+
+		this.makeRequest(config.circularDataURL + config.storeID, self.handleRequestResults, callback);
 	}, 
 
 });

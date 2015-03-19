@@ -12,7 +12,7 @@ var CollapsingPanelOption = React.createClass({displayName: "CollapsingPanelOpti
 				), 
 				React.createElement(CollapsibleUnorderedList, {domID: this.props.config.targetID, subCategories: this.props.config.subCategories})
 			)
-		)
+		);
 	}
 });
 

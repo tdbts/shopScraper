@@ -1,6 +1,6 @@
 var cheerio = require('cheerio'), 
 	CircularPageData = require('./CircularPageData'), 
-	shopRiteDomData = require('./shopRiteDomData'), 
+	DomData = require('./DomData'), 
 	scraper = require('./scraper');
 
 var scrapePage = scraper.extend({
@@ -15,7 +15,8 @@ var scrapePage = scraper.extend({
 	}, 
 
 	handlePageData: function (err, resp, body) {
-		var self = scrapePage;
+		var self = scrapePage,
+			shopRiteDomData = new DomData(self.config.domData);
 
 		if (!err && resp.statusCode === 200) {
 		
@@ -30,7 +31,7 @@ var scrapePage = scraper.extend({
 			pageData.storeName = self.config.storeName;
 
 			// DEVELOPMENT ONLY
-			console.log(pageData.products[0]);
+			// console.log(pageData.products[0]);
 			return pageData;			
 		}
 	}, 
@@ -38,8 +39,7 @@ var scrapePage = scraper.extend({
 	scrape: function (pageNumber, callback) {
 		
 		var self = scrapePage;
-		var url = self.config.baseURL + pageNumber;
-		console.log(url);
+		
 		self.makeRequest(self.config.baseURL + pageNumber, self.handlePageData, callback);
 	}
 

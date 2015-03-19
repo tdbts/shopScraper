@@ -13,7 +13,7 @@ var CollapsibleUnorderedList = React.createClass({
 			<ul id={this.props.domID} className="nav collapse panel_suboptions">
 				{subCategories}
 			</ul>	
-		)
+		);
 	}
 });
 

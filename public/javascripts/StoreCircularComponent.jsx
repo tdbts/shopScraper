@@ -22,7 +22,7 @@ var StoreCircularComponent = React.createClass({
 		var storeProducts = [];
 
 		this.props.circularData.products.forEach(function (productData) {
-			storeProducts.push(<ProductComponent key={productData.shsc_id} product={productData} />)
+			storeProducts.push(<ProductComponent key={productData.shsc_id} product={productData} />);
 		});
 
 		return (
@@ -37,7 +37,7 @@ var StoreCircularComponent = React.createClass({
 					{storeProducts}
 				</div>
 			</div>
-		)
+		);
 	}
 });
 

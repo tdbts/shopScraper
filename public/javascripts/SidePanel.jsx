@@ -68,7 +68,7 @@ var SidePanel = React.createClass({
 		            </ul>
 		        </div>
 		    </div>
-		)
+		);
 	}
 });
 

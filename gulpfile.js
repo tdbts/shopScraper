@@ -24,7 +24,7 @@ gulp.task('transform', function () {
 gulp.task('browserify', function () {
 	return browserify('./public/javascripts/index.js')
 		.bundle()
-		.on('error', function (err) {
+		.on('error', function () {
 			// console.log(err.toString());
 			notify.onError({
 				message: "<%= error.message %>"
@@ -39,7 +39,8 @@ gulp.task('browserify', function () {
 gulp.task('jshint', function () {
 	gulp.src([
 		'src/*.js', 
-		'!public/javascripts/*.js', 
+		'model/*.js', 
+		'public/javascripts/*.js', 
 		'!public/javascripts/bundle.js', 
 		'gulpfile.js'
 		])
@@ -88,5 +89,5 @@ gulp.task('server-restart', function () {
 });
 
 gulp.task('default', ['watch']);
-gulp.task('bundle', ['test', 'transform', 'browserify']);
-gulp.task('build', ['test', 'transform', 'browserify', 'server-restart']);
+gulp.task('bundle', ['jshint', 'test', 'transform', 'browserify']);
+gulp.task('build', ['jshint', 'test', 'transform', 'browserify', 'server-restart']);

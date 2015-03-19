@@ -17,7 +17,7 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
 				)
 			)
-		)
+		);
 	}
 });
 

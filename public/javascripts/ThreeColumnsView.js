@@ -3,6 +3,7 @@ var React = require('react'),
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	componentDidMount: function () {
+		/* Placeholder - Testing out how UI will look */
 		$.get('/api/BigY', function (responseData) {
 			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_one'));
 		});
@@ -33,7 +34,7 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 					)
 				)
 			)
-		)
+		);
 	}
 });
 

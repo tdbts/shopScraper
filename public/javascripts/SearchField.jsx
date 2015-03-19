@@ -15,7 +15,7 @@ var SearchField = React.createClass({
                     </button>
                 </span>
             </div>			
-		)
+		);
 	}
 });
 

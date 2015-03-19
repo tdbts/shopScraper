@@ -18325,7 +18325,7 @@ var CollapsibleListItem = React.createClass({displayName: "CollapsibleListItem",
 	render: function () {
 		return (
 			React.createElement("li", {className: "panel_suboption"}, React.createElement("a", {href: "#"}, this.props.text))
-		)
+		);
 	}
 });
 
@@ -18347,7 +18347,7 @@ var CollapsibleUnorderedList = React.createClass({displayName: "CollapsibleUnord
 			React.createElement("ul", {id: this.props.domID, className: "nav collapse panel_suboptions"}, 
 				subCategories
 			)	
-		)
+		);
 	}
 });
 
@@ -18368,7 +18368,7 @@ var CollapsingPanelOption = React.createClass({displayName: "CollapsingPanelOpti
 				), 
 				React.createElement(CollapsibleUnorderedList, {domID: this.props.config.targetID, subCategories: this.props.config.subCategories})
 			)
-		)
+		);
 	}
 });
 
@@ -18436,7 +18436,7 @@ var Navbar = React.createClass({displayName: "Navbar",
 	                )
 	            )			
 			)
-		)
+		);
 	}
 });
 
@@ -18453,7 +18453,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 	        	React.createElement(Navbar, null), 
 	        	React.createElement(SidePanel, null)
 	        )			
-		)
+		);
 	}
 });
 
@@ -18478,7 +18478,7 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
 				)
 			)
-		)
+		);
 	}
 });
 
@@ -18502,7 +18502,7 @@ var SearchField = React.createClass({displayName: "SearchField",
                     )
                 )
             )			
-		)
+		);
 	}
 });
 
@@ -18545,7 +18545,7 @@ var ShopLogoRow = React.createClass({displayName: "ShopLogoRow",
 		var logos = [];
 		
 		this.props.stores.forEach(function (store) {
-			logos.push(React.createElement(StoreNavigationLogo, {key: store.storeID, store: store}))
+			logos.push(React.createElement(StoreNavigationLogo, {key: store.storeID, store: store}));
 		});
 
 		return (
@@ -18628,7 +18628,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 		            )
 		        )
 		    )
-		)
+		);
 	}
 });
 
@@ -18658,7 +18658,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 		var storeProducts = [];
 
 		this.props.circularData.products.forEach(function (productData) {
-			storeProducts.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}))
+			storeProducts.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
 		});
 
 		return (
@@ -18673,7 +18673,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 					storeProducts
 				)
 			)
-		)
+		);
 	}
 });
 
@@ -18704,6 +18704,7 @@ var React = require('react'),
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	componentDidMount: function () {
+		/* Placeholder - Testing out how UI will look */
 		$.get('/api/BigY', function (responseData) {
 			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_one'));
 		});
@@ -18734,7 +18735,7 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 					)
 				)
 			)
-		)
+		);
 	}
 });
 

@@ -17,7 +17,7 @@ var ProductComponent = React.createClass({
 					<img className="product_image" src={this.props.product.imageUrl} />
 				</div>
 			</div>
-		)
+		);
 	}
 });
 

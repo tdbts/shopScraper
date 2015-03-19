@@ -59,7 +59,7 @@ var Navbar = React.createClass({displayName: "Navbar",
 	                )
 	            )			
 			)
-		)
+		);
 	}
 });
 

@@ -1,6 +1,6 @@
 var cheerio = require('cheerio'), 
 	scraper = require('./scraper'), 
-	shopRiteDomData = require('./shopRiteDomData');
+	DomData = require('./DomData');
 
 var getCircularNumberOfPages = scraper.extend({
 	config: {
@@ -41,7 +41,8 @@ var getCircularNumberOfPages = scraper.extend({
 	}, 
 
 	handleResponse: function (err, resp, body) {
-		var self = getCircularNumberOfPages;
+		var self = getCircularNumberOfPages,
+			shopRiteDomData = new DomData(self.config.domData);
 		
 		var numberOfPages = self.circularPageTotal(body, shopRiteDomData.config.pageNumberLocation), 
 			pagesArray = self.createPagesArray(numberOfPages);

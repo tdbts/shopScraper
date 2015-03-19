@@ -1,8 +1,11 @@
 var express = require('express'),
 	router = express.Router(),
 	renderListings = require('../src/renderListings'),
-	storeRouteMapper = require('../src/storeRouteMapper'), 
+	storeRouteMapper = require('../src/storeRouteMapper'),
+	ContentModel = require('../model/ContentModel'), 
+	placeHolderModelData = require('../model/placeHolderModelData'),  
 	storeLogoData = require('../src/storeLogoData'), 
+	wireDatabaseToScrapersAndScrape = require('../src/wireDatabaseToScrapersAndScrape'), 
 	scrapeBigY = require('../src/scrapeBigY'),
 	scrapeShopRite = require('../src/scrapeShopRite'),
 	scrapeStopAndShop = require('../src/scrapeStopAndShop');
@@ -20,23 +23,19 @@ router.get('/ShopScraperNavigation', function (req, res) {
 });
 
 
-router.get('/stores/:storeName', function (req, res) {
+// router.get('/stores/:storeName', function (req, res) {
 	
-	var storeName = req.params.storeName; 
+// 	var storeName = req.params.storeName; 
 
-	renderListings(res, storeRouteMapper[storeName]);
-});
+// 	renderListings(res, storeRouteMapper[storeName]);
+// });
 
 router.get('/api/:storeName', function (req, res) {
-	 
-	 var storeName = req.params.storeName;
 
-	 storeRouteMapper[storeName].scrape(function (err, circularData) {
-	 	
-	 	if (!err) {
-		 	res.json(circularData);
-	 	}
-	 });
+	var storeName = req.params.storeName;
+
+	wireDatabaseToScrapersAndScrape(res, storeName, 'placeHolderScraperData', 'storeData');
+
 });
 
 // *************************************************
