@@ -2,7 +2,7 @@
 /** @jsx React.DOM */
 
 var React = require('react'), 
-	ShopChooser = require('../javascripts/ShopChooser'),
+	// ShopChooser = require('../javascripts/ShopChooser'),
 	Navigation = require('../javascripts/Navigation'), 
 	ThreeColumnsView = require('../javascripts/ThreeColumnsView'); 	
 
@@ -31,7 +31,7 @@ $(document).ready(function() {
 	React.render(React.createElement(ThreeColumnsView, null), document.getElementById('window_wrapper'));
 });
 
-},{"../javascripts/Navigation":153,"../javascripts/ShopChooser":156,"../javascripts/ThreeColumnsView":161,"react":148}],2:[function(require,module,exports){
+},{"../javascripts/Navigation":153,"../javascripts/ThreeColumnsView":158,"react":148}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -18458,7 +18458,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 });
 
 module.exports = Navigation;
-},{"./Navbar":152,"./SidePanel":158,"react":148}],154:[function(require,module,exports){
+},{"./Navbar":152,"./SidePanel":156,"react":148}],154:[function(require,module,exports){
 var React = require('react');
 
 var ProductComponent = React.createClass({displayName: "ProductComponent",
@@ -18508,56 +18508,6 @@ var SearchField = React.createClass({displayName: "SearchField",
 
 module.exports = SearchField;
 },{"react":148}],156:[function(require,module,exports){
-var React = require('react'), 
-	ShopLogoRow = require('./ShopLogoRow'), 
-	StoreCircularComponent = require('./StoreCircularComponent');
-
-var ShopChooser = React.createClass({displayName: "ShopChooser",
-	componentDidMount: function () {
-		$('.container_store_logo_navigation').on('click', function () {
-
-			var ajaxRoute = $(this).attr('data-ajax_route');
-			
-			$.get(ajaxRoute, function (responseData) {
-				React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('test_store_components_container'));
-			});
-		});		
-	}, 
-
-	render: function () {
-
-		return (
-			React.createElement("div", null, 
-				React.createElement(ShopLogoRow, {stores: this.props.stores})
-			)
-		);
-	}
-});
-
-module.exports = ShopChooser;
-
-},{"./ShopLogoRow":157,"./StoreCircularComponent":159,"react":148}],157:[function(require,module,exports){
-var React = require('react'), 
-	StoreNavigationLogo = require('./StoreNavigationLogo');
-
-var ShopLogoRow = React.createClass({displayName: "ShopLogoRow",
-	render: function () {
-		var logos = [];
-		
-		this.props.stores.forEach(function (store) {
-			logos.push(React.createElement(StoreNavigationLogo, {key: store.storeID, store: store}));
-		});
-
-		return (
-			React.createElement("div", {id: "shop_row", className: "row"}, 
-				logos
-			)
-		);
-	}
-});
-
-module.exports = ShopLogoRow;
-},{"./StoreNavigationLogo":160,"react":148}],158:[function(require,module,exports){
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption');
@@ -18633,7 +18583,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 });
 
 module.exports = SidePanel;
-},{"./CollapsingPanelOption":151,"./SearchField":155,"react":148}],159:[function(require,module,exports){
+},{"./CollapsingPanelOption":151,"./SearchField":155,"react":148}],157:[function(require,module,exports){
 var React = require('react'), 
 	ProductComponent = require('./ProductComponent');
 
@@ -18678,27 +18628,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 });
 
 module.exports = StoreCircularComponent;
-},{"./ProductComponent":154,"react":148}],160:[function(require,module,exports){
-var React = require('react');
-
-var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo", 
-	render: function () {
-		
-		return (
-			React.createElement("div", {"data-ajax_route": this.props.store.storeHref, id: this.props.store.containerID, className: "container_store_logo_navigation col-md-3 col-xs-6"}, 
-				React.createElement("a", {href: "#", className: "store_navigation_link"}, 
-					React.createElement("img", {id: this.props.store.imageID, className: "store_logo", src: this.props.store.imageURL, alt: this.props.store.storeName})
-				)
-			)
-		);	
-	}
-});
-
-module.exports = StoreNavigationLogo;
-
-
-
-},{"react":148}],161:[function(require,module,exports){
+},{"./ProductComponent":154,"react":148}],158:[function(require,module,exports){
 var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent');
 
@@ -18741,4 +18671,4 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./StoreCircularComponent":159,"react":148}]},{},[1]);
+},{"./StoreCircularComponent":157,"react":148}]},{},[1]);

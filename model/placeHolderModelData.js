@@ -7,15 +7,18 @@ Collection.prototype.find = function (propName) {
 	return this[propName];
 };
 
-var myStoreData = {
+var myScrapeConfigData = {
 	BigY: {
 		circularDataURL: "http://bigy.myrelationshop.com/rs/WeeklyAd/GetCurrentCircular?size=768&storeId=",
+		// storeID will be identified using information sent from the client
 		storeID: "30"		
 	},
 
 	ShopRite: {
 		// "PseudoStoreID" is same as data-clientanalyticslabel attribute of store hrefs!
-		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/1/", 
+		// baseURL will be identified using information sent from the client
+		baseURL: "http://plan.shoprite.com/Circular/ShopRite-of-Norwich/BFDE400/Weekly/", 
+		circularNumber: "1/", 
 		pageNumberLocation: 'span.pages', 
 		domData: {
 			pageNumberLocation: 'span.pages', 
@@ -62,6 +65,7 @@ var myStoreData = {
 			}, 
 			parameters: {
 				campaignid: '5e018ae35636a4e2', 
+				// storeid will be identified using information sent from the client
 				storeid: '2599015', 
 				resultset: 'full', 
 				pageid: null, 
@@ -72,7 +76,7 @@ var myStoreData = {
 };
 
 module.exports = {
-	placeHolderScraperData: new Collection('storeData', myStoreData),
+	placeHolderScraperData: new Collection('scrapeConfigData', myScrapeConfigData),
 
 	collection: function (collectionName) {
 		return this[collectionName];

@@ -27,32 +27,52 @@ var scrapeShopRite = scraper.extend({
 
 		var self = this;
 
-		// DEPRECATED NOW THAT WE EXTEND SCRAPER CONFIGS WITH SERVER DATA
-		// scrapePage.setBaseURL(this.config.baseURL);
+		// Scrape the first two pages and compare the first product in each.  If the 
+		// two products are the same, the pages are duplicates, so change the 
+		// value for circularNumber to get the right url and retry.  
+		async.map(["0", "1"], scrapePage.scrape, function (err, pagesDataArray) {
 
-		async.map(pagesArray, scrapePage.scrape, function (err, pagesDataArray) {
+			if (!err) {
+				var firstProduct = pagesDataArray[0].products[0], 
+					secondProduct = pagesDataArray[1].products[0];
 
-			var circularData = new CircularPageData();
-			
-			self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
+				if (firstProduct.productName === secondProduct.productName && 
+					firstProduct.productDescription === secondProduct.productDescription && 
+					firstProduct.price === secondProduct.price && 
+					firstProduct.imageUrl === secondProduct.imageUrl) {
+					
+					console.log("DUPLICATE PAGE DETECTED -- altering circular number.");
 
-			circularData.storeName = self.config.storeName; 
+					var currentCircularNumber = scrapePage.getConfigData('circularNumber');
+					scrapePage.setConfigData('circularNumber', currentCircularNumber === "1/" ? "2/" : "1/");
+				}
 
-			self.assignIDsToProducts(circularData.products);
-			
-			console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
-			
-			callback(err, circularData);
+				async.map(pagesArray, scrapePage.scrape, function (err, pagesDataArray) {
+
+					if (!err) {
+						var circularData = new CircularPageData();
+						
+						self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
+
+						circularData.storeName = self.config.storeName; 
+
+						self.assignIDsToProducts(circularData.products);
+						
+						console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
+						
+						callback(err, circularData);
+					}
+				});						
+			}
 		});
-
 	},
 
 	scrape: function (data, callback) {
 		
-		var self = this;
+		var self = this, 
+			scrapers = [this, getCircularNumberOfPages, scrapePage];
 
-		// this.extendConfig(data);
-		[this, getCircularNumberOfPages, scrapePage].forEach(function (scraper) {
+		scrapers.forEach(function (scraper) {
 			scraper.extendConfig(data);
 		});
 	
