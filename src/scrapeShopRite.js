@@ -27,8 +27,9 @@ var scrapeShopRite = scraper.extend({
 
 		var self = this;
 
-		// DEPRECATED NOW THAT WE EXTEND SCRAPER CONFIGS WITH SERVER DATA
-		// scrapePage.setBaseURL(this.config.baseURL);
+		// Scrape the first two pages and compare the first product in each.  If the 
+		// two products are the same, the pages are duplicates, so change the 
+		// value for circularNumber to get the right url and retry.  
 		async.map(["0", "1"], scrapePage.scrape, function (err, pagesDataArray) {
 
 			if (!err) {
