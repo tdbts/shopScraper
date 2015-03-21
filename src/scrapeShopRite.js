@@ -2,7 +2,8 @@ var scraper = require('./scraper'),
 	getCircularNumberOfPages = require('./sr_getCircularNumberOfPages'), 
 	scrapePage = require('./sr_scrapePage'), 
 	CircularPageData = require('./CircularPageData'),  
-	async = require('async');
+	async = require('async'), 
+	findObjectsToCompare = require('./findObjectsToCompare');
 
 var scrapeShopRite = scraper.extend({
 
@@ -30,11 +31,13 @@ var scrapeShopRite = scraper.extend({
 		// Scrape the first two pages and compare the first product in each.  If the 
 		// two products are the same, the pages are duplicates, so change the 
 		// value for circularNumber to get the right url and retry.  
-		async.map(["0", "1"], scrapePage.scrape, function (err, pagesDataArray) {
+		async.map(["1", "2", "3", "4"], scrapePage.scrape, function (err, pagesDataArray) {
 
 			if (!err) {
-				var firstProduct = pagesDataArray[0].products[0], 
-					secondProduct = pagesDataArray[1].products[0];
+				var comparisonObjects = findObjectsToCompare(pagesDataArray);
+
+				var firstProduct = comparisonObjects[0].products[0], 
+					secondProduct = comparisonObjects[1].products[0];
 
 				if (firstProduct.productName === secondProduct.productName && 
 					firstProduct.productDescription === secondProduct.productDescription && 
