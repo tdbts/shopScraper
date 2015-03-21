@@ -1,9 +1,5 @@
 var express = require('express'),
-	router = express.Router(),
-	// renderListings = require('../src/renderListings'),
-	// storeRouteMapper = require('../src/storeRouteMapper'),
-	// ContentModel = require('../model/ContentModel'), 
-	// placeHolderModelData = require('../model/placeHolderModelData'),  
+	router = express.Router(),  
 	storeLogoData = require('../src/storeLogoData'), 
 	wireDatabaseToScrapersAndScrape = require('../src/wireDatabaseToScrapersAndScrape');
 

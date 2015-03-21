@@ -17,7 +17,7 @@ var scrapePage = scraper.extend({
 	handlePageData: function (err, resp, body) {
 		var self = scrapePage,
 			shopRiteDomData = new DomData(self.config.domData);
-
+		
 		if (!err && resp.statusCode === 200) {
 		
 			var $ = cheerio.load(body),
