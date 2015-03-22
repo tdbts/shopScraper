@@ -48,8 +48,13 @@ var scrapeShopRite = scraper.extend({
 
 			self.checkForDuplicatePages(comparisonObjects);
 
-			async.map(pagesArray, scrapePage.scrape, function (err, pagesDataArray) {
+			var pageScrapes = pagesArray.map(function (pageNumber, callback) {
+				return function (callback) {
+					scrapePage.scrape(pageNumber, callback);
+				}
+			});
 
+			async.parallel(pageScrapes, function (err, pagesDataArray) {
 				if (!err) {
 					var circularData = new CircularPageData();
 					
@@ -62,8 +67,8 @@ var scrapeShopRite = scraper.extend({
 					console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
 					
 					callback(err, circularData);
-				}
-			});			
+				}				
+			});		
 		});
 	},
 

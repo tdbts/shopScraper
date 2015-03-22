@@ -9,7 +9,7 @@ module.exports = {
 	}, 
 
 	makeRequest: function (url, processor, callback) {
-		
+		// var start = process.hrtime();
 		request(url, function (err, resp, body) {
 			var result = null;
 
@@ -18,6 +18,8 @@ module.exports = {
 			}
 
 			callback(err, result);
+			// var end = process.hrtime(start);
+			console.log("Request response time to" + url + ": ", end);
 		});
 	}, 
 
