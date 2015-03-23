@@ -31,7 +31,7 @@ $(document).ready(function() {
 	React.render(React.createElement(ThreeColumnsView, null), document.getElementById('window_wrapper'));
 });
 
-},{"../javascripts/Navigation":153,"../javascripts/ThreeColumnsView":158,"react":148}],2:[function(require,module,exports){
+},{"../javascripts/Navigation":153,"../javascripts/ThreeColumnsView":159,"react":148}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -18584,6 +18584,19 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 
 module.exports = SidePanel;
 },{"./CollapsingPanelOption":151,"./SearchField":155,"react":148}],157:[function(require,module,exports){
+var React = require('react');
+
+var Spinner = React.createClass({displayName: "Spinner",
+	render: function () {
+		return (
+			React.createElement("i", {className: "fa fa-spinner fa-pulse fa-5x column_spinner"})
+		);
+	}
+});
+
+module.exports = Spinner;
+
+},{"react":148}],158:[function(require,module,exports){
 var React = require('react'), 
 	ProductComponent = require('./ProductComponent');
 
@@ -18628,23 +18641,23 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 });
 
 module.exports = StoreCircularComponent;
-},{"./ProductComponent":154,"react":148}],158:[function(require,module,exports){
+},{"./ProductComponent":154,"react":148}],159:[function(require,module,exports){
 var React = require('react'), 
+	Spinner = require('./Spinner'), 
 	StoreCircularComponent = require('./StoreCircularComponent');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	componentDidMount: function () {
-		/* Placeholder - Testing out how UI will look */
 		$.get('/api/BigY', function (responseData) {
-			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_one'));
+			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_left'));
 		});
 
 		$.get('/api/StopAndShop', function (responseData) {
-			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_two'));
+			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_middle'));
 		});			
 		
 		$.get('/api/ShopRite', function (responseData) {
-			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_three'));
+			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), document.getElementById('column_right'));
 		});
 	}, 
 
@@ -18654,13 +18667,13 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 				React.createElement("div", {id: "container_three_columns", className: "container"}, 
 					React.createElement("div", {id: "three_columns_row", className: "row"}, 
 						React.createElement("div", {className: "col-md-1"}), 
-						React.createElement("div", {id: "column_one", className: "col-md-3"}
+						React.createElement("div", {id: "column_left", className: "col-md-3"}
 						), 
 						React.createElement("div", {className: "col-md-1"}), 
-						React.createElement("div", {id: "column_two", className: "col-md-3"}
+						React.createElement("div", {id: "column_middle", className: "col-md-3"}
 						), 
 						React.createElement("div", {className: "col-md-1"}), 
-						React.createElement("div", {id: "column_three", className: "col-md-3"}
+						React.createElement("div", {id: "column_right", className: "col-md-3"}
 						)
 					)
 				)
@@ -18671,4 +18684,4 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./StoreCircularComponent":157,"react":148}]},{},[1]);
+},{"./Spinner":157,"./StoreCircularComponent":158,"react":148}]},{},[1]);

@@ -188,3 +188,8 @@ body {
 #container_three_columns {
     margin-top: 20px;
 }
+
+.column_spinner {
+    padding-top: 50px;
+    padding-left: 20px;
+}

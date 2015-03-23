@@ -3,17 +3,16 @@ var React = require('react'),
 
 var ThreeColumnsView = React.createClass({
 	componentDidMount: function () {
-		/* Placeholder - Testing out how UI will look */
 		$.get('/api/BigY', function (responseData) {
-			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_one'));
+			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_left'));
 		});
 
 		$.get('/api/StopAndShop', function (responseData) {
-			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_two'));
+			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_middle'));
 		});			
 		
 		$.get('/api/ShopRite', function (responseData) {
-			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_three'));
+			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_right'));
 		});
 	}, 
 
@@ -23,13 +22,13 @@ var ThreeColumnsView = React.createClass({
 				<div id="container_three_columns" className="container">
 					<div id="three_columns_row" className="row">
 						<div className="col-md-1"></div>
-						<div id="column_one" className="col-md-3">
+						<div id="column_left" className="col-md-3">
 						</div>
 						<div className="col-md-1"></div>
-						<div id="column_two" className="col-md-3">
+						<div id="column_middle" className="col-md-3">
 						</div>
 						<div className="col-md-1"></div>
-						<div id="column_three" className="col-md-3">
+						<div id="column_right" className="col-md-3">
 						</div>
 					</div>
 				</div>

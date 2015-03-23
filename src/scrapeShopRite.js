@@ -48,10 +48,10 @@ var scrapeShopRite = scraper.extend({
 
 			self.checkForDuplicatePages(comparisonObjects);
 
-			var pageScrapes = pagesArray.map(function (pageNumber, callback) {
+			var pageScrapes = pagesArray.map(function (pageNumber) {
 				return function (callback) {
 					scrapePage.scrape(pageNumber, callback);
-				}
+				};
 			});
 
 			async.parallel(pageScrapes, function (err, pagesDataArray) {
