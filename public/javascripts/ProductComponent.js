@@ -11,7 +11,7 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 					React.createElement("p", {className: "product_description"}, this.props.product.productDescription)
 				), 
 				React.createElement("div", {className: "container_product_price"}, 
-					React.createElement("p", {className: "product_price"}, this.props.product.price)
+					React.createElement("p", {className: "product_price"}, React.createElement("strong", null, this.props.product.price))
 				), 
 				React.createElement("div", {className: "container_product_image"}, 
 					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
@@ -19,6 +19,6 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 			)
 		);
 	}
-});
+});	
 
 module.exports = ProductComponent;

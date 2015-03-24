@@ -11,7 +11,7 @@ var ProductComponent = React.createClass({
 					<p className="product_description">{this.props.product.productDescription}</p>
 				</div>
 				<div className="container_product_price">
-					<p className="product_price">{this.props.product.price}</p>
+					<p className="product_price"><strong>{this.props.product.price}</strong></p>
 				</div>
 				<div className="container_product_image">
 					<img className="product_image" src={this.props.product.imageUrl} />
@@ -19,6 +19,6 @@ var ProductComponent = React.createClass({
 			</div>
 		);
 	}
-});
+});	
 
 module.exports = ProductComponent;

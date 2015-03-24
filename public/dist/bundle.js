@@ -2,36 +2,15 @@
 /** @jsx React.DOM */
 
 var React = require('react'), 
-	// ShopChooser = require('../javascripts/ShopChooser'),
-	Navigation = require('../javascripts/Navigation'), 
-	ThreeColumnsView = require('../javascripts/ThreeColumnsView'); 	
+	ShopScraper = require('./ShopScraper');
 
 $(document).ready(function() {
 
-	// // I just feel like there has got to be a better way to conditionally load 
-	// // the ajax depending on the url path.
-	// // Ultimately, this code will use the logged-in user's data from MongoDB to 
-	// // determine which store's logos to get from the backend...well, actually, the final 
-	// // version of this webapp won't have this logo placeholder at all.  
-	// if (window.location.pathname === "/") {
-	// 	$.ajax({	
-	// 		type: "GET",
+	React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
 
-	// 		url: '/ShopScraperNavigation', 
-			
-	// 		success: function (storeLogoData) {
-
-	// 			React.render(<ShopChooser stores={storeLogoData} />, document.getElementById('store_navigation_container'));
-	// 		}
-	// 	});
-	// }   
-
-	React.render(React.createElement(Navigation, null), document.getElementById('navigation_wrapper'));
-
-	React.render(React.createElement(ThreeColumnsView, null), document.getElementById('window_wrapper'));
 });
 
-},{"../javascripts/Navigation":162,"../javascripts/ThreeColumnsView":168,"react":157}],2:[function(require,module,exports){
+},{"./ShopScraper":165,"react":157}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -19887,7 +19866,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 });
 
 module.exports = Navigation;
-},{"./Navbar":161,"./SidePanel":165,"react":157}],163:[function(require,module,exports){
+},{"./Navbar":161,"./SidePanel":166,"react":157}],163:[function(require,module,exports){
 var React = require('react');
 
 var ProductComponent = React.createClass({displayName: "ProductComponent",
@@ -19901,7 +19880,7 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 					React.createElement("p", {className: "product_description"}, this.props.product.productDescription)
 				), 
 				React.createElement("div", {className: "container_product_price"}, 
-					React.createElement("p", {className: "product_price"}, this.props.product.price)
+					React.createElement("p", {className: "product_price"}, React.createElement("strong", null, this.props.product.price))
 				), 
 				React.createElement("div", {className: "container_product_image"}, 
 					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
@@ -19909,7 +19888,7 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 			)
 		);
 	}
-});
+});	
 
 module.exports = ProductComponent;
 
@@ -19937,6 +19916,29 @@ var SearchField = React.createClass({displayName: "SearchField",
 
 module.exports = SearchField;
 },{"react":157}],165:[function(require,module,exports){
+var React = require('react'), 
+	Navigation = require('./Navigation'), 
+	ThreeColumnsView = require('./ThreeColumnsView');
+
+var ShopScraper = React.createClass({displayName: "ShopScraper",
+	componentDidMount: function () {
+		React.render(React.createElement(Navigation, null), document.getElementById('navigation_wrapper'));
+		React.render(React.createElement(ThreeColumnsView, null), document.getElementById('window_wrapper'));
+	}, 
+
+	render: function () {
+		return (
+			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
+				React.createElement("div", {id: "navigation_wrapper"}), 
+				React.createElement("div", {id: "window_wrapper"})
+			)
+		);
+	}
+});
+
+module.exports = ShopScraper;
+
+},{"./Navigation":162,"./ThreeColumnsView":170,"react":157}],166:[function(require,module,exports){
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption');
@@ -20012,27 +20014,26 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 });
 
 module.exports = SidePanel;
-},{"./CollapsingPanelOption":160,"./SearchField":164,"react":157}],166:[function(require,module,exports){
+},{"./CollapsingPanelOption":160,"./SearchField":164,"react":157}],167:[function(require,module,exports){
+var React = require('react');
+
+var Spinner = React.createClass({displayName: "Spinner",
+	render: function () {
+		return (
+			React.createElement("div", {className: "spinner_container"}, 
+				React.createElement("i", {className: "fa fa-spinner fa-pulse fa-5x spinner"})
+			)
+		);
+	}
+});
+
+module.exports = Spinner;
+
+},{"react":157}],168:[function(require,module,exports){
 var React = require('react'), 
 	ProductComponent = require('./ProductComponent');
 
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
-	// getInitialState: function () {
-	// 	return {
-	// 		circularData: ''
-	// 	};
-	// }, 
-
-	// componentDidMount: function () {
-	// 	 $.get(this.props.urlForData, function (responseData) {
-	// 	 	if (this.isMounted()) {
-	// 	 		this.setState({
-	// 	 			circularData: responseData
-	// 	 		});
-	// 	 	}
-	// 	 }.bind(this));
-	// }, 
-
 	render: function () {
 		var storeProducts = [];
 
@@ -20057,15 +20058,18 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 });
 
 module.exports = StoreCircularComponent;
-},{"./ProductComponent":163,"react":157}],167:[function(require,module,exports){
+},{"./ProductComponent":163,"react":157}],169:[function(require,module,exports){
 var React = require('react'), 
+	Spinner = require('./Spinner'), 
 	StoreCircularComponent = require('./StoreCircularComponent');
 
 var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo", 
 	handleClickEvent: function () {
 		var mountID = React.findDOMNode(this.refs.logo).parentNode.getAttribute('id'), 
 			circularDataURL = this.props.store.storeHref;
-			
+
+		React.render(React.createElement(Spinner, {key: this.props.store.imageID}), document.getElementById(mountID));
+		
 		$.get(circularDataURL, function (responseData) {
 
 			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), 
@@ -20075,10 +20079,9 @@ var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo",
 	}, 
 
 	componentDidMount: function () {
-
-		$(this.props.store.imageID).on('click', function () {
+		$("#" + this.props.store.imageID).on('click', function () {
 			this.handleClickEvent();
-		});
+		}.bind(this));
 	}, 
 
 	render: function () {
@@ -20094,7 +20097,7 @@ var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo",
 
 module.exports = StoreNavigationLogo;
 
-},{"./StoreCircularComponent":166,"react":157}],168:[function(require,module,exports){
+},{"./Spinner":167,"./StoreCircularComponent":168,"react":157}],170:[function(require,module,exports){
 var React = require('react'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo'), 
 	StoreCircularComponent = require('./StoreCircularComponent');
@@ -20166,4 +20169,4 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./StoreCircularComponent":166,"./StoreNavigationLogo":167,"react":157}]},{},[1]);
+},{"./StoreCircularComponent":168,"./StoreNavigationLogo":169,"react":157}]},{},[1]);

@@ -3,7 +3,9 @@ var React = require('react');
 var Spinner = React.createClass({
 	render: function () {
 		return (
-			<i className="fa fa-spinner fa-pulse fa-5x column_spinner"></i>
+			<div className="spinner_container">
+				<i className="fa fa-spinner fa-pulse fa-5x spinner"></i>
+			</div>
 		);
 	}
 });

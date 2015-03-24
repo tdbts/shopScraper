@@ -2,22 +2,6 @@ var React = require('react'),
 	ProductComponent = require('./ProductComponent');
 
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
-	// getInitialState: function () {
-	// 	return {
-	// 		circularData: ''
-	// 	};
-	// }, 
-
-	// componentDidMount: function () {
-	// 	 $.get(this.props.urlForData, function (responseData) {
-	// 	 	if (this.isMounted()) {
-	// 	 		this.setState({
-	// 	 			circularData: responseData
-	// 	 		});
-	// 	 	}
-	// 	 }.bind(this));
-	// }, 
-
 	render: function () {
 		var storeProducts = [];
 

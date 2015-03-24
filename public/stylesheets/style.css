@@ -19,7 +19,7 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
 }
 
 .fa-2x {
@@ -43,34 +43,36 @@ ul.products_ul {
 }
 
 .store_circular_component {
-	border: 2px solid #777;
+	border: 2px solid #bbbbbb;
+    color: #555;
 }
 
 .header_store_name {
-    border-bottom: 2px solid #777;
+    border-bottom: 2px solid #bbbbbb;
     font-weight: bold;
     padding-bottom: 10px;
     text-align: center;
 }
 
 .store_valid_dates {
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid #bbbbbb;
     padding-bottom: 10px;
     text-align: center;
 }
 
 .products_container {
-	border: 2px solid #777;
+	border: 2px solid #bbbbbb;
 }
 
 .product_info {
-	border-bottom: 1px solid #777;
+	border-bottom: 1px solid #bbbbbb;
     padding: 5px;
 	padding-top: 0px;
 }
 
 .product_name {
-    padding-top: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 
@@ -125,7 +127,7 @@ body {
 
 #side-menu {
     height: 1000px;
-    border-right: 1px solid #E7E7E7
+    border-right: 1px solid #e7e7e7
 }
 
 .sidebar .sidebar-nav.navbar-collapse {
@@ -189,7 +191,11 @@ body {
     margin-top: 20px;
 }
 
-.column_spinner {
-    padding-top: 50px;
-    padding-left: 20px;
+.spinner_container { 
+    text-align: center;
+}
+
+i.spinner {
+    display: inline-block;
+    text-align: center;
 }
