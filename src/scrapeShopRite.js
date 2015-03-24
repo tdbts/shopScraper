@@ -3,7 +3,7 @@ var scraper = require('./scraper'),
 	scrapePage = require('./sr_scrapePage'), 
 	CircularPageData = require('./CircularPageData'),  
 	async = require('async'), 
-	findObjectsToCompare = require('./findObjectsToCompare');
+	findComparisonObjects = require('./findComparisonObjects');
 
 var scrapeShopRite = scraper.extend({
 
@@ -22,51 +22,53 @@ var scrapeShopRite = scraper.extend({
 			});
 		});
 
+	},
+
+	checkForDuplicatePages: function (comparisonObjects) {
+		var firstProduct = comparisonObjects[0].products[0], 
+			secondProduct = comparisonObjects[1].products[0];
+
+		if (firstProduct.productName === secondProduct.productName && 
+			firstProduct.productDescription === secondProduct.productDescription && 
+			firstProduct.price === secondProduct.price && 
+			firstProduct.imageUrl === secondProduct.imageUrl) {
+			
+			console.log("DUPLICATE PAGE DETECTED -- altering circular number.");
+
+			var currentCircularNumber = scrapePage.getConfigData('circularNumber');
+			scrapePage.setConfigData('circularNumber', currentCircularNumber === "1/" ? "2/" : "1/");
+		}		
 	}, 
 
 	scrapeCircular: function (pagesArray, callback) {
 
 		var self = this;
 
-		// Scrape the first two pages and compare the first product in each.  If the 
-		// two products are the same, the pages are duplicates, so change the 
-		// value for circularNumber to get the right url and retry.  
-		async.map(["1", "2", "3", "4"], scrapePage.scrape, function (err, pagesDataArray) {
+		async.reduce(pagesArray, [], findComparisonObjects, function (comparisonObjects) {
 
-			if (!err) {
-				var comparisonObjects = findObjectsToCompare(pagesDataArray);
+			self.checkForDuplicatePages(comparisonObjects);
 
-				var firstProduct = comparisonObjects[0].products[0], 
-					secondProduct = comparisonObjects[1].products[0];
+			var pageScrapes = pagesArray.map(function (pageNumber) {
+				return function (callback) {
+					scrapePage.scrape(pageNumber, callback);
+				};
+			});
 
-				if (firstProduct.productName === secondProduct.productName && 
-					firstProduct.productDescription === secondProduct.productDescription && 
-					firstProduct.price === secondProduct.price && 
-					firstProduct.imageUrl === secondProduct.imageUrl) {
+			async.parallel(pageScrapes, function (err, pagesDataArray) {
+				if (!err) {
+					var circularData = new CircularPageData();
 					
-					console.log("DUPLICATE PAGE DETECTED -- altering circular number.");
+					self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
 
-					var currentCircularNumber = scrapePage.getConfigData('circularNumber');
-					scrapePage.setConfigData('circularNumber', currentCircularNumber === "1/" ? "2/" : "1/");
-				}
+					circularData.storeName = self.config.storeName; 
 
-				async.map(pagesArray, scrapePage.scrape, function (err, pagesDataArray) {
-
-					if (!err) {
-						var circularData = new CircularPageData();
-						
-						self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
-
-						circularData.storeName = self.config.storeName; 
-
-						self.assignIDsToProducts(circularData.products);
-						
-						console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
-						
-						callback(err, circularData);
-					}
-				});						
-			}
+					self.assignIDsToProducts(circularData.products);
+					
+					console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
+					
+					callback(err, circularData);
+				}				
+			});		
 		});
 	},
 
