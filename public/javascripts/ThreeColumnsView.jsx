@@ -1,19 +1,49 @@
 var React = require('react'), 
+	StoreNavigationLogo = require('./StoreNavigationLogo'), 
 	StoreCircularComponent = require('./StoreCircularComponent');
 
 var ThreeColumnsView = React.createClass({
-	componentDidMount: function () {
-		$.get('/api/BigY', function (responseData) {
-			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_left'));
-		});
+	getInitialState: function () {
+		return {
+			'isOccupied': {
+				'column_left': false, 
+				'column_middle': false, 
+				'column_right': false 
+			}
+		};	
+	}, 
 
-		$.get('/api/StopAndShop', function (responseData) {
-			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_middle'));
-		});			
+	getDefaultProps: function () {
+		return {
+			'viewType': 'threeColumns'
+		};
+	}, 
+
+	componentDidMount: function () {
+		// $.get('/api/BigY', function (responseData) {
+		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_left'));
+		// });
+
+		// $.get('/api/StopAndShop', function (responseData) {
+		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_middle'));
+		// });			
 		
-		$.get('/api/ShopRite', function (responseData) {
-			React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_right'));
-		});
+		// $.get('/api/ShopRite', function (responseData) {
+		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_right'));
+		// });
+		
+		$.get('/ShopScraperNavigation', function (storeLogoData) {
+			var i = 0, 
+				columnID;
+
+			for (columnID in this.state.isOccupied) {
+				React.render(<StoreNavigationLogo store={storeLogoData[i]} />, 
+					document.getElementById(columnID));
+				
+				i++;
+				this.state.isOccupied[columnID] = true;
+			}
+		}.bind(this));
 	}, 
 
 	render: function () {
