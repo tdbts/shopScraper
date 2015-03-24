@@ -1,10 +1,13 @@
 var React = require('react'), 
+	Spinner = require('./Spinner'), 
 	StoreCircularComponent = require('./StoreCircularComponent');
 
 var StoreNavigationLogo = React.createClass({ 
 	handleClickEvent: function () {
 		var mountID = React.findDOMNode(this.refs.logo).parentNode.getAttribute('id'), 
 			circularDataURL = this.props.store.storeHref;
+
+		React.render(<Spinner key={this.props.store.imageID} />, document.getElementById(mountID));
 		
 		$.get(circularDataURL, function (responseData) {
 
