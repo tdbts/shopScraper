@@ -1,12 +1,16 @@
 var express = require('express'),
 	router = express.Router(),  
-	storeLogoData = require('../src/storeLogoData'), 
+	storeLogoData = require('../src/storeLogoData'),  
 	wireDatabaseToScrapersAndScrape = require('../src/wireDatabaseToScrapersAndScrape');
-
 
 /* GET home page. */
 router.get('/', function (req, res) {
-
+	// if (req.db) {
+	// 	console.log("YEAHHHH WE GOT A DATABASE, BITCH!");
+	// 	req.db.collection('companies').find({}).toArray(function (err, data) {
+	// 		console.log(data);
+	// 	});
+	// }
 	res.render('index');
 });
 
