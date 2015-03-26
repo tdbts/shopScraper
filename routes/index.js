@@ -1,8 +1,7 @@
 var express = require('express'),
 	router = express.Router(),  
-	// storeLogoData = require('../src/storeLogoData'),  
 	ContentModel = require('../model/ContentModel'), 
-	wireDatabaseToScrapersAndScrape = require('../src/wireDatabaseToScrapersAndScrape');
+	handleScrapeRequest = require('../src/handleScrapeRequest');
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -22,6 +21,7 @@ router.get('/', function (req, res) {
 router.get('/ShopScraperNavigation', function (req, res) {
 	if (req.db) {
 		var model = new ContentModel(req.db);
+		
 		model.collection('storeLogoData').getData({}, function (err, data) {
 			if (!err) {
 				stringifiedLogoData = JSON.stringify(data);
@@ -36,8 +36,7 @@ router.get('/api/:storeName', function (req, res) {
 
 	var storeName = req.params.storeName;
 
-	wireDatabaseToScrapersAndScrape(res, storeName, 'placeHolderScraperData', 'scrapeConfigData');
-
+	handleScrapeRequest(req, res, storeName);
 });
 
 module.exports = router;

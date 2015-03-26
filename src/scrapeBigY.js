@@ -75,11 +75,12 @@ var scrapeBigY = scraper.extend({
 	}, 
 	
 	scrape: function (data, callback) {
-		
 		var self = this, 
 			config = this.config;
 
-		this.extendConfig(data);
+		this.extendConfig(data.configData.pop());
+
+		config.storeID = data.preferences.pop().storeID;
 
 		this.makeRequest(config.circularDataURL + config.storeID, self.handleRequestResults, callback);
 	}, 

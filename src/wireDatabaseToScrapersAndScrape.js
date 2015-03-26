@@ -1,16 +1,8 @@
-var ContentModel = require('../model/ContentModel'), 
-	placeHolderModelData = require('../model/placeHolderModelData'), 
-	storeRouteMapper = require('./storeRouteMapper');
+var storeRouteMapper = require('./storeRouteMapper');
 
-module.exports = function (res, storeName, collectionName, propertyName) {
-	
-	var model = new ContentModel();
-	model.setDB(placeHolderModelData);
+module.exports = function (res, storeName, dataForScrape) {
 
-	var allStoreConfigData = model.getData(collectionName, propertyName), 
-		storeScrapeConfig = allStoreConfigData[storeName];
-
-	storeRouteMapper[storeName].scrape(storeScrapeConfig, function (err, circularData) {
+	storeRouteMapper[storeName].scrape(dataForScrape, function (err, circularData) {
 		if (!err) {
 			res.json(circularData);
 		}

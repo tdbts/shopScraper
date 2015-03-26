@@ -75,10 +75,14 @@ var scrapeShopRite = scraper.extend({
 	scrape: function (data, callback) {
 		
 		var self = this, 
+			configData = data.configData[0], 
+			preferences = data.preferences[0], 
 			scrapers = [this, getCircularNumberOfPages, scrapePage];
 
+		configData.baseURL = preferences.baseURL;
+
 		scrapers.forEach(function (scraper) {
-			scraper.extendConfig(data);
+			scraper.extendConfig(configData);
 		});
 	
 		getCircularNumberOfPages.scrape(this.config.baseURL, function (err, pagesArray) {

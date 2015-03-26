@@ -4,7 +4,7 @@ var OneColumnView = React.createClass({displayName: "OneColumnView",
 	getDefaultProps: function () {
 		return {
 			'viewType': 'oneColumn'
-		}
+		};
 	}, 
 
 	render: function () {

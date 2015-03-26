@@ -1,6 +1,5 @@
 var React = require('react'), 
-	StoreNavigationLogo = require('./StoreNavigationLogo'), 
-	StoreCircularComponent = require('./StoreCircularComponent');
+	StoreNavigationLogo = require('./StoreNavigationLogo');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	getInitialState: function () {
@@ -24,6 +23,8 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 		$.get('/ShopScraperNavigation', function (storeLogoData) {
 			var i = 0, 
 				columnID;
+
+			storeLogoData = JSON.parse(storeLogoData); 
 
 			for (columnID in this.state.isOccupied) {
 				React.render(React.createElement(StoreNavigationLogo, {store: storeLogoData[i]}), 

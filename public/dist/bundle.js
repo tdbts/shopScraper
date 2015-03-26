@@ -20041,7 +20041,7 @@ var React = require('react'),
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
 	render: function () {
 		var storeProducts = [];
-
+		
 		this.props.circularData.products.forEach(function (productData) {
 			storeProducts.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
 		});
@@ -20104,8 +20104,7 @@ module.exports = StoreNavigationLogo;
 
 },{"./Spinner":167,"./StoreCircularComponent":168,"react":157}],170:[function(require,module,exports){
 var React = require('react'), 
-	StoreNavigationLogo = require('./StoreNavigationLogo'), 
-	StoreCircularComponent = require('./StoreCircularComponent');
+	StoreNavigationLogo = require('./StoreNavigationLogo');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	getInitialState: function () {
@@ -20129,6 +20128,8 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 		$.get('/ShopScraperNavigation', function (storeLogoData) {
 			var i = 0, 
 				columnID;
+
+			storeLogoData = JSON.parse(storeLogoData); 
 
 			for (columnID in this.state.isOccupied) {
 				React.render(React.createElement(StoreNavigationLogo, {store: storeLogoData[i]}), 
@@ -20163,4 +20164,4 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./StoreCircularComponent":168,"./StoreNavigationLogo":169,"react":157}]},{},[1]);
+},{"./StoreNavigationLogo":169,"react":157}]},{},[1]);
