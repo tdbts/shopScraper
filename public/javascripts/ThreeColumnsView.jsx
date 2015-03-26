@@ -1,6 +1,5 @@
 var React = require('react'), 
-	StoreNavigationLogo = require('./StoreNavigationLogo'), 
-	StoreCircularComponent = require('./StoreCircularComponent');
+	StoreNavigationLogo = require('./StoreNavigationLogo');
 
 var ThreeColumnsView = React.createClass({
 	getInitialState: function () {
@@ -20,21 +19,12 @@ var ThreeColumnsView = React.createClass({
 	}, 
 
 	componentDidMount: function () {
-		// $.get('/api/BigY', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_left'));
-		// });
-
-		// $.get('/api/StopAndShop', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_middle'));
-		// });			
-		
-		// $.get('/api/ShopRite', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_right'));
-		// });
 		
 		$.get('/ShopScraperNavigation', function (storeLogoData) {
 			var i = 0, 
 				columnID;
+
+			storeLogoData = JSON.parse(storeLogoData); 
 
 			for (columnID in this.state.isOccupied) {
 				React.render(<StoreNavigationLogo store={storeLogoData[i]} />, 

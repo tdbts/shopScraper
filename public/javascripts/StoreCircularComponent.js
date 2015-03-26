@@ -4,7 +4,7 @@ var React = require('react'),
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
 	render: function () {
 		var storeProducts = [];
-
+		
 		this.props.circularData.products.forEach(function (productData) {
 			storeProducts.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
 		});

@@ -1,26 +1,42 @@
 var express = require('express'),
 	router = express.Router(),  
-	storeLogoData = require('../src/storeLogoData'), 
-	wireDatabaseToScrapersAndScrape = require('../src/wireDatabaseToScrapersAndScrape');
-
+	ContentModel = require('../model/ContentModel'), 
+	handleScrapeRequest = require('../src/handleScrapeRequest');
 
 /* GET home page. */
 router.get('/', function (req, res) {
-
+	// PLACEHOLDER -- DB CHECK
+	if (req.db) {
+		console.log("YEAHHHH WE GOT A DATABASE, BITCH!");
+		var model = new ContentModel(req.db);
+		model.collection('companies').getData({'companyName': 'BigY'}, function (err, data) {
+			if (!err) {
+				console.log(data);
+			}
+		});
+	}
 	res.render('index');
 });
 
 router.get('/ShopScraperNavigation', function (req, res) {
-
-	res.send(storeLogoData);	
+	if (req.db) {
+		var model = new ContentModel(req.db);
+		
+		model.collection('storeLogoData').getData({}, function (err, data) {
+			if (!err) {
+				stringifiedLogoData = JSON.stringify(data);
+				
+				res.send(stringifiedLogoData);
+			}
+		});
+	}
 });
 
 router.get('/api/:storeName', function (req, res) {
 
 	var storeName = req.params.storeName;
 
-	wireDatabaseToScrapersAndScrape(res, storeName, 'placeHolderScraperData', 'scrapeConfigData');
-
+	handleScrapeRequest(req, res, storeName);
 });
 
 module.exports = router;

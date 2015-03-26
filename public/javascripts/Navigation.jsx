@@ -5,10 +5,12 @@ var React = require('react'),
 var Navigation = React.createClass({
 	render: function () {
 		return (
-	        <nav id="primary_navbar" className="navbar navbar-default navbar-static-top" role="navigation">
-	        	<Navbar />
-	        	<SidePanel />
-	        </nav>			
+			<div id="navbar_container">
+		        <nav id="primary_navbar" className="navbar navbar-default navbar-static-top" role="navigation">
+		        	<Navbar />
+		        	<SidePanel />
+		        </nav>
+	        </div>			
 		);
 	}
 });

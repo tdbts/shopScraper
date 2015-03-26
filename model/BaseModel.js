@@ -18,6 +18,8 @@ module.exports.prototype = {
 	
 	setDB: function(db) {
 		this.db = db;
+
+		return this;
 	},
 	
 	collection: function(collectionName) {
@@ -25,6 +27,8 @@ module.exports.prototype = {
 			return this._collection;
 		}
 
-		return this._collection = this.db.collection(collectionName);
+		this._collection = this.db.collection(collectionName);
+		
+		return this;
 	}
 };

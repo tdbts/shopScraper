@@ -73,8 +73,13 @@ var scrapeStopAndShop = scraper.extend({
 
 	scrape: function (data, callback) {
 		
+		var configData = data.configData.pop(), 
+			preferences = data.preferences.pop();
+
+		configData.urlFragments.parameters.storeid = preferences.storeID;
+		
 		var self = this, 
-			stopAndShopURLs = new UrlCreator(data.urlConfigs, data.urlFragments),
+			stopAndShopURLs = new UrlCreator(configData.urlConfigs, configData.urlFragments),
 			urlForPromotionID = stopAndShopURLs.getUrl('forPromotionID');
 
 		async.waterfall([
@@ -99,7 +104,7 @@ var scrapeStopAndShop = scraper.extend({
 
 				var pageIDs = pagesMetadata.getPageIDs();
 
-				getProducts.extendConfig(data);
+				getProducts.extendConfig(configData);
 
 				self.asyncMapOverData(pageIDs, getProducts.scrape, self.coordinatePageDataProcessing, cb);
 			
