@@ -11,19 +11,15 @@ var users = require('./routes/users');
 var app = express();
 
 var mongoConnect = require('./src/mongoConnect');
-var myDB;
+var shopScraperDB;
 
-mongoConnect(function (db) {
-    // WORKS
-    // db.collection('companies').find({}).toArray(function (err, data) {
-    //     console.log(data);
-    // });
+mongoConnect(shopScraperDB, function (db) {
     
-    myDB = db;
+    shopScraperDB = db
 });
 
 var attachDB = function (req, res, next) {
-    req.db = myDB;
+    req.db = shopScraperDB;
     next();
 };
 

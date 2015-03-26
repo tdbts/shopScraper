@@ -5,6 +5,9 @@ var React = require('react'),
 var ShopScraper = React.createClass({
 	componentDidMount: function () {
 		React.render(<Navigation />, document.getElementById('navigation_wrapper'));
+		
+		// PLACEHOLDER -- There will eventually be a conditional statement 
+		// here to render different views depending on client's localStorage
 		React.render(<ThreeColumnsView />, document.getElementById('window_wrapper'));
 	}, 
 

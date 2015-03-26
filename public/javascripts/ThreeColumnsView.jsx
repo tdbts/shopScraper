@@ -20,17 +20,6 @@ var ThreeColumnsView = React.createClass({
 	}, 
 
 	componentDidMount: function () {
-		// $.get('/api/BigY', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_left'));
-		// });
-
-		// $.get('/api/StopAndShop', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_middle'));
-		// });			
-		
-		// $.get('/api/ShopRite', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_right'));
-		// });
 		
 		$.get('/ShopScraperNavigation', function (storeLogoData) {
 			var i = 0, 

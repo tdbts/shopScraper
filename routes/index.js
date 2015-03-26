@@ -5,12 +5,13 @@ var express = require('express'),
 
 /* GET home page. */
 router.get('/', function (req, res) {
-	// if (req.db) {
-	// 	console.log("YEAHHHH WE GOT A DATABASE, BITCH!");
-	// 	req.db.collection('companies').find({}).toArray(function (err, data) {
-	// 		console.log(data);
-	// 	});
-	// }
+	// PLACEHOLDER -- DB CHECK
+	if (req.db) {
+		console.log("YEAHHHH WE GOT A DATABASE, BITCH!");
+		req.db.collection('companies').find({}).toArray(function (err, data) {
+			console.log(data);
+		});
+	}
 	res.render('index');
 });
 
