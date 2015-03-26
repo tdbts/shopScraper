@@ -1,6 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/** @jsx React.DOM */
-
 var React = require('react'), 
 	ShopScraper = require('./ShopScraper');
 
@@ -19857,9 +19855,11 @@ var React = require('react'),
 var Navigation = React.createClass({displayName: "Navigation",
 	render: function () {
 		return (
-	        React.createElement("nav", {id: "primary_navbar", className: "navbar navbar-default navbar-static-top", role: "navigation"}, 
-	        	React.createElement(Navbar, null), 
-	        	React.createElement(SidePanel, null)
+			React.createElement("div", {id: "navbar_container"}, 
+		        React.createElement("nav", {id: "primary_navbar", className: "navbar navbar-default navbar-static-top", role: "navigation"}, 
+		        	React.createElement(Navbar, null), 
+		        	React.createElement(SidePanel, null)
+		        )
 	        )			
 		);
 	}
@@ -19893,26 +19893,49 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 module.exports = ProductComponent;
 
 },{"react":157}],164:[function(require,module,exports){
+/* 
+* SearchField component requires FontAwesome for the magnifying glass icon.
+*/
 
-},{}],165:[function(require,module,exports){
+var React = require('react');
+
+var SearchField = React.createClass({displayName: "SearchField",
+	render: function () {
+		return (
+            React.createElement("div", {className: "input-group custom-search-form"}, 
+                React.createElement("input", {type: "text", className: "form-control", placeholder: "Search..."}), 
+                React.createElement("span", {className: "input-group-btn"}, 
+                    React.createElement("button", {className: "btn btn-default", type: "button"}, 
+                        React.createElement("span", {className: "fa fa-search"})
+                    )
+                )
+            )			
+		);
+	}
+});
+
+module.exports = SearchField;
+},{"react":157}],165:[function(require,module,exports){
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
 	componentDidMount: function () {
-		React.render(React.createElement(Navigation, null), document.getElementById('navigation_wrapper'));
+		// React.render(<Navigation />, document.getElementById('navigation_wrapper'));
 		
-		// PLACEHOLDER -- There will eventually be a conditional statement 
-		// here to render different views depending on client's localStorage
-		React.render(React.createElement(ThreeColumnsView, null), document.getElementById('window_wrapper'));
+		// React.render(<ThreeColumnsView />, document.getElementById('window_wrapper'));
 	}, 
 
 	render: function () {
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
-				React.createElement("div", {id: "navigation_wrapper"}), 
-				React.createElement("div", {id: "window_wrapper"})
+				React.createElement("div", {id: "navigation_wrapper"}, 
+					React.createElement(Navigation, null)
+				), 
+				React.createElement("div", {id: "window_wrapper"}, 
+					React.createElement(ThreeColumnsView, null)
+				)
 			)
 		);
 	}
@@ -20102,17 +20125,6 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	}, 
 
 	componentDidMount: function () {
-		// $.get('/api/BigY', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_left'));
-		// });
-
-		// $.get('/api/StopAndShop', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_middle'));
-		// });			
-		
-		// $.get('/api/ShopRite', function (responseData) {
-		// 	React.render(<StoreCircularComponent circularData={responseData} />, document.getElementById('column_right'));
-		// });
 		
 		$.get('/ShopScraperNavigation', function (storeLogoData) {
 			var i = 0, 
