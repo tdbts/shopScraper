@@ -19921,12 +19921,6 @@ var React = require('react'),
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
-	componentDidMount: function () {
-		// React.render(<Navigation />, document.getElementById('navigation_wrapper'));
-		
-		// React.render(<ThreeColumnsView />, document.getElementById('window_wrapper'));
-	}, 
-
 	render: function () {
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
@@ -19960,6 +19954,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 	}, 
 
 	render: function () {
+		// PLACEHOLDER -- This data will eventually come from localHost
 		var dashboardSubCategories = [{text: "Add Store", key: "0"}, {text: "Swap Store", key: "1"}, {text: "Add Favorite", key: "2"}], 
 			favoritesSubCategories = [{text: "Brawny", key: "0"}, {text: "Oreo", key: "1"}, {text: "Chicken Broth", key: "2"}, {text: "Beer", key: "3"}], 
 			listsSubCategories = [{text: "Stop & Shop", key: "0"}, {text: "Shop Rite", key: "1"}], 

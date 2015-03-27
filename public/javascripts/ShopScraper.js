@@ -3,12 +3,6 @@ var React = require('react'),
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
-	componentDidMount: function () {
-		// React.render(<Navigation />, document.getElementById('navigation_wrapper'));
-		
-		// React.render(<ThreeColumnsView />, document.getElementById('window_wrapper'));
-	}, 
-
 	render: function () {
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
