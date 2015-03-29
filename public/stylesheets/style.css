@@ -184,6 +184,7 @@ body {
         width: 250px;
         margin-top: 50px;
     }
+}
 
 /* ADDITIONS TO SIDE-MENU */
 .panel_suboption {
@@ -267,4 +268,33 @@ i.spinner {
 
 .info_text {
     line-height: 22px;
+}
+
+/* TESTING CSS FOR PHONES/TABLETS */
+@media(max-width: 768px) {
+    #welcome_test {
+        margin-left: 0px;
+        height: 100%;
+    }
+
+    #myNavbar {
+        display: none;
+    }
+
+    .info_column {
+        max-width: 60%;
+        margin: 0 auto 30px auto;
+    }
+
+    .info_text {
+        text-align: justify;
+    }
+
+/*    #welcome_jumbotron {
+        max-height: 250px;
+    }*/
+
+/*    #side-menu {
+        max-height: 350px;
+    }*/
 }

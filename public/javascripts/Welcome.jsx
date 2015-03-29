@@ -4,13 +4,17 @@ var Welcome = React.createClass({
 	render: function () {
  		return (
 			<div className="welcome_container">
-				<div id="welcome_jumbotron" className="jumbotron">
-					<div id="welcome_text_container">
-						<h1 id="welcome_text">Welcome To ShopScraper!</h1>
-					</div>
-					<div id="welcome_button_container">
-						<button id="welcome_button" type="button" className="btn btn-info">
-						<span id="welcome_button_glyph" className="fa fa-shopping-cart"></span> Click to Get Started</button>
+				<div id="jumbotron_container" className="container">
+					<div className="col-sm-12">	
+						<div id="welcome_jumbotron" className="jumbotron">
+							<div id="welcome_text_container">
+								<h1 id="welcome_text">Welcome To ShopScraper!</h1>
+							</div>
+							<div id="welcome_button_container">
+								<button id="welcome_button" type="button" className="btn btn-info">
+								<span id="welcome_button_glyph" className="fa fa-shopping-cart"></span> Click to Get Started</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div id="landing_page_info_container" className="container">
