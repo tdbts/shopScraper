@@ -2,7 +2,7 @@ var React = require('react');
 
 var Welcome = React.createClass({
 	render: function () {
- 		return (
+		return (
 			<div className="welcome_container">
 				<div id="welcome_jumbotron" className="jumbotron">
 					<div id="welcome_text_container">
@@ -15,7 +15,7 @@ var Welcome = React.createClass({
 				</div>
 				<div id="landing_page_info_container" className="container">
 					<div id="landing_page_info" className="row">
-						<div className="col-md-3 info_column">
+						<div className="col-md-3">
 							<div className="info_circle_container">
 								<span className="fa-stack fa-3x">
 									<span className="fa fa-circle fa-stack-2x info_circle"></span>
@@ -29,7 +29,7 @@ var Welcome = React.createClass({
 								between flyers, find everything you need right here at ShopScraper.</p>
 							</div>
 						</div>
-						<div className="col-md-3 info_column">
+						<div className="col-md-3">
 							<div className="info_circle_container">
 								<span className="fa-stack fa-3x">
 									<span className="fa fa-circle fa-stack-2x info_circle"></span>
@@ -43,7 +43,7 @@ var Welcome = React.createClass({
 								store listings to see how prices have changed over time.</p>
 							</div>
 						</div>
-						<div className="col-md-3 info_column">
+						<div className="col-md-3">
 							<div className="info_circle_container">
 								<span className="fa-stack fa-3x">
 									<span className="fa fa-circle fa-stack-2x info_circle"></span>
@@ -57,7 +57,7 @@ var Welcome = React.createClass({
 								where they will always be quick and easy to find.</p>
 							</div>
 						</div>
-						<div className="col-md-3 info_column">
+						<div className="col-md-3">
 							<div className="info_circle_container">
 								<span className="fa-stack fa-3x">
 									<span className="fa fa-circle fa-stack-2x info_circle"></span>

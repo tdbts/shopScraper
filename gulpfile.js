@@ -15,17 +15,20 @@ var gulp = require('gulp'),
 	react = require('gulp-react'); 
 
 gulp.task('transform', function () {
-	gulp.src(['public/javascripts/*.jsx'])
+	gulp.src(['public/comonents/*.jsx'])
 		.pipe(react())
 		.on('error', console.log.bind(console))
 		.pipe(gulp.dest('public/javascripts'));
+
+	console.log("TRANSFORM OF .jsx FILES COMPLETE.");
 });
 
 gulp.task('browserify', function () {
+	console.log("BUNDLING FILES WITH BROWSERIFY.");
+	
 	return browserify('./public/javascripts/index.js')
 		.bundle()
 		.on('error', function () {
-			// console.log(err.toString());
 			notify.onError({
 				message: "<%= error.message %>"
 			}).apply(this, arguments);
@@ -34,6 +37,7 @@ gulp.task('browserify', function () {
 		})
 		.pipe(source('bundle.js'))
 		.pipe(gulp.dest('./public/dist'));
+
 });
 
 gulp.task('jshint', function () {
@@ -51,15 +55,14 @@ gulp.task('jshint', function () {
 gulp.task('watch', function () {
 	var sourcefiles = [
 		'src/*.js', 
-		'public/javascripts/*.js',    
+		'public/javascripts/*.js',
+		'routes/*.js', 
+		'/test/*.js',     
 		'gulpfile.js'
 	];
 
-	gulp.watch(sourcefiles, ['browserify']);
-
-});
-
-gulp.task('watch', function () {
+	gulp.watch(sourcefiles, ['jshint']);
+	
 	gulp.watch('public/javascripts/*.jsx', ['transform', 'browserify']);
 });
 
@@ -76,18 +79,16 @@ gulp.task('server-restart', function () {
 			'NODE_ENV': 'development'
 		}
 	})
-		// .on('start', ['bundle'])
-		// .on('change', ['bundle'])
-		.on('restart', function () {
-			var date = new Date(), 
-				hour = date.getHours(), 
-				minutes = date.getMinutes(), 
-				seconds = date.getSeconds();
+	.on('restart', function () {
+		var date = new Date(), 
+			hour = date.getHours(), 
+			minutes = date.getMinutes(), 
+			seconds = date.getSeconds();
 
-			console.log("Change detected.  Restarted server at " + hour + ":" + minutes + ":" + seconds + ".");
-		});	
+		console.log("Change detected.  Restarted server at " + hour + ":" + minutes + ":" + seconds + ".");
+	});	
 });
 
 gulp.task('default', ['watch']);
-gulp.task('bundle', ['jshint', 'test', 'transform', 'browserify']);
+// gulp.task('bundle', ['jshint', 'test', 'transform', 'browserify']);
 gulp.task('build', ['jshint', 'test', 'transform', 'browserify', 'server-restart']);
