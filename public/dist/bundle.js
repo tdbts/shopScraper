@@ -19902,8 +19902,29 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 module.exports = ProductComponent;
 
 },{"react":157}],164:[function(require,module,exports){
+/* 
+* SearchField component requires FontAwesome for the magnifying glass icon.
+*/
 
-},{}],165:[function(require,module,exports){
+var React = require('react');
+
+var SearchField = React.createClass({displayName: "SearchField",
+	render: function () {
+		return (
+            React.createElement("div", {className: "input-group custom-search-form"}, 
+                React.createElement("input", {type: "text", className: "form-control", placeholder: "Search..."}), 
+                React.createElement("span", {className: "input-group-btn"}, 
+                    React.createElement("button", {className: "btn btn-default", type: "button"}, 
+                        React.createElement("span", {className: "fa fa-search"})
+                    )
+                )
+            )			
+		);
+	}
+});
+
+module.exports = SearchField;
+},{"react":157}],165:[function(require,module,exports){
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	ThreeColumnsView = require('./ThreeColumnsView');
