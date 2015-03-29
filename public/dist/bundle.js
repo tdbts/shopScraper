@@ -1,14 +1,23 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var React = require('react'), 
+	Welcome = require('./Welcome'), 
+	Navigation = require('./Navigation'), 
 	ShopScraper = require('./ShopScraper');
 
 $(document).ready(function() {
 
-	React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
+	// PLACEHOLDER -- Testing Welcome Page
+	if (window.location.pathname === '/test/Welcome') {
+		React.render(React.createElement(Navigation, null), document.getElementById('app_wrapper'));
+		React.render(React.createElement(Welcome, null), document.getElementById('welcome_test'));
+	
+	} else {
+		React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
+	}
 
 });
 
-},{"./ShopScraper":165,"react":157}],2:[function(require,module,exports){
+},{"./Navigation":162,"./ShopScraper":165,"./Welcome":171,"react":157}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -19900,12 +19909,6 @@ var React = require('react'),
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
-	componentDidMount: function () {
-		// React.render(<Navigation />, document.getElementById('navigation_wrapper'));
-		
-		// React.render(<ThreeColumnsView />, document.getElementById('window_wrapper'));
-	}, 
-
 	render: function () {
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
@@ -19939,6 +19942,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 	}, 
 
 	render: function () {
+		// PLACEHOLDER -- This data will eventually come from localHost
 		var dashboardSubCategories = [{text: "Add Store", key: "0"}, {text: "Swap Store", key: "1"}, {text: "Add Favorite", key: "2"}], 
 			favoritesSubCategories = [{text: "Brawny", key: "0"}, {text: "Oreo", key: "1"}, {text: "Chicken Broth", key: "2"}, {text: "Beer", key: "3"}], 
 			listsSubCategories = [{text: "Stop & Shop", key: "0"}, {text: "Shop Rite", key: "1"}], 
@@ -20125,7 +20129,6 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 			React.createElement("div", {id: "three_columns_view"}, 
 				React.createElement("div", {id: "container_three_columns", className: "container"}, 
 					React.createElement("div", {id: "three_columns_row", className: "row"}, 
-						React.createElement("div", {className: "col-md-1"}), 
 						React.createElement("div", {id: "column_left", className: "col-md-3"}
 						), 
 						React.createElement("div", {className: "col-md-1"}), 
@@ -20133,7 +20136,8 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 						), 
 						React.createElement("div", {className: "col-md-1"}), 
 						React.createElement("div", {id: "column_right", className: "col-md-3"}
-						)
+						), 
+						React.createElement("div", {className: "col-md-1"})
 					)
 				)
 			)
@@ -20143,4 +20147,87 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./StoreNavigationLogo":169,"react":157}]},{},[1]);
+},{"./StoreNavigationLogo":169,"react":157}],171:[function(require,module,exports){
+var React = require('react');
+
+var Welcome = React.createClass({displayName: "Welcome",
+	render: function () {
+		return (
+			React.createElement("div", {className: "welcome_container"}, 
+				React.createElement("div", {id: "welcome_jumbotron", className: "jumbotron"}, 
+					React.createElement("div", {id: "welcome_text_container"}, 
+						React.createElement("h1", {id: "welcome_text"}, "Welcome To ShopScraper!")
+					), 
+					React.createElement("div", {id: "welcome_button_container"}, 
+						React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info"}, 
+						React.createElement("span", {id: "welcome_button_glyph", className: "fa fa-shopping-cart"}), " Click to Get Started")
+					)
+				), 
+				React.createElement("div", {id: "landing_page_info_container", className: "container"}, 
+					React.createElement("div", {id: "landing_page_info", className: "row"}, 
+						React.createElement("div", {className: "col-md-3"}, 
+							React.createElement("div", {className: "info_circle_container"}, 
+								React.createElement("span", {className: "fa-stack fa-3x"}, 
+									React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
+									React.createElement("span", {className: "glyphicon glyphicon-search fa-inverse"})
+								)
+							), 
+							React.createElement("div", {className: "landing_page_info_text"}, 
+								React.createElement("p", {className: "info_text"}, "Find everything on sale —  for all of your favorite" + ' ' + 
+								"local grocery stores —  consolidated in once place.  No more combing" + ' ' + 
+								"through the Sunday newspaper looking for bargains, or comparing prices" + ' ' + 
+								"between flyers, find everything you need right here at ShopScraper.")
+							)
+						), 
+						React.createElement("div", {className: "col-md-3"}, 
+							React.createElement("div", {className: "info_circle_container"}, 
+								React.createElement("span", {className: "fa-stack fa-3x"}, 
+									React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
+									React.createElement("span", {className: "fa fa-history fa-inverse"})
+								)
+							), 
+							React.createElement("div", {className: "landing_page_info_text"}, 
+								React.createElement("p", {className: "info_text"}, "Ever look at the list price and have no idea whether you're" + ' ' + 
+								"looking at a good deal or a rip-off?  Or have no idea what you paid for the" + ' ' + 
+								"same exact product just last week?  At ShopScraper, you can search your old" + ' ' + 
+								"store listings to see how prices have changed over time.")
+							)
+						), 
+						React.createElement("div", {className: "col-md-3"}, 
+							React.createElement("div", {className: "info_circle_container"}, 
+								React.createElement("span", {className: "fa-stack fa-3x"}, 
+									React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
+									React.createElement("span", {className: "fa fa-list fa-inverse"})
+								)
+							), 
+							React.createElement("div", {className: "landing_page_info_text"}, 
+								React.createElement("p", {className: "info_text"}, "Certain products you just love, so there's no sense in searching" + ' ' + 
+								"for them all over again whenever a new flyer is released.  Add the brands and" + ' ' + 
+								"staples you can't do without to a saved collection of personal favorites," + ' ' + 
+								"where they will always be quick and easy to find.")
+							)
+						), 
+						React.createElement("div", {className: "col-md-3"}, 
+							React.createElement("div", {className: "info_circle_container"}, 
+								React.createElement("span", {className: "fa-stack fa-3x"}, 
+									React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
+									React.createElement("span", {className: "fa fa-envelope fa-inverse"})
+								)
+							), 
+							React.createElement("div", {className: "landing_page_info_text"}, 
+								React.createElement("p", {className: "info_text"}, "Select the best products at the lowest prices and add them to your" + ' ' + 
+								"shopping list for the week.  When you're done, email the bargains you selected to" + ' ' + 
+								"yourself or to anyone you'd like.  The list will be ready for you when you get to" + ' ' + 
+								"the store.")
+							)
+						)
+					)
+				)
+			)
+		);
+	}
+});
+
+module.exports = Welcome;
+
+},{"react":157}]},{},[1]);

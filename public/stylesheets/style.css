@@ -7,11 +7,11 @@ body {
 }
 
 #navbar_container {
-	width: 98%;
+	width: 100%;
 }
 
 #myNavbar {
-    height: 1px;
+    height: 0px;
 }
 
 #primary_navbar {
@@ -28,6 +28,11 @@ a {
 
 #content {
 	padding-left: 50px;
+}
+
+#window_wrapper {
+    margin-left: 250px;
+    height: 100%;
 }
 
 /* PLACEHOLDER */
@@ -117,7 +122,7 @@ body {
 }
 
 #navbar_right_wrapper {
-    padding-right: 15px;
+    padding-right: 25px;
 }
 
 .navbar-nav > li > a.navbar_icon_right {
@@ -177,7 +182,7 @@ body {
         z-index: 1;
         position: absolute;
         width: 250px;
-        margin-top: 51px;
+        margin-top: 50px;
     }
 
 /* ADDITIONS TO SIDE-MENU */
@@ -199,4 +204,67 @@ body {
 i.spinner {
     display: inline-block;
     text-align: center;
+}
+
+/* PLACEHOLDER */
+#welcome_test {
+    margin-left: 250px;
+    height: 100%;
+}
+
+#welcome_text {
+    text-align: center;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    letter-spacing: 4px;
+}
+
+#welcome_jumbotron {
+    min-height: 350px;
+    background-image: 
+        linear-gradient(
+            rgba(0, 0, 0, 0.3), 
+            rgba(0, 0, 0, 0.3)
+        ), 
+        url(store_aisle_fast.jpg);
+    background-size: cover;
+}
+
+#welcome_jumbotron div {
+    position: relative;
+    top: 50%;
+    transform: translateY(50%);
+    color: white;
+}
+
+#welcome_button_container {
+    margin-top: 50px;
+}
+
+#welcome_button {
+    margin-left: 40%;
+}
+
+#welcome_button_glyph {
+    margin-right: 5px;
+}
+
+#landing_page_info_container {
+    text-align: center;
+}
+
+.info_circle_container {
+    padding-bottom: 10px;
+}
+
+.info_circle {
+    color: #5c5c5c;
+}
+
+.landing_page_info_text {
+    border-top: 1px solid black;
+    padding: 25px 10px 0;
+}
+
+.info_text {
+    line-height: 22px;
 }

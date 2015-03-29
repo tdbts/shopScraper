@@ -41,7 +41,6 @@ var ThreeColumnsView = React.createClass({
 			<div id="three_columns_view">
 				<div id="container_three_columns" className="container">
 					<div id="three_columns_row" className="row">
-						<div className="col-md-1"></div>
 						<div id="column_left" className="col-md-3">
 						</div>
 						<div className="col-md-1"></div>
@@ -50,6 +49,7 @@ var ThreeColumnsView = React.createClass({
 						<div className="col-md-1"></div>
 						<div id="column_right" className="col-md-3">
 						</div>
+						<div className="col-md-1"></div>
 					</div>
 				</div>
 			</div>

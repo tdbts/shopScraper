@@ -14,12 +14,14 @@ var scrapeShopRite = scraper.extend({
 	collectAllProducts: function (data, resultsObj, dateParser) {
 		
 		data.map(function (page) {
-			resultsObj.startDate = resultsObj.startDate || dateParser(page.startDate);
-			resultsObj.endDate = resultsObj.endDate || dateParser(page.endDate);
-			
-			page.products.map(function (product) {
-				resultsObj.products.push(product);
-			});
+			if (page) {
+				resultsObj.startDate = resultsObj.startDate || dateParser(page.startDate);
+				resultsObj.endDate = resultsObj.endDate || dateParser(page.endDate);
+				
+				page.products.map(function (product) {
+					resultsObj.products.push(product);
+				});
+			}
 		});
 
 	},

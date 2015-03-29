@@ -39,4 +39,10 @@ router.get('/api/:storeName', function (req, res) {
 	handleScrapeRequest(req, res, storeName);
 });
 
+// TESTING WELCOME PAGE
+router.get('/test/Welcome', function (req, res) {
+	
+	res.render('index');
+});
+
 module.exports = router;
