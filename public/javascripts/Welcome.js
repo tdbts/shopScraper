@@ -23,9 +23,10 @@ var Welcome = React.createClass({displayName: "Welcome",
 								)
 							), 
 							React.createElement("div", {className: "landing_page_info_text"}, 
-								React.createElement("p", {id: "info_text"}, "Lorem ipsum Adipisicing magna Ut in occaecat enim cupidatat dolor" + ' ' + 
-								"reprehenderit mollit Excepteur nulla Duis velit culpa fugiat cupidatat" + ' ' + 
-								"amet magna enim culpa sint irure ea incididunt.")
+								React.createElement("p", {className: "info_text"}, "Find everything on sale —  for all of your favorite" + ' ' + 
+								"local grocery stores —  consolidated in once place.  No more combing" + ' ' + 
+								"through the Sunday newspaper looking for bargains, or comparing prices" + ' ' + 
+								"between flyers, find everything you need right here at ShopScraper.")
 							)
 						), 
 						React.createElement("div", {className: "col-md-3"}, 
@@ -36,9 +37,10 @@ var Welcome = React.createClass({displayName: "Welcome",
 								)
 							), 
 							React.createElement("div", {className: "landing_page_info_text"}, 
-								React.createElement("p", {id: "info_text"}, "Lorem ipsum Adipisicing magna Ut in occaecat enim cupidatat dolor" + ' ' + 
-								"reprehenderit mollit Excepteur nulla Duis velit culpa fugiat cupidatat" + ' ' + 
-								"amet magna enim culpa sint irure ea incididunt.")
+								React.createElement("p", {className: "info_text"}, "Ever look at the list price and have no idea whether you're" + ' ' + 
+								"looking at a good deal or a rip-off?  Or have no idea what you paid for the" + ' ' + 
+								"same exact product just last week?  At ShopScraper, you can search your old" + ' ' + 
+								"store listings to see how prices have changed over time.")
 							)
 						), 
 						React.createElement("div", {className: "col-md-3"}, 
@@ -49,9 +51,10 @@ var Welcome = React.createClass({displayName: "Welcome",
 								)
 							), 
 							React.createElement("div", {className: "landing_page_info_text"}, 
-								React.createElement("p", {id: "info_text"}, "Lorem ipsum Adipisicing magna Ut in occaecat enim cupidatat dolor" + ' ' + 
-								"reprehenderit mollit Excepteur nulla Duis velit culpa fugiat cupidatat" + ' ' + 
-								"amet magna enim culpa sint irure ea incididunt.")
+								React.createElement("p", {className: "info_text"}, "Certain products you just love, so there's no sense in searching" + ' ' + 
+								"for them all over again whenever a new flyer is released.  Add the brands and" + ' ' + 
+								"staples you can't do without to a saved collection of personal favorites," + ' ' + 
+								"where they will always be quick and easy to find.")
 							)
 						), 
 						React.createElement("div", {className: "col-md-3"}, 
@@ -62,9 +65,10 @@ var Welcome = React.createClass({displayName: "Welcome",
 								)
 							), 
 							React.createElement("div", {className: "landing_page_info_text"}, 
-								React.createElement("p", {id: "info_text"}, "Lorem ipsum Adipisicing magna Ut in occaecat enim cupidatat dolor" + ' ' + 
-								"reprehenderit mollit Excepteur nulla Duis velit culpa fugiat cupidatat" + ' ' + 
-								"amet magna enim culpa sint irure ea incididunt.")
+								React.createElement("p", {className: "info_text"}, "Select the best products at the lowest prices and add them to your" + ' ' + 
+								"shopping list for the week.  When you're done, email the bargains you selected to" + ' ' + 
+								"yourself or to anyone you'd like.  The list will be ready for you when you get to" + ' ' + 
+								"the store.")
 							)
 						)
 					)

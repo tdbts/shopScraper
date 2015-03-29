@@ -264,3 +264,7 @@ i.spinner {
     border-top: 1px solid black;
     padding: 25px 10px 0;
 }
+
+.info_text {
+    line-height: 22px;
+}
