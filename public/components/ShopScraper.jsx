@@ -1,8 +1,19 @@
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
+	Welcome = require('./Welcome'), 
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({
+	getInitialState: function () {
+		return {
+			showWelcome: true
+		};
+	}, 
+
+	handleButtonClick: function () {
+		return this.setState({showWelcome: false});
+	}, 
+
 	render: function () {
 		return (
 			<div id="shsc_subcomponents_wrapper">
@@ -10,7 +21,7 @@ var ShopScraper = React.createClass({
 					<Navigation />
 				</div>
 				<div id="window_wrapper">
-					<ThreeColumnsView />
+					{this.state.showWelcome ? <Welcome onButtonClick={this.handleButtonClick} /> : <ThreeColumnsView />}
 				</div>
 			</div>
 		);

@@ -219,7 +219,7 @@ i.spinner {
 /* PLACEHOLDER */
 #welcome_test {
     margin-left: 250px;
-    height: 100%;
+    /*height: 100%;*/
 }
 
 #jumbotron_container {
@@ -294,15 +294,11 @@ i.spinner {
 }
 
 #welcome_button {
-    display: none;
+    /*display: none;*/
 }
 
 /* TESTING CSS FOR PHONES/TABLETS */
 @media(max-width: 993px) {
-/*    #welcome_text_container {
-        transform: translateY(35px);
-    }*/
-
     #welcome_jumbotron div {
         transform: translateY(35px);
     }
@@ -321,7 +317,7 @@ i.spinner {
     }
 
     #side-menu {
-        height: 1300px;
+        height: 1500px;
     }
 
     #welcome_text {
@@ -330,9 +326,8 @@ i.spinner {
 }
 
 @media(max-width: 768px) {
-    #welcome_test {
+    #window_wrapper {
         margin-left: 0px;
-        height: 100%;
     }
 
     #myNavbar {

@@ -1,4 +1,5 @@
-var React = require('react');
+var React = require('react'), 
+	ThreeColumnsView = require('./ThreeColumnsView');
 
 var Welcome = React.createClass({displayName: "Welcome",
 	render: function () {
@@ -11,7 +12,7 @@ var Welcome = React.createClass({displayName: "Welcome",
 								React.createElement("h1", {id: "welcome_text"}, "Welcome To ShopScraper!")
 							), 
 							React.createElement("div", {id: "welcome_button_container"}, 
-								React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info btn-sm"}, 
+								React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info btn-sm", onClick: this.props.onButtonClick}, 
 								React.createElement("span", {id: "welcome_button_glyph", className: "fa fa-shopping-cart"}), " Click to Get Started")
 							)
 						)

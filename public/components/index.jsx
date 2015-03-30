@@ -5,13 +5,15 @@ var React = require('react'),
 
 $(document).ready(function() {
 
-	// PLACEHOLDER -- Testing Welcome Page
-	if (window.location.pathname === '/test/Welcome') {
-		React.render(<Navigation />, document.getElementById('app_wrapper'));
-		React.render(<Welcome />, document.getElementById('welcome_test'));
+	// // PLACEHOLDER -- Testing Welcome Page
+	// if (window.location.pathname === '/test/Welcome') {
+	// 	React.render(<Navigation />, document.getElementById('app_wrapper'));
+	// 	React.render(<Welcome />, document.getElementById('welcome_test'));
 	
-	} else {
-		React.render(<ShopScraper />, document.getElementById('app_wrapper'));
-	}
+	// } else {
+	// 	React.render(<ShopScraper />, document.getElementById('app_wrapper'));
+	// }
+
+	React.render(<ShopScraper />, document.getElementById('app_wrapper'));
 
 });

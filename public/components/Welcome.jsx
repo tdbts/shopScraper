@@ -1,4 +1,5 @@
-var React = require('react');
+var React = require('react'), 
+	ThreeColumnsView = require('./ThreeColumnsView');
 
 var Welcome = React.createClass({
 	render: function () {
@@ -11,7 +12,7 @@ var Welcome = React.createClass({
 								<h1 id="welcome_text">Welcome To ShopScraper!</h1>
 							</div>
 							<div id="welcome_button_container">
-								<button id="welcome_button" type="button" className="btn btn-info btn-sm">
+								<button id="welcome_button" type="button" className="btn btn-info btn-sm" onClick={this.props.onButtonClick}>
 								<span id="welcome_button_glyph" className="fa fa-shopping-cart"></span> Click to Get Started</button>
 							</div>
 						</div>

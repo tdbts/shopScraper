@@ -6,14 +6,16 @@ var React = require('react'),
 
 $(document).ready(function() {
 
-	// PLACEHOLDER -- Testing Welcome Page
-	if (window.location.pathname === '/test/Welcome') {
-		React.render(React.createElement(Navigation, null), document.getElementById('app_wrapper'));
-		React.render(React.createElement(Welcome, null), document.getElementById('welcome_test'));
+	// // PLACEHOLDER -- Testing Welcome Page
+	// if (window.location.pathname === '/test/Welcome') {
+	// 	React.render(<Navigation />, document.getElementById('app_wrapper'));
+	// 	React.render(<Welcome />, document.getElementById('welcome_test'));
 	
-	} else {
-		React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
-	}
+	// } else {
+	// 	React.render(<ShopScraper />, document.getElementById('app_wrapper'));
+	// }
+
+	React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
 
 });
 
@@ -19927,9 +19929,20 @@ module.exports = SearchField;
 },{"react":157}],165:[function(require,module,exports){
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
+	Welcome = require('./Welcome'), 
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
+	getInitialState: function () {
+		return {
+			showWelcome: true
+		};
+	}, 
+
+	handleButtonClick: function () {
+		return this.setState({showWelcome: false});
+	}, 
+
 	render: function () {
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
@@ -19937,7 +19950,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 					React.createElement(Navigation, null)
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
-					React.createElement(ThreeColumnsView, null)
+					this.state.showWelcome ? React.createElement(Welcome, {onButtonClick: this.handleButtonClick}) : React.createElement(ThreeColumnsView, null)
 				)
 			)
 		);
@@ -19946,7 +19959,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 module.exports = ShopScraper;
 
-},{"./Navigation":162,"./ThreeColumnsView":170,"react":157}],166:[function(require,module,exports){
+},{"./Navigation":162,"./ThreeColumnsView":170,"./Welcome":171,"react":157}],166:[function(require,module,exports){
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption');
@@ -20169,13 +20182,10 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 module.exports = ThreeColumnsView;
 
 },{"./StoreNavigationLogo":169,"react":157}],171:[function(require,module,exports){
-var React = require('react');
+var React = require('react'), 
+	ThreeColumnsView = require('./ThreeColumnsView');
 
 var Welcome = React.createClass({displayName: "Welcome",
-	componentDidMount: function () {
-		$('#welcome_button').fadeIn(4000);
-	}, 
-
 	render: function () {
  		return (
 			React.createElement("div", {className: "welcome_container"}, 
@@ -20186,7 +20196,7 @@ var Welcome = React.createClass({displayName: "Welcome",
 								React.createElement("h1", {id: "welcome_text"}, "Welcome To ShopScraper!")
 							), 
 							React.createElement("div", {id: "welcome_button_container"}, 
-								React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info btn-sm"}, 
+								React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info btn-sm", onClick: this.props.onButtonClick}, 
 								React.createElement("span", {id: "welcome_button_glyph", className: "fa fa-shopping-cart"}), " Click to Get Started")
 							)
 						)
@@ -20259,4 +20269,4 @@ var Welcome = React.createClass({displayName: "Welcome",
 
 module.exports = Welcome;
 
-},{"react":157}]},{},[1]);
+},{"./ThreeColumnsView":170,"react":157}]},{},[1]);
