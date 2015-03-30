@@ -56,7 +56,7 @@ var Welcome = React.createClass({
 								</span>
 							</div>
 							<div className="landing_page_info_text">
-								<p className="info_text">Certain products you just love, so there's no sense in searching 
+								<p className="info_text">Certain products you just love &mdash; so there's no sense in searching 
 								for them all over again whenever a new flyer is released.  Add the brands and 
 								staples you can't do without to a saved collection of personal favorites, 
 								where they will always be quick and easy to find.</p>
