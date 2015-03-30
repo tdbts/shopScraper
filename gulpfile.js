@@ -15,7 +15,7 @@ var gulp = require('gulp'),
 	react = require('gulp-react'); 
 
 gulp.task('transform', function () {
-	gulp.src(['public/comonents/*.jsx'])
+	gulp.src(['public/components/*.jsx'])
 		.pipe(react())
 		.on('error', console.log.bind(console))
 		.pipe(gulp.dest('public/javascripts'));
@@ -55,7 +55,7 @@ gulp.task('jshint', function () {
 gulp.task('watch', function () {
 	var sourcefiles = [
 		'src/*.js', 
-		'public/javascripts/*.js',
+		// 'public/javascripts/*.js',
 		'routes/*.js', 
 		'/test/*.js',     
 		'gulpfile.js'
@@ -63,7 +63,7 @@ gulp.task('watch', function () {
 
 	gulp.watch(sourcefiles, ['jshint']);
 	
-	gulp.watch('public/javascripts/*.jsx', ['transform', 'browserify']);
+	gulp.watch('public/components/*.jsx', ['transform', 'browserify']);
 });
 
 gulp.task('test', function () {

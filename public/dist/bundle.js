@@ -20172,6 +20172,10 @@ module.exports = ThreeColumnsView;
 var React = require('react');
 
 var Welcome = React.createClass({displayName: "Welcome",
+	componentDidMount: function () {
+		$('#welcome_button').fadeIn(4000);
+	}, 
+
 	render: function () {
  		return (
 			React.createElement("div", {className: "welcome_container"}, 
@@ -20182,7 +20186,7 @@ var Welcome = React.createClass({displayName: "Welcome",
 								React.createElement("h1", {id: "welcome_text"}, "Welcome To ShopScraper!")
 							), 
 							React.createElement("div", {id: "welcome_button_container"}, 
-								React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info"}, 
+								React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info btn-sm"}, 
 								React.createElement("span", {id: "welcome_button_glyph", className: "fa fa-shopping-cart"}), " Click to Get Started")
 							)
 						)
@@ -20213,7 +20217,7 @@ var Welcome = React.createClass({displayName: "Welcome",
 							), 
 							React.createElement("div", {className: "landing_page_info_text"}, 
 								React.createElement("p", {className: "info_text"}, "Ever look at the list price and have no idea whether you're" + ' ' + 
-								"looking at a good deal or a rip-off?  Or have no idea what you paid for the" + ' ' + 
+								"looking at a good deal or a rip-off?  Or have no idea how much you paid for the" + ' ' + 
 								"same exact product just last week?  At ShopScraper, you can search your old" + ' ' + 
 								"store listings to see how prices have changed over time.")
 							)
