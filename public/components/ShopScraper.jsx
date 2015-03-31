@@ -7,12 +7,36 @@ var React = require('react'),
 var ShopScraper = React.createClass({
 	getInitialState: function () {
 		return {
-			showWelcome: true
+			showLocationsSelector: false, 
+			showStoreListings: false, 
+			currentWindowView: <Welcome onButtonClick={this.determineViewToRender} />
 		};
 	}, 
 
-	handleButtonClick: function () {
-		return this.setState({showWelcome: false});
+	getDataFromLocalStorage: function () {
+		return localStorage ? localStorage.getItem('shopScraperData') : null;
+	}, 
+
+	getLocalStorageBasedComponent: function () {
+		var shopScraperData = this.getDataFromLocalStorage(), 
+			currentViewComponent;
+
+		if (!shopScraperData) {
+			currentViewComponent = <DefaultLocationsSelector />;
+		
+		} else {
+			// ...More code will be added here
+			currentViewComponent = <ThreeColumnsView />
+		} 
+
+		return currentViewComponent;
+	}, 
+
+	determineViewToRender: function () {
+		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
+			: <Welcome onButtonClick={this.handleButtonClick} />;
+
+		return this.setState({currentWindowView: currentWindowView}); 
 	}, 
 
 	render: function () {
@@ -22,7 +46,7 @@ var ShopScraper = React.createClass({
 					<Navigation />
 				</div>
 				<div id="window_wrapper">
-					{this.state.showWelcome ? <Welcome onButtonClick={this.handleButtonClick} /> : <DefaultLocationsSelector />}
+					{this.state.currentWindowView}
 				</div>
 			</div>
 		);

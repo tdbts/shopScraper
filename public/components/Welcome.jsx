@@ -1,7 +1,8 @@
 var React = require('react'), 
+	DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
 	ThreeColumnsView = require('./ThreeColumnsView');
 
-var Welcome = React.createClass({
+var Welcome = React.createClass({ 
 	render: function () {
  		return (
 			<div className="welcome_container">

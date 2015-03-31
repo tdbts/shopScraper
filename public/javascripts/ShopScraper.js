@@ -7,12 +7,36 @@ var React = require('react'),
 var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
-			showWelcome: true
+			showLocationsSelector: false, 
+			showStoreListings: false, 
+			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender})
 		};
 	}, 
 
-	handleButtonClick: function () {
-		return this.setState({showWelcome: false});
+	getDataFromLocalStorage: function () {
+		return localStorage ? localStorage.getItem('shopScraperData') : null;
+	}, 
+
+	getLocalStorageBasedComponent: function () {
+		var shopScraperData = this.getDataFromLocalStorage(), 
+			currentViewComponent;
+
+		if (!shopScraperData) {
+			currentViewComponent = React.createElement(DefaultLocationsSelector, null);
+		
+		} else {
+			// ...More code will be added here
+			currentViewComponent = React.createElement(ThreeColumnsView, null)
+		} 
+
+		return currentViewComponent;
+	}, 
+
+	determineViewToRender: function () {
+		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
+			: React.createElement(Welcome, {onButtonClick: this.handleButtonClick});
+
+		return this.setState({currentWindowView: currentWindowView}); 
 	}, 
 
 	render: function () {
@@ -22,7 +46,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 					React.createElement(Navigation, null)
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
-					this.state.showWelcome ? React.createElement(Welcome, {onButtonClick: this.handleButtonClick}) : React.createElement(DefaultLocationsSelector, null)
+					this.state.currentWindowView
 				)
 			)
 		);
