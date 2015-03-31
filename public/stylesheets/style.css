@@ -85,8 +85,6 @@ ul.products_ul {
     margin-bottom: 5px;
 }
 
-
-
 img.product_image {
     padding-left: 20%;
     max-height: 75%;
@@ -301,6 +299,7 @@ i.spinner {
 
 #locations_selector_container {
     margin-top: 15px;
+    padding: 15px;
 }
 
 .logo_container {
@@ -309,6 +308,22 @@ i.spinner {
 
 .location_selector_container {
     margin-bottom: 50px;
+}
+
+#locations_selector_description {
+    padding: 15px;
+}
+
+#locsel_description_title_container {
+    border-bottom: 1px solid #c0c0c0;
+}
+
+#locsel_description_text_container {
+    margin-top: 15px;
+}
+
+.defaults_button_container {
+    padding: 5px;
 }
 
 /* TESTING CSS FOR PHONES/TABLETS */

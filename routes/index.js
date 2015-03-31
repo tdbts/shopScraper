@@ -66,6 +66,16 @@ router.get('/test/SelectLocationDefaults', function (req, res) {
 			function (callback) {
 				locationDataModel.collection('locations').getData({}, function (err, data) {
 					if (!err) {
+						data = data.sort(function (a, b) {
+							if (a.name < b.name) {
+								return -1;
+							} else if (a.name > b.name) {
+								return 1;
+							} else {
+								return 0;
+							}
+						});
+						
 						jsonResponse.locationData = data;
 						callback(null, jsonResponse);
 					}
