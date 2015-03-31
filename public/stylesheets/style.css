@@ -294,8 +294,21 @@ i.spinner {
     margin-bottom: 50px;
 }
 
-#welcome_button {
-    /*display: none;*/
+.store_logo {
+    width: 235px;
+    max-height: 215px;
+}
+
+#locations_selector_container {
+    margin-top: 15px;
+}
+
+.logo_container {
+    margin-bottom: 25px;
+}
+
+.location_selector_container {
+    margin-bottom: 50px;
 }
 
 /* TESTING CSS FOR PHONES/TABLETS */

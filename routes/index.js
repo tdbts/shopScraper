@@ -1,6 +1,7 @@
 var express = require('express'),
 	router = express.Router(),  
 	ContentModel = require('../model/ContentModel'), 
+	async = require('async'), 
 	handleScrapeRequest = require('../src/handleScrapeRequest');
 
 /* GET home page. */
@@ -43,6 +44,41 @@ router.get('/api/:storeName', function (req, res) {
 router.get('/test/Welcome', function (req, res) {
 	
 	res.render('index');
+});
+
+router.get('/test/SelectLocationDefaults', function (req, res) {
+	var jsonResponse = {};
+
+	if (req.db) {
+		var logoDataModel = new ContentModel(req.db), 
+			locationDataModel = new ContentModel(req.db);
+
+		async.parallel([
+			function (callback) {
+				logoDataModel.collection('storeLogoData').getData({}, function (err, data) {
+					if (!err) {
+						jsonResponse.logoData = data;
+						callback(null, jsonResponse);
+					}
+				});
+			}, 
+
+			function (callback) {
+				locationDataModel.collection('locations').getData({}, function (err, data) {
+					if (!err) {
+						jsonResponse.locationData = data;
+						callback(null, jsonResponse);
+					}
+				});
+			}
+		], 
+
+		function (err, results) {
+			if (!err) {
+				res.send(JSON.stringify(results));
+			}
+		});
+	} 
 });
 
 module.exports = router;

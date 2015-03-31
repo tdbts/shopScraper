@@ -1,6 +1,7 @@
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	Welcome = require('./Welcome'), 
+	DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
@@ -21,7 +22,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 					React.createElement(Navigation, null)
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
-					this.state.showWelcome ? React.createElement(Welcome, {onButtonClick: this.handleButtonClick}) : React.createElement(ThreeColumnsView, null)
+					this.state.showWelcome ? React.createElement(Welcome, {onButtonClick: this.handleButtonClick}) : React.createElement(DefaultLocationsSelector, null)
 				)
 			)
 		);
