@@ -8,6 +8,8 @@ var Navigation = React.createClass({
 			<div id="navbar_container">
 		        <nav id="primary_navbar" className="navbar navbar-default navbar-static-top" role="navigation">
 		        	<Navbar />
+		        </nav>
+		        <nav id="sidepanel_container">
 		        	<SidePanel />
 		        </nav>
 	        </div>			

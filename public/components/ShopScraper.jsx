@@ -4,12 +4,12 @@ var React = require('react'),
 	DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
 	ThreeColumnsView = require('./ThreeColumnsView');
 
-var ShopScraper = React.createClass({displayName: "ShopScraper",
+var ShopScraper = React.createClass({
 	getInitialState: function () {
 		return {
 			showLocationsSelector: false, 
 			showStoreListings: false, 
-			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender})
+			currentWindowView: <Welcome onButtonClick={this.determineViewToRender} />
 		};
 	}, 
 
@@ -22,11 +22,11 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			currentViewComponent;
 
 		if (!shopScraperData) {
-			currentViewComponent = React.createElement(DefaultLocationsSelector, null);
+			currentViewComponent = <DefaultLocationsSelector />;
 		
 		} else {
 			// ...More code will be added here
-			currentViewComponent = React.createElement(ThreeColumnsView, null);
+			currentViewComponent = <ThreeColumnsView />;
 		} 
 
 		return currentViewComponent;
@@ -34,21 +34,21 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 	determineViewToRender: function () {
 		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
-			: React.createElement(Welcome, {onButtonClick: this.handleButtonClick});
+			: <Welcome onButtonClick={this.handleButtonClick} />;
 
 		return this.setState({currentWindowView: currentWindowView}); 
 	}, 
 
 	render: function () {
 		return (
-			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
-				React.createElement("div", {id: "navigation_wrapper"}, 
-					React.createElement(Navigation, null)
-				), 
-				React.createElement("div", {id: "window_wrapper"}, 
-					this.state.currentWindowView
-				)
-			)
+			<div id="shsc_subcomponents_wrapper">
+				<div id="navigation_wrapper">
+					<Navigation />
+				</div>
+				<div id="window_wrapper">
+					{this.state.currentWindowView}
+				</div>
+			</div>
 		);
 	}
 });

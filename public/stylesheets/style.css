@@ -1,5 +1,10 @@
+html {
+    height: 100%;
+}
+
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
 }
 
 #navbar {
@@ -80,8 +85,6 @@ ul.products_ul {
     margin-bottom: 5px;
 }
 
-
-
 img.product_image {
     padding-left: 20%;
     max-height: 75%;
@@ -114,6 +117,10 @@ body {
         padding: 0 30px;
         border-left: 1px solid #e7e7e7;
     }
+
+    #welcome_jumbotron {
+        min-height: 350px;
+    }
 }
 /* DELETE ??? */
 
@@ -131,8 +138,9 @@ body {
 
 
 #side-menu {
-    height: 1000px;
-    border-right: 1px solid #e7e7e7
+    height: 1500px;
+    border-right: 1px solid #e7e7e7;
+    background-color: #f8f8f8;
 }
 
 .sidebar .sidebar-nav.navbar-collapse {
@@ -182,8 +190,9 @@ body {
         z-index: 1;
         position: absolute;
         width: 250px;
-        margin-top: 50px;
+        /*margin-top: 50px;*/
     }
+}
 
 /* ADDITIONS TO SIDE-MENU */
 .panel_suboption {
@@ -209,17 +218,26 @@ i.spinner {
 /* PLACEHOLDER */
 #welcome_test {
     margin-left: 250px;
-    height: 100%;
+    /*height: 100%;*/
+}
+
+#jumbotron_container {
+    padding-top: 15px;
+}
+
+#welcome_text_container {
+    margin-bottom: 25px;
 }
 
 #welcome_text {
     text-align: center;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     letter-spacing: 4px;
+    margin-bottom: 70px;
 }
 
 #welcome_jumbotron {
-    min-height: 350px;
+    /*min-height: 350px;*/
     background-image: 
         linear-gradient(
             rgba(0, 0, 0, 0.3), 
@@ -227,21 +245,24 @@ i.spinner {
         ), 
         url(store_aisle_fast.jpg);
     background-size: cover;
+    padding: 15px;
 }
 
 #welcome_jumbotron div {
     position: relative;
-    top: 50%;
-    transform: translateY(50%);
+    /*top: 50%;*/
+    /*transform: translateY(50%);*/
+    transform: translateY(40px);
     color: white;
 }
 
 #welcome_button_container {
-    margin-top: 50px;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
 #welcome_button {
-    margin-left: 40%;
+    margin: 0 auto;
 }
 
 #welcome_button_glyph {
@@ -262,9 +283,156 @@ i.spinner {
 
 .landing_page_info_text {
     border-top: 1px solid black;
-    padding: 25px 10px 0;
+    padding: 15px 10px 0;
 }
 
 .info_text {
-    line-height: 22px;
+    line-height: 21px;
+    text-align: justify;
+    margin-bottom: 50px;
 }
+
+.store_logo {
+    width: 235px;
+    max-height: 215px;
+}
+
+#locations_selector_container {
+    margin-top: 15px;
+    padding: 15px;
+}
+
+.logo_container {
+    margin-bottom: 25px;
+}
+
+.location_selector_container {
+    margin-bottom: 50px;
+}
+
+#locations_selector_description {
+    padding: 15px;
+}
+
+#locsel_description_title_container {
+    border-bottom: 1px solid #c0c0c0;
+}
+
+#locsel_description_text_container {
+    margin-top: 15px;
+}
+
+.defaults_button_container {
+    padding: 5px;
+}
+
+/* TESTING CSS FOR PHONES/TABLETS */
+@media(max-width: 993px) {
+    #welcome_jumbotron div {
+        transform: translateY(35px);
+    }
+
+    #welcome_jumbotron {
+        padding: 15px;
+    }
+
+    .info_column {
+        max-width: 55%;
+        margin: 0 auto;
+    }
+
+    .info_text {
+        text-align: justify;
+    }
+
+    #side-menu {
+        height: 1500px;
+    }
+
+    #welcome_text {
+        margin-bottom: 40px;
+    }
+}
+
+@media(max-width: 768px) {
+    #window_wrapper {
+        margin-left: 0px;
+    }
+
+    #myNavbar {
+        display: none;
+    }
+
+    .info_column {
+        max-width: 70%;
+        margin: 0 auto 30px auto;
+    }
+
+    .info_text {
+        text-align: justify;
+        font-size: 13px;
+    }
+
+    #jumbotron_container {
+        padding: 15px 15px 30px 15px;
+    }
+
+    #welcome_jumbotron {
+        min-height: 200px;
+        max-height: 250px;
+        padding-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    #welcome_jumbotron div {
+        position: relative;
+/*        top: 40%;*/
+        transform: translateY(40px);
+    }
+
+    #welcome_text_container {
+        margin-bottom: 0px;    
+    }
+
+    #welcome_text {
+        margin-bottom: 40px;
+        margin: 0 auto;
+    }
+
+    #welcome_button_container {
+        margin-bottom: 15px;
+        margin-top: 20px    ;
+    }
+}
+
+@media(max-width: 481px) {
+    #welcome_jumbotron {
+        max-height: 175px;
+        min-width: 275px;
+        padding-top: 0px;
+        padding: 0px 15px 15px 15px;
+    }   
+
+    #welcome_text_container {
+        /*margin-bottom: 20px;*/
+    }
+
+    #welcome_text {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 25px;    
+    }
+
+    #welcome_button_container {
+        margin: 0 auto 25px auto;
+    }
+
+    .info_column {
+        max-width: 85%;
+    }
+
+    .info_text {
+        font-size: 13px;
+    }
+}
+

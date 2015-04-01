@@ -1,23 +1,15 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var React = require('react'), 
-	Welcome = require('./Welcome'), 
-	Navigation = require('./Navigation'), 
+	// Welcome = require('./Welcome'), 
+	// Navigation = require('./Navigation'), 
 	ShopScraper = require('./ShopScraper');
 
 $(document).ready(function() {
 
-	// PLACEHOLDER -- Testing Welcome Page
-	if (window.location.pathname === '/test/Welcome') {
-		React.render(React.createElement(Navigation, null), document.getElementById('app_wrapper'));
-		React.render(React.createElement(Welcome, null), document.getElementById('welcome_test'));
-	
-	} else {
-		React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
-	}
-
+	React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
 });
 
-},{"./Navigation":162,"./ShopScraper":165,"./Welcome":171,"react":157}],2:[function(require,module,exports){
+},{"./ShopScraper":166,"react":157}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -19792,6 +19784,132 @@ module.exports = CollapsingPanelOption;
 },{"./CollapsibleUnorderedList":159,"react":157}],161:[function(require,module,exports){
 var React = require('react');
 
+var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocationsSelector",
+	getInitialState: function () {
+		return {
+			storeLogoData: [], 
+			storeLocationData: []
+		};
+	}, 
+
+	componentDidMount: function () {
+		$.get('/test/SelectLocationDefaults', function (data) {
+			var json = JSON.parse(data)[0];
+			
+			this.setState({
+				storeLogoData: json.logoData[0].storeLogoData, 
+				storeLocationData: json.locationData
+			});
+		}.bind(this));
+	}, 
+
+	createLocationSelectors: function (locationSelectors) {
+		// console.log("STORE LOGO DATA: ", this.state.storeLogoData);
+		// console.log("STORE LOCATION DATA: ", this.state.storeLocationData);
+		if (this.state.storeLogoData && this.state.storeLocationData) {
+			this.state.storeLogoData.map(function (logo) {
+				var locations = [];
+
+				this.state.storeLocationData.map(function (location) {
+					var selectionText = location.name + " \u2014 " + location.address;
+
+					if (location.companyID === logo.storeID) {
+						return locations.push(React.createElement("option", {key: location.storeID, value: location._id}, selectionText));
+					} 
+				}.bind(this));
+
+				return locationSelectors.push(
+					React.createElement("div", {key: logo.storeID, className: "location_selector_container"}, 
+						React.createElement("div", {className: "row"}, 
+							React.createElement("div", {className: "col-md-1"}), 
+							React.createElement("div", {id: logo.containerID, className: "col-md-2 logo_container"}, 
+								React.createElement("img", {alt: logo.storeName, id: logo.imageID, src: logo.imageURL, className: "store_logo"})
+							), 
+							React.createElement("div", {className: "col-md-9"})
+						), 
+						React.createElement("div", {className: "row"}, 
+							React.createElement("div", {className: "col-md-1"}), 
+							React.createElement("div", {className: "col-md-8 select_dom_element_container"}, 
+								React.createElement("select", {className: "form-control locations_selector"}, 
+									React.createElement("option", {value: logo.storeID}, "*** No ", logo.storeName, " Location Selected ***"), 
+									locations
+								)
+							), 
+							React.createElement("div", {className: "col-md-3"})
+						)
+					)
+				);
+			}.bind(this));
+		} 
+		// console.log(locationSelectors);		
+	}, 
+
+	render: function () {
+		var locationSelectors = [];
+
+		this.createLocationSelectors(locationSelectors);
+
+		return (
+			React.createElement("div", {className: "container"}, 
+				React.createElement("div", {className: "row"}, 
+					React.createElement("div", {id: "locations_selector_description", className: "col-md-3"}, 
+						React.createElement("div", {id: "locsel_description_title_container"}, 
+							React.createElement("h1", {id: "locsel_description_title"}, "Select Your Local Store Locations")
+						), 
+						React.createElement("div", {id: "locsel_description_text_container"}, 
+							React.createElement("p", {id: "locsel_description_text"}, "Lorem ipsum Incididunt" + ' ' + 
+							"sint veniam sint occaecat dolor incididunt est dolor commodo" + ' ' + 
+							"Ut exercitation sunt id enim in in cillum ullamco et enim" + ' ' + 
+							"consectetur sint dolore dolor dolor est ut ut ea est in" + ' ' + 
+							"officia et voluptate voluptate ex pariatur fugiat fugiat dolore" + ' ' + 
+							"esse nostrud do Duis in amet sunt fugiat ut laborum labore" + ' ' + 
+							"dolor labore tempor do quis laboris aliquip Excepteur adipisicing" + ' ' + 
+							"id incididunt dolore minim Ut veniam in mollit ullamco mollit" + ' ' + 
+							"eiusmod sunt Duis ullamco cillum est occaecat cupidatat sed qui" + ' ' + 
+							"dolore quis et occaecat qui nulla dolor dolore pariatur fugiat" + ' ' + 
+							"deserunt aliqua amet in incididunt ullamco dolor nisi nostrud" + ' ' + 
+							"labore in sit laboris culpa occaecat nostrud ut occaecat enim" + ' ' + 
+							"pariatur culpa esse sit dolor laboris ex irure laborum minim" + ' ' + 
+							"anim adipisicing sunt ut proident esse sunt elit eiusmod amet" + ' ' + 
+							"nulla fugiat enim ad quis incididunt aute do sit officia labore" + ' ' + 
+							"adipisicing reprehenderit elit dolor quis aute anim amet aute" + ' ' + 
+							"adipisicing nulla Ut culpa in enim sunt aliqua ex est anim ea" + ' ' + 
+							"proident cillum minim irure occaecat proident exercitation dolore" + ' ' + 
+							"sint officia veniam deserunt ut in nostrud anim dolore amet minim" + ' ' + 
+							"eu eiusmod Ut culpa sed aute eu consectetur enim est irure proident" + ' ' + 
+							"ut elit in nisi ut ex Ut nostrud occaecat magna officia consectetur" + ' ' + 
+							"commodo aute reprehenderit sit eiusmod tempor mollit eiusmod.")
+						)
+					), 
+					React.createElement("div", {className: "col-md-1"}), 
+					React.createElement("div", {className: "col-md-8"}, 
+						React.createElement("div", {id: "locations_selector_container"}, 
+							locationSelectors
+						), 
+						React.createElement("div", {id: "default_submit_button_row", className: "row"}, 
+							React.createElement("div", {className: "col-md-1"}), 
+							React.createElement("div", {id: "location_defaults_selection_buttons_container", className: "col-md-8"}, 
+								React.createElement("span", {id: "location_defaults_submit_button_container", className: "defaults_button_container"}, 
+									React.createElement("button", {id: "location_defaults_submit_button", className: "btn btn-info", type: "button"}, "Set Default Locations")
+								), 
+								React.createElement("span", {id: "location_defaults_clear_button_container", className: "defaults_button_container"}, 
+									React.createElement("button", {id: "location_defaults_clear_button", className: "btn btn-danger", type: "button"}, "Clear Selected Locations")
+								)
+							), 
+							React.createElement("div", {className: "col-md-3"})
+						)
+					)
+				)
+			)
+		);
+	}
+});
+
+module.exports = DefaultLocationsSelector;
+
+},{"react":157}],162:[function(require,module,exports){
+var React = require('react');
+
 var Navbar = React.createClass({displayName: "Navbar",
 	render: function () {
 		return (
@@ -19856,7 +19974,7 @@ var Navbar = React.createClass({displayName: "Navbar",
 });
 
 module.exports = Navbar;
-},{"react":157}],162:[function(require,module,exports){
+},{"react":157}],163:[function(require,module,exports){
 var React = require('react'), 
 	Navbar = require('./Navbar'), 
 	SidePanel = require('./SidePanel');
@@ -19866,7 +19984,9 @@ var Navigation = React.createClass({displayName: "Navigation",
 		return (
 			React.createElement("div", {id: "navbar_container"}, 
 		        React.createElement("nav", {id: "primary_navbar", className: "navbar navbar-default navbar-static-top", role: "navigation"}, 
-		        	React.createElement(Navbar, null), 
+		        	React.createElement(Navbar, null)
+		        ), 
+		        React.createElement("nav", {id: "sidepanel_container"}, 
 		        	React.createElement(SidePanel, null)
 		        )
 	        )			
@@ -19875,7 +19995,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 });
 
 module.exports = Navigation;
-},{"./Navbar":161,"./SidePanel":166,"react":157}],163:[function(require,module,exports){
+},{"./Navbar":162,"./SidePanel":167,"react":157}],164:[function(require,module,exports){
 var React = require('react');
 
 var ProductComponent = React.createClass({displayName: "ProductComponent",
@@ -19901,7 +20021,7 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 
 module.exports = ProductComponent;
 
-},{"react":157}],164:[function(require,module,exports){
+},{"react":157}],165:[function(require,module,exports){
 /* 
 * SearchField component requires FontAwesome for the magnifying glass icon.
 */
@@ -19924,12 +20044,48 @@ var SearchField = React.createClass({displayName: "SearchField",
 });
 
 module.exports = SearchField;
-},{"react":157}],165:[function(require,module,exports){
+},{"react":157}],166:[function(require,module,exports){
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
+	Welcome = require('./Welcome'), 
+	DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
+	getInitialState: function () {
+		return {
+			showLocationsSelector: false, 
+			showStoreListings: false, 
+			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender})
+		};
+	}, 
+
+	getDataFromLocalStorage: function () {
+		return localStorage ? localStorage.getItem('shopScraperData') : null;
+	}, 
+
+	getLocalStorageBasedComponent: function () {
+		var shopScraperData = this.getDataFromLocalStorage(), 
+			currentViewComponent;
+
+		if (!shopScraperData) {
+			currentViewComponent = React.createElement(DefaultLocationsSelector, null);
+		
+		} else {
+			// ...More code will be added here
+			currentViewComponent = React.createElement(ThreeColumnsView, null);
+		} 
+
+		return currentViewComponent;
+	}, 
+
+	determineViewToRender: function () {
+		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
+			: React.createElement(Welcome, {onButtonClick: this.handleButtonClick});
+
+		return this.setState({currentWindowView: currentWindowView}); 
+	}, 
+
 	render: function () {
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
@@ -19937,7 +20093,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 					React.createElement(Navigation, null)
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
-					React.createElement(ThreeColumnsView, null)
+					this.state.currentWindowView
 				)
 			)
 		);
@@ -19946,7 +20102,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 module.exports = ShopScraper;
 
-},{"./Navigation":162,"./ThreeColumnsView":170,"react":157}],166:[function(require,module,exports){
+},{"./DefaultLocationsSelector":161,"./Navigation":163,"./ThreeColumnsView":171,"./Welcome":172,"react":157}],167:[function(require,module,exports){
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption');
@@ -20023,7 +20179,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 });
 
 module.exports = SidePanel;
-},{"./CollapsingPanelOption":160,"./SearchField":164,"react":157}],167:[function(require,module,exports){
+},{"./CollapsingPanelOption":160,"./SearchField":165,"react":157}],168:[function(require,module,exports){
 var React = require('react');
 
 var Spinner = React.createClass({displayName: "Spinner",
@@ -20038,7 +20194,7 @@ var Spinner = React.createClass({displayName: "Spinner",
 
 module.exports = Spinner;
 
-},{"react":157}],168:[function(require,module,exports){
+},{"react":157}],169:[function(require,module,exports){
 var React = require('react'), 
 	ProductComponent = require('./ProductComponent');
 
@@ -20067,7 +20223,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 });
 
 module.exports = StoreCircularComponent;
-},{"./ProductComponent":163,"react":157}],169:[function(require,module,exports){
+},{"./ProductComponent":164,"react":157}],170:[function(require,module,exports){
 var React = require('react'), 
 	Spinner = require('./Spinner'), 
 	StoreCircularComponent = require('./StoreCircularComponent');
@@ -20106,7 +20262,7 @@ var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo",
 
 module.exports = StoreNavigationLogo;
 
-},{"./Spinner":167,"./StoreCircularComponent":168,"react":157}],170:[function(require,module,exports){
+},{"./Spinner":168,"./StoreCircularComponent":169,"react":157}],171:[function(require,module,exports){
 var React = require('react'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo');
 
@@ -20168,80 +20324,62 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./StoreNavigationLogo":169,"react":157}],171:[function(require,module,exports){
-var React = require('react');
+},{"./StoreNavigationLogo":170,"react":157}],172:[function(require,module,exports){
+var React = require('react'), 
+	// DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
+	// ThreeColumnsView = require('./ThreeColumnsView'), 
+	WelcomeColumn = require('./WelcomeColumn'); 
 
-var Welcome = React.createClass({displayName: "Welcome",
+var Welcome = React.createClass({displayName: "Welcome", 
+	getInitialState: function () {
+		return {
+			columnData: []
+		};
+	}, 
+
+	componentDidMount: function () {
+		var infoColumnsData;
+
+		$.get('/WelcomePageDomData', function (data) {
+			infoColumnsData = data.pop().welcomePage.infoColumns;
+			
+			this.handleDomData(infoColumnsData);
+		
+		}.bind(this));	
+	}, 
+
+	handleDomData: function (data) {
+		var columns = [];
+
+		data.forEach(function (columnObj, index) {
+			columns[index] = React.createElement(WelcomeColumn, {columnID: columnObj.columnID, key: index, text: columnObj.text, glyphiconClass: columnObj.glyphiconClass});
+			return;
+		});
+
+		this.setState({columnData: columns});
+
+		return;
+	}, 
+
 	render: function () {
-		return (
+ 		return (
 			React.createElement("div", {className: "welcome_container"}, 
-				React.createElement("div", {id: "welcome_jumbotron", className: "jumbotron"}, 
-					React.createElement("div", {id: "welcome_text_container"}, 
-						React.createElement("h1", {id: "welcome_text"}, "Welcome To ShopScraper!")
-					), 
-					React.createElement("div", {id: "welcome_button_container"}, 
-						React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info"}, 
-						React.createElement("span", {id: "welcome_button_glyph", className: "fa fa-shopping-cart"}), " Click to Get Started")
+				React.createElement("div", {id: "jumbotron_container", className: "container"}, 
+					React.createElement("div", {className: "col-sm-12"}, 	
+						React.createElement("div", {id: "welcome_jumbotron", className: "jumbotron"}, 
+							React.createElement("div", {id: "welcome_text_container"}, 
+								React.createElement("h1", {id: "welcome_text"}, "Welcome To ShopScraper!")
+							), 
+							React.createElement("div", {id: "welcome_button_container"}, 
+								React.createElement("button", {id: "welcome_button", type: "button", className: "btn btn-info btn-sm", onClick: this.props.onButtonClick}, 
+								React.createElement("span", {id: "welcome_button_glyph", className: "fa fa-shopping-cart"}), " Click to Get Started")
+							)
+						)
 					)
 				), 
 				React.createElement("div", {id: "landing_page_info_container", className: "container"}, 
 					React.createElement("div", {id: "landing_page_info", className: "row"}, 
-						React.createElement("div", {className: "col-md-3"}, 
-							React.createElement("div", {className: "info_circle_container"}, 
-								React.createElement("span", {className: "fa-stack fa-3x"}, 
-									React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
-									React.createElement("span", {className: "glyphicon glyphicon-search fa-inverse"})
-								)
-							), 
-							React.createElement("div", {className: "landing_page_info_text"}, 
-								React.createElement("p", {className: "info_text"}, "Find everything on sale —  for all of your favorite" + ' ' + 
-								"local grocery stores —  consolidated in once place.  No more combing" + ' ' + 
-								"through the Sunday newspaper looking for bargains, or comparing prices" + ' ' + 
-								"between flyers, find everything you need right here at ShopScraper.")
-							)
-						), 
-						React.createElement("div", {className: "col-md-3"}, 
-							React.createElement("div", {className: "info_circle_container"}, 
-								React.createElement("span", {className: "fa-stack fa-3x"}, 
-									React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
-									React.createElement("span", {className: "fa fa-history fa-inverse"})
-								)
-							), 
-							React.createElement("div", {className: "landing_page_info_text"}, 
-								React.createElement("p", {className: "info_text"}, "Ever look at the list price and have no idea whether you're" + ' ' + 
-								"looking at a good deal or a rip-off?  Or have no idea what you paid for the" + ' ' + 
-								"same exact product just last week?  At ShopScraper, you can search your old" + ' ' + 
-								"store listings to see how prices have changed over time.")
-							)
-						), 
-						React.createElement("div", {className: "col-md-3"}, 
-							React.createElement("div", {className: "info_circle_container"}, 
-								React.createElement("span", {className: "fa-stack fa-3x"}, 
-									React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
-									React.createElement("span", {className: "fa fa-list fa-inverse"})
-								)
-							), 
-							React.createElement("div", {className: "landing_page_info_text"}, 
-								React.createElement("p", {className: "info_text"}, "Certain products you just love, so there's no sense in searching" + ' ' + 
-								"for them all over again whenever a new flyer is released.  Add the brands and" + ' ' + 
-								"staples you can't do without to a saved collection of personal favorites," + ' ' + 
-								"where they will always be quick and easy to find.")
-							)
-						), 
-						React.createElement("div", {className: "col-md-3"}, 
-							React.createElement("div", {className: "info_circle_container"}, 
-								React.createElement("span", {className: "fa-stack fa-3x"}, 
-									React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
-									React.createElement("span", {className: "fa fa-envelope fa-inverse"})
-								)
-							), 
-							React.createElement("div", {className: "landing_page_info_text"}, 
-								React.createElement("p", {className: "info_text"}, "Select the best products at the lowest prices and add them to your" + ' ' + 
-								"shopping list for the week.  When you're done, email the bargains you selected to" + ' ' + 
-								"yourself or to anyone you'd like.  The list will be ready for you when you get to" + ' ' + 
-								"the store.")
-							)
-						)
+						this.state.columnData
 					)
 				)
 			)
@@ -20250,5 +20388,28 @@ var Welcome = React.createClass({displayName: "Welcome",
 });
 
 module.exports = Welcome;
+
+},{"./WelcomeColumn":173,"react":157}],173:[function(require,module,exports){
+var React = require('react');
+
+var WelcomeColumn = React.createClass({displayName: "WelcomeColumn",
+	render: function () {
+		return (
+			React.createElement("div", {id: this.props.columnID, className: "col-md-3 info_column"}, 
+				React.createElement("div", {className: "info_circle_container"}, 
+					React.createElement("span", {className: "fa-stack fa-3x"}, 
+						React.createElement("span", {className: "fa fa-circle fa-stack-2x info_circle"}), 
+						React.createElement("span", {className: this.props.glyphiconClass})
+					)
+				), 
+				React.createElement("div", {className: "landing_page_info_text"}, 
+					React.createElement("p", {className: "info_text"}, this.props.text)
+				)
+			)			
+		);
+	}
+});
+
+module.exports = WelcomeColumn;
 
 },{"react":157}]},{},[1]);

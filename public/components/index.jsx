@@ -5,5 +5,5 @@ var React = require('react'),
 
 $(document).ready(function() {
 
-	React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
+	React.render(<ShopScraper />, document.getElementById('app_wrapper'));
 });

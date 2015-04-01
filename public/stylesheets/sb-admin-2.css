@@ -12,6 +12,7 @@ body {
     width: 100%;
 }
 
+
 /* DELETE ??? */
 @media(min-width:768px) {
     #page-wrapper {
@@ -19,6 +20,13 @@ body {
         margin: 0 0 0 250px;
         padding: 0 30px;
         border-left: 1px solid #e7e7e7;
+    }
+
+    .sidebar {
+        z-index: 1;
+        position: absolute;
+        width: 250px;
+        /*margin-top: 50px;*/
     }
 }
 /* DELETE ??? */
@@ -83,11 +91,8 @@ body {
     padding-left: 52px;
 }
 
-@media(min-width:768px) {
-    .sidebar {
-        z-index: 1;
-        position: absolute;
-        width: 250px;
-        margin-top: 50px;
+@media(max-width: 992px) {
+    #side-menu {
+        height: 1500px;
     }
-
+}
