@@ -67,7 +67,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('test', function () {
-	gulp.src('test/tests.js', {read: false})
+	gulp.src('test/**/*.js', {read: false})
 		.pipe(mocha({reporter: mochaReporter}));	
 });
 

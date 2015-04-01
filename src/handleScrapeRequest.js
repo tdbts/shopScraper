@@ -9,7 +9,7 @@ module.exports = function (req, res, storeName) {
 	if (req.db) {
 		var model = new ContentModel(req.db);
 
-		model.collection('scrapeConfig').getData({'storeName': storeName}, function (err, data) {
+		model.collection('scrapeConfig').getData({'storeName': storeName}, {}, function (err, data) {
 			if (!err) {
 				configData = data;
 				
