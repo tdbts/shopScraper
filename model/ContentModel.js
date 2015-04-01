@@ -4,12 +4,14 @@ var Model = require('./BaseModel'),
 	_ = require('underscore');
 
 var ContentModel = model.extend({
-	getData: function (queryObj, callback) {
+	getData: function (queryObj, options, callback) {
 		// DEVELOPMENT ONLY
 		var humanReadableQuery = _.isEmpty(queryObj) ? "all documents." : JSON.stringify(queryObj);
 		console.log("Querying " + this._collection + " collection for " + humanReadableQuery);
 		
-		return this.collection().find(queryObj).toArray(function (err, data) {
+		options = options || {};
+
+		return this.collection().find(queryObj, options).toArray(function (err, data) {
 			if (!err) {
 				callback(err, data);
 			} else {

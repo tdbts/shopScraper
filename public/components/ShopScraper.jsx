@@ -26,7 +26,7 @@ var ShopScraper = React.createClass({
 		
 		} else {
 			// ...More code will be added here
-			currentViewComponent = <ThreeColumnsView />
+			currentViewComponent = <ThreeColumnsView />;
 		} 
 
 		return currentViewComponent;

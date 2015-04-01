@@ -4,6 +4,7 @@
     "jQuery": false, 
     "document": false,
     "window": false, 
+    "localStorage": false, 
     "module": true,
     "define": true,
     "requirejs": true,
