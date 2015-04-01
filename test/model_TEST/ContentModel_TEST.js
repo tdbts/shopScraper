@@ -4,7 +4,7 @@ var chai = require('chai'),
 // Testing '../model/ContentModel.js'
 describe("Model for Getting Data Needed by Scrapers", function () {
 	
-	var ContentModel = require('../model/ContentModel');
+	var ContentModel = require('../../model/ContentModel');
 
 	it("Should set the database and return the collection using methods.", function () {
 		

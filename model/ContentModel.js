@@ -6,9 +6,11 @@ var Model = require('./BaseModel'),
 var ContentModel = model.extend({
 	getData: function (queryObj, options, callback) {
 		// DEVELOPMENT ONLY
-		var humanReadableQuery = _.isEmpty(queryObj) ? "all documents." : JSON.stringify(queryObj);
-		console.log("Querying " + this._collection + " collection for " + humanReadableQuery);
+		var humanReadableQuery = _.isEmpty(queryObj) ? " all documents using " : " " + JSON.stringify(queryObj) + " using", 
+			humanReadableOptions = _.isEmpty(options) ? " no options." : " options: " + JSON.stringify(options) + ".";
 		
+		console.log("Querying " + this._collection.namespace + " collection for" + humanReadableQuery + humanReadableOptions);
+
 		options = options || {};
 
 		return this.collection().find(queryObj, options).toArray(function (err, data) {

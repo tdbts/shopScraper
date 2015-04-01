@@ -14,15 +14,15 @@ var ShopScraper = React.createClass({
 	}, 
 
 	getDataFromLocalStorage: function () {
-		return localStorage ? localStorage.getItem('shopScraperData') : null;
+		return localStorage ? localStorage.getItem('userDefaultLocations') : null;
 	}, 
 
 	getLocalStorageBasedComponent: function () {
-		var shopScraperData = this.getDataFromLocalStorage(), 
+		var defaultLocations = this.getDataFromLocalStorage(), 
 			currentViewComponent;
 
-		if (!shopScraperData) {
-			currentViewComponent = <DefaultLocationsSelector />;
+		if (!defaultLocations) {
+			currentViewComponent = <DefaultLocationsSelector handleSubmitSelections={this.handleSubmitSelections} handleClearSelections={this.handleClearSelections} />;
 		
 		} else {
 			// ...More code will be added here
@@ -30,6 +30,41 @@ var ShopScraper = React.createClass({
 		} 
 
 		return currentViewComponent;
+	}, 
+
+	handleSubmitSelections: function () {
+		var companyID, 
+			defaultLocationID, 
+			defaultData = [];
+
+		$('.locations_dropdown').each(function () {
+			companyID = $(this).find('.no_selection_option').attr('value');
+			defaultLocationID = this.value;
+
+			defaultData.push({
+				companyID: companyID, 
+				defaultLocationID: defaultLocationID
+			});
+		});
+
+		// DEVELOPMENT ONLY
+		console.log(defaultData);
+
+		if (localStorage) {
+			localStorage.setItem('userDefaultLocations', JSON.stringify(defaultData));
+		}
+
+		console.log(localStorage);
+
+		this.setState({currentWindowView: <ThreeColumnsView />});
+
+	}, 
+
+	handleClearSelections: function () {
+
+		$('.locations_dropdown').each(function () {
+			this.selectedIndex = 0;
+		});
 	}, 
 
 	determineViewToRender: function () {

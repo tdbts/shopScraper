@@ -24,7 +24,8 @@ var DefaultLocationsSelector = React.createClass({
 		// console.log("STORE LOCATION DATA: ", this.state.storeLocationData);
 		if (this.state.storeLogoData && this.state.storeLocationData) {
 			this.state.storeLogoData.map(function (logo) {
-				var locations = [];
+				var locations = [], 
+					selectElementID;
 
 				this.state.storeLocationData.map(function (location) {
 					var selectionText = location.name + " \u2014 " + location.address;
@@ -33,6 +34,8 @@ var DefaultLocationsSelector = React.createClass({
 						return locations.push(<option key={location.storeID} value={location._id}>{selectionText}</option>);
 					} 
 				}.bind(this));
+
+				selectElementID = "selectElement_" + logo.storeID;
 
 				return locationSelectors.push(
 					<div key={logo.storeID} className="location_selector_container">
@@ -46,8 +49,8 @@ var DefaultLocationsSelector = React.createClass({
 						<div className="row">
 							<div className="col-md-1"></div>
 							<div className="col-md-8 select_dom_element_container">
-								<select className="form-control locations_selector">
-									<option value={logo.storeID}>&#42;&#42;&#42; No {logo.storeName} Location Selected &#42;&#42;&#42;</option>
+								<select id={selectElementID} className="form-control locations_dropdown">
+									<option className="no_selection_option" value={logo.storeID}>&#42;&#42;&#42; No {logo.storeName} Location Selected &#42;&#42;&#42;</option>
 									{locations}
 								</select>
 							</div>
@@ -60,10 +63,31 @@ var DefaultLocationsSelector = React.createClass({
 		// console.log(locationSelectors);		
 	}, 
 
+	createLocationSelectorButtons: function (locationSelectorButtons) {
+		if (this.state.storeLogoData && this.state.storeLocationData) {
+			locationSelectorButtons.push(
+				<div key="0" id="location_defaults_selection_buttons_container">
+					<span id="location_defaults_submit_button_container" className="defaults_button_container">
+						<button id="location_defaults_submit_button" className="btn btn-info" type="button" onClick={this.props.handleSubmitSelections}>Set Default Locations</button> 
+					</span>
+					<span id="location_defaults_clear_button_container" className="defaults_button_container">
+						<button id="location_defaults_clear_button" className="btn btn-danger" type="button" onClick={this.props.handleClearSelections}>Clear Selected Locations</button> 
+					</span>				
+				</div>
+			);
+		} else {
+			locationSelectorButtons = [];
+		}
+
+		return locationSelectorButtons;
+	}, 
+
 	render: function () {
-		var locationSelectors = [];
+		var locationSelectors = [], 
+			locationSelectorButtons = [];
 
 		this.createLocationSelectors(locationSelectors);
+		this.createLocationSelectorButtons(locationSelectorButtons);
 
 		return (
 			<div className="container">
@@ -104,13 +128,8 @@ var DefaultLocationsSelector = React.createClass({
 						</div>
 						<div id="default_submit_button_row" className="row">
 							<div className="col-md-1"></div>
-							<div id="location_defaults_selection_buttons_container" className="col-md-8">
-								<span id="location_defaults_submit_button_container" className="defaults_button_container">
-									<button id="location_defaults_submit_button" className="btn btn-info" type="button">Set Default Locations</button> 
-								</span>
-								<span id="location_defaults_clear_button_container" className="defaults_button_container">
-									<button id="location_defaults_clear_button" className="btn btn-danger" type="button">Clear Selected Locations</button> 
-								</span>
+							<div id="location_defaults_selection_buttons_column" className="col-md-8">
+								{locationSelectorButtons}
 							</div>
 							<div className="col-md-3"></div>
 						</div>

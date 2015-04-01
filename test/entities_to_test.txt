@@ -14,7 +14,6 @@ sp_getProducts.js
 findElementsThatPass.js    
 getStoreLocations.js       
 sr_getCircularNumberOfPages.js
-getType.js                 
 sr_scrapePage.js
 handleScrapeRequest.js     
 stopAndShopURLs.js
@@ -24,6 +23,7 @@ queryDatabaseForScrape.js
 requester.js               
 renderListings.js          
 wireDatabaseToScrapersAndScrape.js
+// getType.js                 
 // scrapeBigY.js
 // UrlObject.js
 // scraper.js

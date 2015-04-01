@@ -19808,7 +19808,8 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 		// console.log("STORE LOCATION DATA: ", this.state.storeLocationData);
 		if (this.state.storeLogoData && this.state.storeLocationData) {
 			this.state.storeLogoData.map(function (logo) {
-				var locations = [];
+				var locations = [], 
+					selectElementID;
 
 				this.state.storeLocationData.map(function (location) {
 					var selectionText = location.name + " \u2014 " + location.address;
@@ -19817,6 +19818,8 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						return locations.push(React.createElement("option", {key: location.storeID, value: location._id}, selectionText));
 					} 
 				}.bind(this));
+
+				selectElementID = "selectElement_" + logo.storeID;
 
 				return locationSelectors.push(
 					React.createElement("div", {key: logo.storeID, className: "location_selector_container"}, 
@@ -19830,8 +19833,8 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						React.createElement("div", {className: "row"}, 
 							React.createElement("div", {className: "col-md-1"}), 
 							React.createElement("div", {className: "col-md-8 select_dom_element_container"}, 
-								React.createElement("select", {className: "form-control locations_selector"}, 
-									React.createElement("option", {value: logo.storeID}, "*** No ", logo.storeName, " Location Selected ***"), 
+								React.createElement("select", {id: selectElementID, className: "form-control locations_dropdown"}, 
+									React.createElement("option", {className: "no_selection_option", value: logo.storeID}, "*** No ", logo.storeName, " Location Selected ***"), 
 									locations
 								)
 							), 
@@ -19844,10 +19847,31 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 		// console.log(locationSelectors);		
 	}, 
 
+	createLocationSelectorButtons: function (locationSelectorButtons) {
+		if (this.state.storeLogoData && this.state.storeLocationData) {
+			locationSelectorButtons.push(
+				React.createElement("div", {key: "0", id: "location_defaults_selection_buttons_container"}, 
+					React.createElement("span", {id: "location_defaults_submit_button_container", className: "defaults_button_container"}, 
+						React.createElement("button", {id: "location_defaults_submit_button", className: "btn btn-info", type: "button", onClick: this.props.handleSubmitSelections}, "Set Default Locations")
+					), 
+					React.createElement("span", {id: "location_defaults_clear_button_container", className: "defaults_button_container"}, 
+						React.createElement("button", {id: "location_defaults_clear_button", className: "btn btn-danger", type: "button", onClick: this.props.handleClearSelections}, "Clear Selected Locations")
+					)				
+				)
+			);
+		} else {
+			locationSelectorButtons = [];
+		}
+
+		return locationSelectorButtons;
+	}, 
+
 	render: function () {
-		var locationSelectors = [];
+		var locationSelectors = [], 
+			locationSelectorButtons = [];
 
 		this.createLocationSelectors(locationSelectors);
+		this.createLocationSelectorButtons(locationSelectorButtons);
 
 		return (
 			React.createElement("div", {className: "container"}, 
@@ -19888,13 +19912,8 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						), 
 						React.createElement("div", {id: "default_submit_button_row", className: "row"}, 
 							React.createElement("div", {className: "col-md-1"}), 
-							React.createElement("div", {id: "location_defaults_selection_buttons_container", className: "col-md-8"}, 
-								React.createElement("span", {id: "location_defaults_submit_button_container", className: "defaults_button_container"}, 
-									React.createElement("button", {id: "location_defaults_submit_button", className: "btn btn-info", type: "button"}, "Set Default Locations")
-								), 
-								React.createElement("span", {id: "location_defaults_clear_button_container", className: "defaults_button_container"}, 
-									React.createElement("button", {id: "location_defaults_clear_button", className: "btn btn-danger", type: "button"}, "Clear Selected Locations")
-								)
+							React.createElement("div", {id: "location_defaults_selection_buttons_column", className: "col-md-8"}, 
+								locationSelectorButtons
 							), 
 							React.createElement("div", {className: "col-md-3"})
 						)
@@ -20061,15 +20080,15 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 	}, 
 
 	getDataFromLocalStorage: function () {
-		return localStorage ? localStorage.getItem('shopScraperData') : null;
+		return localStorage ? localStorage.getItem('userDefaultLocations') : null;
 	}, 
 
 	getLocalStorageBasedComponent: function () {
-		var shopScraperData = this.getDataFromLocalStorage(), 
+		var defaultLocations = this.getDataFromLocalStorage(), 
 			currentViewComponent;
 
-		if (!shopScraperData) {
-			currentViewComponent = React.createElement(DefaultLocationsSelector, null);
+		if (!defaultLocations) {
+			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
 		
 		} else {
 			// ...More code will be added here
@@ -20077,6 +20096,41 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		} 
 
 		return currentViewComponent;
+	}, 
+
+	handleSubmitSelections: function () {
+		var companyID, 
+			defaultLocationID, 
+			defaultData = [];
+
+		$('.locations_dropdown').each(function () {
+			companyID = $(this).find('.no_selection_option').attr('value');
+			defaultLocationID = this.value;
+
+			defaultData.push({
+				companyID: companyID, 
+				defaultLocationID: defaultLocationID
+			});
+		});
+
+		// DEVELOPMENT ONLY
+		console.log(defaultData);
+
+		if (localStorage) {
+			localStorage.setItem('userDefaultLocations', JSON.stringify(defaultData));
+		}
+
+		console.log(localStorage);
+
+		this.setState({currentWindowView: React.createElement(ThreeColumnsView, null)})
+
+	}, 
+
+	handleClearSelections: function () {
+
+		$('.locations_dropdown').each(function () {
+			this.selectedIndex = 0;
+		});
 	}, 
 
 	determineViewToRender: function () {
