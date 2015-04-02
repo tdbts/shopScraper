@@ -1,4 +1,5 @@
 var async = require('async'), 
+	sortObjectsByProp = require('./sortObjectsByProp'), 
 	ContentModel = require('../model/ContentModel');
 
 module.exports = function (req, res, callback) {
@@ -8,42 +9,31 @@ module.exports = function (req, res, callback) {
 		var logoDataModel = new ContentModel(req.db), 
 			locationDataModel = new ContentModel(req.db);
 
-		async.parallel([
-			function (callback) {
+		async.parallel({
+			logoData: function (callback) {
 				logoDataModel.collection('dom').getData({}, {'storeLogoData': 1, '_id': 0}, function (err, data) {
 					if (!err) {
 						data = data[0].storeLogoData;
-						
+
 						callback(null, data);
-					}
+					}	
 				});
 			}, 
 
-			function (callback) {
+			locationData: function (callback) {
 				locationDataModel.collection('locations').getData({}, {}, function (err, data) {
 					if (!err) {
-						data = data.sort(function (a, b) {
-							if (a.name < b.name) {
-								return -1;
-							} else if (a.name > b.name) {
-								return 1;
-							} else {
-								return 0;
-							}
-						});
+						data = data.sort(sortObjectsByProp('name'));
 
 						callback(null, data);
 					}
 				});
 			}
-		], 
+		}, 
 
-		function (err, results) {
+		function (err, resultsObj) {
 			if (!err) {
-				jsonResponse.logoData = results[0];
-				jsonResponse.locationData = results[1];
-
-				callback(jsonResponse);
+				callback(resultsObj);
 			}
 		});
 	}	

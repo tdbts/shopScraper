@@ -1,7 +1,7 @@
 var express = require('express'),
-	router = express.Router(),  
-	ContentModel = require('../model/ContentModel'), 
+	router = express.Router(),   
 	getStoreLocations = require('../src/getStoreLocations'), 
+	getAndSendWelcomePageDomData = require('../src/getAndSendWelcomePageDomData'), 
 	getListingsFromUserDefaults = require('../src/getListingsFromUserDefaults'), 
 	handleScrapeRequest = require('../src/handleScrapeRequest');
 
@@ -28,9 +28,7 @@ router.get('/', function (req, res) {
 
 router.get('/api/:storeName', function (req, res) {
 
-	var storeName = req.params.storeName;
-
-	handleScrapeRequest(req, res, storeName);
+	handleScrapeRequest(req, res, req.params.storeName);
 });
 
 router.get('/user/locations', function (req, res) {
@@ -46,13 +44,8 @@ router.get('/SelectLocationDefaults', function (req, res) {
 });
 
 router.get('/WelcomePageDomData', function (req, res) {
-	var model = new ContentModel(req.db);
-
-	model.collection('dom').getData({"welcomePage": {$exists: true}}, {}, function (err, data) {
-		if (!err) {
-			res.json(data);
-		}
-	});
+	
+	getAndSendWelcomePageDomData(req, res);
 });
 
 module.exports = router;
