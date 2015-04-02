@@ -19799,14 +19799,14 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 				storeLogoData: data.logoData, 
 				storeLocationData: data.locationData
 			});
-			
+
 		}.bind(this));
 	}, 
 
 	createLocationSelectors: function (locationSelectors) {
-		// console.log("STORE LOGO DATA: ", this.state.storeLogoData);
-		// console.log("STORE LOCATION DATA: ", this.state.storeLocationData);
+		
 		if (this.state.storeLogoData && this.state.storeLocationData) {
+			
 			this.state.storeLogoData.map(function (logo) {
 				var locations = [], 
 					selectElementID;
@@ -20073,8 +20073,6 @@ var React = require('react'),
 var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
-			showLocationsSelector: false, 
-			showStoreListings: false, 
 			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender})
 		};
 	}, 
@@ -20098,31 +20096,29 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		return currentViewComponent;
 	}, 
 
-	handleSubmitSelections: function () {
-		var companyID, 
-			defaultLocationID, 
-			defaultData = [];
+	getDefaultDataFromSelections: function () {
+		var defaultData = [];
 
 		$('.locations_dropdown').each(function () {
-			companyID = $(this).find('.no_selection_option').attr('value');
-			defaultLocationID = this.value;
-
+			
 			defaultData.push({
-				companyID: companyID, 
-				defaultLocationID: defaultLocationID
+				companyID: $(this).find('.no_selection_option').attr('value'), 
+				defaultLocationID: this.value
 			});
 		});
 
-		// DEVELOPMENT ONLY
-		console.log(defaultData);
+		return defaultData;		
+	}, 
+
+	handleSubmitSelections: function () {
+
+		var defaultData = this.getDefaultDataFromSelections();
 
 		defaultData = JSON.stringify(defaultData);
 
 		if (localStorage) {
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
-
-		console.log(localStorage);
 
 		this.setState({currentWindowView: React.createElement(ThreeColumnsView, {defaultLocations: defaultData})});	
 
@@ -20337,28 +20333,34 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 	getDefaultProps: function () {
 		return {
-			'viewType': 'threeColumns'
+			'viewType': 'threeColumns', 
+			'columnPositions': ["left", "middle", "right"]
 		};
 	}, 
 
+	getColumnID: function (index) { 
+
+		return "column_" + this.props.columnPositions[index];
+	}, 
+
 	componentDidMount: function () {
-		
-		var columnIDs = ["left", "middle", "right"];
-		
-		columnIDs.map(function (id, index) {
-			var columnID = "column_" + columnIDs[index];
+		var columnID, i;
+
+		for (i = 0; i < this.props.columnPositions.length; i++) {
+			columnID = this.getColumnID(i);
 
 			React.render(React.createElement(Spinner, null), document.getElementById(columnID));
-		});
-		
+		}
+	
 		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
 
 			return storeListings.map(function (store, index) {
-				var columnID = "column_" + columnIDs[index];
-				console.log(columnID);
+				columnID = "column_" + this.props.columnPositions[index];
+				
 				React.render(React.createElement(StoreCircularComponent, {circularData: store}), document.getElementById(columnID));
-			});
-		});
+			
+			}.bind(this));
+		}.bind(this));
 	}, 
 
 	render: function () {

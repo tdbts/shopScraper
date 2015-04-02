@@ -3,8 +3,6 @@ var async = require('async'),
 	ContentModel = require('../model/ContentModel');
 
 module.exports = function (req, res, callback) {
-	var jsonResponse = {};
-
 	if (req.db) {
 		var logoDataModel = new ContentModel(req.db), 
 			locationDataModel = new ContentModel(req.db);

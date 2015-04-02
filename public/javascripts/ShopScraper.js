@@ -7,8 +7,6 @@ var React = require('react'),
 var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
-			showLocationsSelector: false, 
-			showStoreListings: false, 
 			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender})
 		};
 	}, 
@@ -32,31 +30,29 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		return currentViewComponent;
 	}, 
 
-	handleSubmitSelections: function () {
-		var companyID, 
-			defaultLocationID, 
-			defaultData = [];
+	getDefaultDataFromSelections: function () {
+		var defaultData = [];
 
 		$('.locations_dropdown').each(function () {
-			companyID = $(this).find('.no_selection_option').attr('value');
-			defaultLocationID = this.value;
-
+			
 			defaultData.push({
-				companyID: companyID, 
-				defaultLocationID: defaultLocationID
+				companyID: $(this).find('.no_selection_option').attr('value'), 
+				defaultLocationID: this.value
 			});
 		});
 
-		// DEVELOPMENT ONLY
-		console.log(defaultData);
+		return defaultData;		
+	}, 
+
+	handleSubmitSelections: function () {
+
+		var defaultData = this.getDefaultDataFromSelections();
 
 		defaultData = JSON.stringify(defaultData);
 
 		if (localStorage) {
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
-
-		console.log(localStorage);
 
 		this.setState({currentWindowView: React.createElement(ThreeColumnsView, {defaultLocations: defaultData})});	
 

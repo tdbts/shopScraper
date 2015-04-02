@@ -15,14 +15,14 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 				storeLogoData: data.logoData, 
 				storeLocationData: data.locationData
 			});
-			
+
 		}.bind(this));
 	}, 
 
 	createLocationSelectors: function (locationSelectors) {
-		// console.log("STORE LOGO DATA: ", this.state.storeLogoData);
-		// console.log("STORE LOCATION DATA: ", this.state.storeLocationData);
+		
 		if (this.state.storeLogoData && this.state.storeLocationData) {
+			
 			this.state.storeLogoData.map(function (logo) {
 				var locations = [], 
 					selectElementID;

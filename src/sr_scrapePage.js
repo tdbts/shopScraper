@@ -39,7 +39,7 @@ var scrapePage = scraper.extend({
 	scrape: function (pageNumber, callback) {
 		
 		var self = scrapePage;
-		console.log("ABOUT TO SCRAPE PAGE, HERE IS BASEURL: ", self.config.baseURL);
+		
 		self.makeRequest(self.config.baseURL + self.config.circularNumber + pageNumber, self.handlePageData, callback);
 	}
 

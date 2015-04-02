@@ -16,28 +16,34 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 	getDefaultProps: function () {
 		return {
-			'viewType': 'threeColumns'
+			'viewType': 'threeColumns', 
+			'columnPositions': ["left", "middle", "right"]
 		};
 	}, 
 
+	getColumnID: function (index) { 
+
+		return "column_" + this.props.columnPositions[index];
+	}, 
+
 	componentDidMount: function () {
-		
-		var columnIDs = ["left", "middle", "right"];
-		
-		columnIDs.map(function (id, index) {
-			var columnID = "column_" + columnIDs[index];
+		var columnID, i;
+
+		for (i = 0; i < this.props.columnPositions.length; i++) {
+			columnID = this.getColumnID(i);
 
 			React.render(React.createElement(Spinner, null), document.getElementById(columnID));
-		});
-		
+		}
+	
 		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
 
 			return storeListings.map(function (store, index) {
-				var columnID = "column_" + columnIDs[index];
-				console.log(columnID);
+				columnID = "column_" + this.props.columnPositions[index];
+				
 				React.render(React.createElement(StoreCircularComponent, {circularData: store}), document.getElementById(columnID));
-			});
-		});
+			
+			}.bind(this));
+		}.bind(this));
 	}, 
 
 	render: function () {
