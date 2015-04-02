@@ -19803,21 +19803,28 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 		}.bind(this));
 	}, 
 
+	createArrayOfLocationOptions: function (logo) {
+		var locations = [], 
+			selectElementID, 
+			selectionText;
+
+		this.state.storeLocationData.map(function (location) {
+			selectionText = location.name + " \u2014 " + location.address;
+
+			if (location.companyID === logo.storeID) {
+				return locations.push(React.createElement("option", {key: location.storeID, value: location.storeID}, selectionText));
+			} 
+		}.bind(this));	
+
+		return locations;	
+	},
+
 	createLocationSelectors: function (locationSelectors) {
 		
 		if (this.state.storeLogoData && this.state.storeLocationData) {
-			
 			this.state.storeLogoData.map(function (logo) {
-				var locations = [], 
-					selectElementID;
 
-				this.state.storeLocationData.map(function (location) {
-					var selectionText = location.name + " \u2014 " + location.address;
-
-					if (location.companyID === logo.storeID) {
-						return locations.push(React.createElement("option", {key: location.storeID, value: location.storeID}, selectionText));
-					} 
-				}.bind(this));
+				var locations = this.createArrayOfLocationOptions(logo);
 
 				selectElementID = "selectElement_" + logo.storeID;
 
@@ -19843,12 +19850,11 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 					)
 				);
 			}.bind(this));
-		} 
-		// console.log(locationSelectors);		
+		} 	
 	}, 
 
 	createLocationSelectorButtons: function (locationSelectorButtons) {
-		if (this.state.storeLogoData && this.state.storeLocationData) {
+		if (this.state.storeLogoData.length && this.state.storeLocationData.length) {
 			locationSelectorButtons.push(
 				React.createElement("div", {key: "0", id: "location_defaults_selection_buttons_container"}, 
 					React.createElement("span", {id: "location_defaults_submit_button_container", className: "defaults_button_container"}, 
@@ -19859,6 +19865,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 					)				
 				)
 			);
+
 		} else {
 			locationSelectorButtons = [];
 		}
@@ -20015,32 +20022,8 @@ var Navigation = React.createClass({displayName: "Navigation",
 
 module.exports = Navigation;
 },{"./Navbar":162,"./SidePanel":167,"react":157}],164:[function(require,module,exports){
-var React = require('react');
 
-var ProductComponent = React.createClass({displayName: "ProductComponent",
-	render: function () {
-		return (
-			React.createElement("div", {className: "product_info"}, 
-				React.createElement("div", {className: "container_product_name"}, 
-					React.createElement("h3", {className: "product_name"}, this.props.product.productName)
-				), 
-				React.createElement("div", {className: "container_product_description"}, 
-					React.createElement("p", {className: "product_description"}, this.props.product.productDescription)
-				), 
-				React.createElement("div", {className: "container_product_price"}, 
-					React.createElement("p", {className: "product_price"}, React.createElement("strong", null, this.props.product.price))
-				), 
-				React.createElement("div", {className: "container_product_image"}, 
-					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
-				)
-			)
-		);
-	}
-});	
-
-module.exports = ProductComponent;
-
-},{"react":157}],165:[function(require,module,exports){
+},{}],165:[function(require,module,exports){
 /* 
 * SearchField component requires FontAwesome for the magnifying glass icon.
 */

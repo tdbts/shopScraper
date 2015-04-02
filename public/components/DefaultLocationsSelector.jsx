@@ -19,21 +19,28 @@ var DefaultLocationsSelector = React.createClass({
 		}.bind(this));
 	}, 
 
+	createArrayOfLocationOptions: function (logo) {
+		var locations = [], 
+			selectElementID, 
+			selectionText;
+
+		this.state.storeLocationData.map(function (location) {
+			selectionText = location.name + " \u2014 " + location.address;
+
+			if (location.companyID === logo.storeID) {
+				return locations.push(<option key={location.storeID} value={location.storeID}>{selectionText}</option>);
+			} 
+		}.bind(this));	
+
+		return locations;	
+	},
+
 	createLocationSelectors: function (locationSelectors) {
 		
 		if (this.state.storeLogoData && this.state.storeLocationData) {
-			
 			this.state.storeLogoData.map(function (logo) {
-				var locations = [], 
-					selectElementID;
 
-				this.state.storeLocationData.map(function (location) {
-					var selectionText = location.name + " \u2014 " + location.address;
-
-					if (location.companyID === logo.storeID) {
-						return locations.push(<option key={location.storeID} value={location.storeID}>{selectionText}</option>);
-					} 
-				}.bind(this));
+				var locations = this.createArrayOfLocationOptions(logo);
 
 				selectElementID = "selectElement_" + logo.storeID;
 
@@ -59,12 +66,11 @@ var DefaultLocationsSelector = React.createClass({
 					</div>
 				);
 			}.bind(this));
-		} 
-		// console.log(locationSelectors);		
+		} 	
 	}, 
 
 	createLocationSelectorButtons: function (locationSelectorButtons) {
-		if (this.state.storeLogoData && this.state.storeLocationData) {
+		if (this.state.storeLogoData.length && this.state.storeLocationData.length) {
 			locationSelectorButtons.push(
 				<div key="0" id="location_defaults_selection_buttons_container">
 					<span id="location_defaults_submit_button_container" className="defaults_button_container">
@@ -75,6 +81,7 @@ var DefaultLocationsSelector = React.createClass({
 					</span>				
 				</div>
 			);
+
 		} else {
 			locationSelectorButtons = [];
 		}
