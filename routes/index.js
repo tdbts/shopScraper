@@ -1,9 +1,7 @@
 var express = require('express'),
 	router = express.Router(),  
 	ContentModel = require('../model/ContentModel'), 
-	async = require('async'), 
 	getStoreLocations = require('../src/getStoreLocations'), 
-	wireDatabaseToScrapersAndScrape = require('../src/wireDatabaseToScrapersAndScrape'), 
 	getListingsFromUserDefaults = require('../src/getListingsFromUserDefaults'), 
 	handleScrapeRequest = require('../src/handleScrapeRequest');
 
@@ -37,14 +35,12 @@ router.get('/api/:storeName', function (req, res) {
 
 router.get('/user/locations', function (req, res) {
 
-	console.log("GETTING LISTINGS FROM USER DEFAULTS.");
-
 	getListingsFromUserDefaults(req, res);	
 });
 
 router.get('/SelectLocationDefaults', function (req, res) {
 	
-		getStoreLocations(req, res, function (results) {
+	getStoreLocations(req, res, function (results) {
 		res.json(results);
 	});
 });

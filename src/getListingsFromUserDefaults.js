@@ -1,22 +1,12 @@
 var async = require('async'), 
 	wireDatabaseToScrapersAndScrape = require('../src/wireDatabaseToScrapersAndScrape'), 
-	ScrapeConfig = require('./ScrapeConfig'), 
 	assembleDataForScrapes = require('./assembleDataForScrapes'), 
-	getUserPreferenceForLocation = require('./getUserPreferenceForLocation'), 
 	ContentModel = require('../model/ContentModel');
 
 module.exports = function (req, res) {
-	// DEVELOPMENT ONLY
-	console.log("LINE 7 - req.query: \n", req.query);
-
-	var defaultsData = JSON.parse(req.query.data);
-	
-	// DEVELOPMENT ONLY
-	console.log("LINE 12 - defaultsData: \n", defaultsData);
-
-	var companyModel = new ContentModel(req.db), 
+	var defaultsData = JSON.parse(req.query.data),
 		locationModel = new ContentModel(req.db),
-		scrapeConfigModel = new ContentModel(req.db),  
+		scrapeConfigModel = new ContentModel(req.db), 
 		locationIDs;
 
 	locationIDs = defaultsData.map(function (obj) {
@@ -42,14 +32,8 @@ module.exports = function (req, res) {
 	}, 
 
 	function (err, results) {
-		console.log("LINE 42 - results from querying database for locations and scrapeConfig data: \n", results);
-
 		var dataForScrapes = assembleDataForScrapes(results.locations, results.scrapeConfigs);
 
-		console.log("LINE 59: DATA FOR SCRAPES: \n", JSON.stringify(dataForScrapes));
-
-		// // APPROACH #1 - USING async.map
-		// DEFINITELY SEEMS FASTER, BUT WHY??
 		async.map(dataForScrapes, function (data, callback) {
 			wireDatabaseToScrapersAndScrape(res, data, callback);
 		}, 
@@ -61,4 +45,4 @@ module.exports = function (req, res) {
 		});
 
 	});
-}
+};

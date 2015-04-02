@@ -43,7 +43,8 @@ gulp.task('browserify', function () {
 gulp.task('jshint', function () {
 	gulp.src([
 		'src/*.js', 
-		'model/*.js', 
+		'model/*.js',
+		'routes/*.js',  
 		'public/javascripts/*.js', 
 		'!public/javascripts/bundle.js', 
 		'gulpfile.js'
