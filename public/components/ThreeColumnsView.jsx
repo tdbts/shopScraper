@@ -1,4 +1,5 @@
 var React = require('react'), 
+	StoreCircularComponent = require('./StoreCircularComponent'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo');
 
 var ThreeColumnsView = React.createClass({
@@ -20,20 +21,30 @@ var ThreeColumnsView = React.createClass({
 
 	componentDidMount: function () {
 		
-		$.get('/ShopScraperNavigation', function (storeLogoData) {
-			var i = 0, 
-				columnID;
+		// $.get('/ShopScraperNavigation', function (storeLogoData) {
+		// 	var i = 0, 
+		// 		columnID;
 
-			storeLogoData = JSON.parse(storeLogoData); 
+		// 	storeLogoData = JSON.parse(storeLogoData); 
 
-			for (columnID in this.state.isOccupied) {
-				React.render(<StoreNavigationLogo store={storeLogoData[i]} />, 
-					document.getElementById(columnID));
+		// 	for (columnID in this.state.isOccupied) {
+		// 		React.render(<StoreNavigationLogo store={storeLogoData[i]} />, 
+		// 			document.getElementById(columnID));
 				
-				i++;
-				this.state.isOccupied[columnID] = true;
-			}
-		}.bind(this));
+		// 		i++;
+		// 		this.state.isOccupied[columnID] = true;
+		// 	}
+		// }.bind(this));
+		
+		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
+			var columnIDs = ["left", "middle", "right"];
+
+			return storeListings.map(function (store, index) {
+				var columnID = "column_" + columnIDs[index];
+				console.log(columnID);
+				React.render(<StoreCircularComponent circularData={store} />, document.getElementById(columnID));
+			});
+		});
 	}, 
 
 	render: function () {

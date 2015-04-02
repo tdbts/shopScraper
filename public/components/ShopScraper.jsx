@@ -50,13 +50,15 @@ var ShopScraper = React.createClass({
 		// DEVELOPMENT ONLY
 		console.log(defaultData);
 
+		defaultData = JSON.stringify(defaultData);
+
 		if (localStorage) {
-			localStorage.setItem('userDefaultLocations', JSON.stringify(defaultData));
+			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
 		console.log(localStorage);
 
-		this.setState({currentWindowView: <ThreeColumnsView />});
+		this.setState({currentWindowView: <ThreeColumnsView defaultLocations={defaultData} />});	
 
 	}, 
 

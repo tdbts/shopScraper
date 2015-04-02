@@ -31,7 +31,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 					var selectionText = location.name + " \u2014 " + location.address;
 
 					if (location.companyID === logo.storeID) {
-						return locations.push(React.createElement("option", {key: location.storeID, value: location._id}, selectionText));
+						return locations.push(React.createElement("option", {key: location.storeID, value: location.storeID}, selectionText));
 					} 
 				}.bind(this));
 

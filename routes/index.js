@@ -3,6 +3,7 @@ var express = require('express'),
 	ContentModel = require('../model/ContentModel'), 
 	async = require('async'), 
 	getStoreLocations = require('../src/getStoreLocations'), 
+	wireDatabaseToScrapersAndScrape = require('../src/wireDatabaseToScrapersAndScrape'), 
 	handleScrapeRequest = require('../src/handleScrapeRequest');
 
 /* GET home page. */
@@ -41,6 +42,75 @@ router.get('/api/:storeName', function (req, res) {
 	handleScrapeRequest(req, res, storeName);
 });
 
+router.get('/user/locations', function (req, res) {
+	
+	console.log("LINE 47: \n", req.query);
+
+	var defaultsData = JSON.parse(req.query.data);
+	console.log("LINE 50: \n", defaultsData);
+
+	var companyModel = new ContentModel(req.db), 
+		locationModel = new ContentModel(req.db),
+		scrapeConfigModel = new ContentModel(req.db),  
+		locationIDs;
+
+	locationIDs = defaultsData.map(function (obj) {
+		return obj.defaultLocationID;
+	});
+
+	async.parallel([
+		function (callback) {
+			locationModel.collection('locations').getData({'storeID': {$in: locationIDs}}, {}, function (err, data) {
+				if (!err) {
+					callback(null, data);
+				}
+			});
+		}, 
+
+		function (callback) {
+			scrapeConfigModel.collection('scrapeConfig').getData({}, {}, function (err, data) {
+				if (!err) {
+					callback(null, data);
+				}
+			});
+		}
+	], 
+
+	function (err, results) {
+		console.log("LINE 80: \n", results);
+
+		var dataForScrapes = [];
+
+		results[0].map(function (location) {
+			results[1].map(function (config) {
+				if (location.companyID === config.companyID) {
+					dataForScrapes.push({
+						storeName: config.storeName, 
+						configData: [config], 
+						preferences: location.companyID === '2' ? [{circularPath: location.circularPath}] 
+							: [{storeID: location.storeID}] 
+					});
+				}
+			});
+		});
+
+		console.log("LINE 97: DATA FOR SCRAPES: \n", JSON.stringify(dataForScrapes));
+
+		async.map(dataForScrapes, function (data, callback) {
+			wireDatabaseToScrapersAndScrape(res, data, callback);
+		}, 
+		function (err, results) {
+			if (!err) {
+				console.log("LINE 104: \n", results);
+				res.json(results);
+			}
+		});
+
+	});
+
+
+});
+
 // TESTING WELCOME PAGE
 router.get('/test/Welcome', function (req, res) {
 	
@@ -49,7 +119,7 @@ router.get('/test/Welcome', function (req, res) {
 
 router.get('/test/SelectLocationDefaults', function (req, res) {
 	
-	getStoreLocations(req, res, function (results) {
+		getStoreLocations(req, res, function (results) {
 		res.json(results);
 	});
 });
