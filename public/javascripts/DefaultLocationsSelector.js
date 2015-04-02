@@ -9,13 +9,13 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 	}, 
 
 	componentDidMount: function () {
-		$.get('/test/SelectLocationDefaults', function (data) {
-			var json = JSON.parse(data)[0];
-			
+		$.get('/SelectLocationDefaults', function (data) {
+
 			this.setState({
-				storeLogoData: json.logoData[0].storeLogoData, 
-				storeLocationData: json.locationData
+				storeLogoData: data.logoData, 
+				storeLocationData: data.locationData
 			});
+			
 		}.bind(this));
 	}, 
 

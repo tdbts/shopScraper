@@ -10,10 +10,11 @@ module.exports = function (req, res, callback) {
 
 		async.parallel([
 			function (callback) {
-				logoDataModel.collection('dom').getData({}, {'storeLogoData': 1}, function (err, data) {
+				logoDataModel.collection('dom').getData({}, {'storeLogoData': 1, '_id': 0}, function (err, data) {
 					if (!err) {
-						jsonResponse.logoData = data;
-						callback(null, jsonResponse);
+						data = data[0].storeLogoData;
+						
+						callback(null, data);
 					}
 				});
 			}, 
@@ -31,8 +32,7 @@ module.exports = function (req, res, callback) {
 							}
 						});
 
-						jsonResponse.locationData = data;
-						callback(null, jsonResponse);
+						callback(null, data);
 					}
 				});
 			}
@@ -40,7 +40,10 @@ module.exports = function (req, res, callback) {
 
 		function (err, results) {
 			if (!err) {
-				callback(results);
+				jsonResponse.logoData = results[0];
+				jsonResponse.locationData = results[1];
+
+				callback(jsonResponse);
 			}
 		});
 	}	

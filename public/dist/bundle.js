@@ -19793,13 +19793,13 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 	}, 
 
 	componentDidMount: function () {
-		$.get('/test/SelectLocationDefaults', function (data) {
-			var json = JSON.parse(data)[0];
-			
+		$.get('/SelectLocationDefaults', function (data) {
+
 			this.setState({
-				storeLogoData: json.logoData[0].storeLogoData, 
-				storeLocationData: json.locationData
+				storeLogoData: data.logoData, 
+				storeLocationData: data.locationData
 			});
+			
 		}.bind(this));
 	}, 
 
@@ -20015,32 +20015,8 @@ var Navigation = React.createClass({displayName: "Navigation",
 
 module.exports = Navigation;
 },{"./Navbar":162,"./SidePanel":167,"react":157}],164:[function(require,module,exports){
-var React = require('react');
 
-var ProductComponent = React.createClass({displayName: "ProductComponent",
-	render: function () {
-		return (
-			React.createElement("div", {className: "product_info"}, 
-				React.createElement("div", {className: "container_product_name"}, 
-					React.createElement("h3", {className: "product_name"}, this.props.product.productName)
-				), 
-				React.createElement("div", {className: "container_product_description"}, 
-					React.createElement("p", {className: "product_description"}, this.props.product.productDescription)
-				), 
-				React.createElement("div", {className: "container_product_price"}, 
-					React.createElement("p", {className: "product_price"}, React.createElement("strong", null, this.props.product.price))
-				), 
-				React.createElement("div", {className: "container_product_image"}, 
-					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
-				)
-			)
-		);
-	}
-});	
-
-module.exports = ProductComponent;
-
-},{"react":157}],165:[function(require,module,exports){
+},{}],165:[function(require,module,exports){
 /* 
 * SearchField component requires FontAwesome for the magnifying glass icon.
 */
@@ -20347,7 +20323,7 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 		
 		columnIDs.map(function (id, index) {
 			var columnID = "column_" + columnIDs[index];
-			console.log("ADDING SPINNERS.");
+
 			React.render(React.createElement(Spinner, null), document.getElementById(columnID));
 		});
 		

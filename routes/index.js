@@ -143,13 +143,7 @@ router.get('/user/locations', function (req, res) {
 
 });
 
-// TESTING WELCOME PAGE
-router.get('/test/Welcome', function (req, res) {
-	
-	res.render('index');
-});
-
-router.get('/test/SelectLocationDefaults', function (req, res) {
+router.get('/SelectLocationDefaults', function (req, res) {
 	
 		getStoreLocations(req, res, function (results) {
 		res.json(results);
