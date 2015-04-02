@@ -1,5 +1,6 @@
 var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
+	Spinner = require('./Spinner'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
@@ -21,23 +22,15 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 	componentDidMount: function () {
 		
-		// $.get('/ShopScraperNavigation', function (storeLogoData) {
-		// 	var i = 0, 
-		// 		columnID;
+		var columnIDs = ["left", "middle", "right"];
+		
+		columnIDs.map(function (id, index) {
+			var columnID = "column_" + columnIDs[index];
 
-		// 	storeLogoData = JSON.parse(storeLogoData); 
-
-		// 	for (columnID in this.state.isOccupied) {
-		// 		React.render(<StoreNavigationLogo store={storeLogoData[i]} />, 
-		// 			document.getElementById(columnID));
-				
-		// 		i++;
-		// 		this.state.isOccupied[columnID] = true;
-		// 	}
-		// }.bind(this));
+			React.render(React.createElement(Spinner, null), document.getElementById(columnID));
+		});
 		
 		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
-			var columnIDs = ["left", "middle", "right"];
 
 			return storeListings.map(function (store, index) {
 				var columnID = "column_" + columnIDs[index];

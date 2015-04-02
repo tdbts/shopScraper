@@ -20321,6 +20321,7 @@ module.exports = StoreNavigationLogo;
 },{"./Spinner":168,"./StoreCircularComponent":169,"react":157}],171:[function(require,module,exports){
 var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
+	Spinner = require('./Spinner'), 
 	StoreNavigationLogo = require('./StoreNavigationLogo');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
@@ -20342,23 +20343,15 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 	componentDidMount: function () {
 		
-		// $.get('/ShopScraperNavigation', function (storeLogoData) {
-		// 	var i = 0, 
-		// 		columnID;
-
-		// 	storeLogoData = JSON.parse(storeLogoData); 
-
-		// 	for (columnID in this.state.isOccupied) {
-		// 		React.render(<StoreNavigationLogo store={storeLogoData[i]} />, 
-		// 			document.getElementById(columnID));
-				
-		// 		i++;
-		// 		this.state.isOccupied[columnID] = true;
-		// 	}
-		// }.bind(this));
+		var columnIDs = ["left", "middle", "right"];
+		
+		columnIDs.map(function (id, index) {
+			var columnID = "column_" + columnIDs[index];
+			console.log("ADDING SPINNERS.");
+			React.render(React.createElement(Spinner, null), document.getElementById(columnID));
+		});
 		
 		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
-			var columnIDs = ["left", "middle", "right"];
 
 			return storeListings.map(function (store, index) {
 				var columnID = "column_" + columnIDs[index];
@@ -20391,7 +20384,7 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./StoreCircularComponent":169,"./StoreNavigationLogo":170,"react":157}],172:[function(require,module,exports){
+},{"./Spinner":168,"./StoreCircularComponent":169,"./StoreNavigationLogo":170,"react":157}],172:[function(require,module,exports){
 var React = require('react'), 
 	// DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
 	// ThreeColumnsView = require('./ThreeColumnsView'), 

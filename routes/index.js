@@ -96,6 +96,8 @@ router.get('/user/locations', function (req, res) {
 
 		console.log("LINE 97: DATA FOR SCRAPES: \n", JSON.stringify(dataForScrapes));
 
+		// // APPROACH #1 - USING async.map
+		// DEFINITELY SEEMS FASTER, BUT WHY??
 		async.map(dataForScrapes, function (data, callback) {
 			wireDatabaseToScrapersAndScrape(res, data, callback);
 		}, 
@@ -105,6 +107,36 @@ router.get('/user/locations', function (req, res) {
 				res.json(results);
 			}
 		});
+
+
+		// // APPROACH #2 - USING async.parallel
+		// var scrapes = [
+		// 	function (callback) {
+		// 		wireDatabaseToScrapersAndScrape(res, dataForScrapes[0], function (err, circularData) {
+		// 			console.log("BIG Y CIRCULAR DATA: ", circularData);
+		// 			callback(null, circularData);
+		// 		});
+		// 	}, 
+
+		// 	function (callback) {
+		// 		wireDatabaseToScrapersAndScrape(res, dataForScrapes[1], function (err, circularData) {
+		// 			callback(null, circularData);
+		// 		});
+		// 	}, 
+
+		// 	function (callback) {
+		// 		wireDatabaseToScrapersAndScrape(res, dataForScrapes[2], function (err, circularData) {
+		// 			callback(null, circularData);
+		// 		});
+		// 	}
+		// ];
+
+		// async.parallel(scrapes, function (err, circularData) {
+		// 	if (!err) {
+		// 		console.log("LINE 141: \n", circularData);
+		// 		res.json(circularData);
+		// 	}
+		// });
 
 	});
 
