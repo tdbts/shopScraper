@@ -1,7 +1,8 @@
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	Welcome = require('./Welcome'), 
-	DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
+	DefaultLocationsSelector = require('./DefaultLocationsSelector'),
+	ViewListings = require('./ViewListings'),  
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
@@ -15,16 +16,26 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		return localStorage ? localStorage.getItem('userDefaultLocations') : null;
 	}, 
 
+	defaultsAreValid: function (localStorageData) {
+		var parsedLocalStorageData = JSON.parse(localStorageData);
+
+		return (parsedLocalStorageData.length > 1) && (parsedLocalStorageData.every(function (obj) {
+				return obj.hasOwnProperty('companyID') && obj.hasOwnProperty('defaultLocationID');
+			}));
+	}, 
+
 	getLocalStorageBasedComponent: function () {
-		var defaultLocations = this.getDataFromLocalStorage(), 
+		var localStorageData = this.getDataFromLocalStorage(), 
 			currentViewComponent;
 
-		if (!defaultLocations) {
+		if (!localStorageData || !this.defaultsAreValid(localStorageData)) {
 			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
 		
 		} else {
-			// ...More code will be added here
-			currentViewComponent = React.createElement(ThreeColumnsView, null);
+			if (this.defaultsAreValid(localStorageData)) {
+
+				currentViewComponent = React.createElement(ViewListings, {defaultLocations: localStorageData});
+			}
 		} 
 
 		return currentViewComponent;
@@ -54,7 +65,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: React.createElement(ThreeColumnsView, {defaultLocations: defaultData})});	
+		this.setState({currentWindowView: React.createElement(ViewListings, {defaultLocations: defaultData})});	
 
 	}, 
 

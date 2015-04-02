@@ -20,8 +20,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 	}, 
 
 	createArrayOfLocationOptions: function (logo) {
-		var locations = [], 
-			selectElementID, 
+		var locations = [],  
 			selectionText;
 
 		this.state.storeLocationData.map(function (location) {
@@ -36,7 +35,8 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 	},
 
 	createLocationSelectors: function (locationSelectors) {
-		
+		var selectElementID;
+
 		if (this.state.storeLogoData && this.state.storeLocationData) {
 			this.state.storeLogoData.map(function (logo) {
 

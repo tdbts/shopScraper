@@ -36,6 +36,7 @@ a {
 }
 
 #window_wrapper {
+    padding-top: 20px;
     margin-left: 250px;
     height: 100%;
 }
@@ -202,7 +203,7 @@ body {
 
 /* WINDOW CSS */
 #container_three_columns {
-    margin-top: 20px;
+    /*margin-top: 20px;*/
 }
 
 .spinner_container { 

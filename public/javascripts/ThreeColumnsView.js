@@ -1,7 +1,6 @@
 var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
-	Spinner = require('./Spinner'), 
-	StoreNavigationLogo = require('./StoreNavigationLogo');
+	Spinner = require('./Spinner');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	getInitialState: function () {
@@ -30,20 +29,10 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 		var columnID, i;
 
 		for (i = 0; i < this.props.columnPositions.length; i++) {
-			columnID = this.getColumnID(i);
+			columnID = this.getColumnID(i); 
 
-			React.render(React.createElement(Spinner, null), document.getElementById(columnID));
+			React.render(this.props.listings[i], document.getElementById(columnID));
 		}
-	
-		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
-
-			return storeListings.map(function (store, index) {
-				columnID = "column_" + this.props.columnPositions[index];
-				
-				React.render(React.createElement(StoreCircularComponent, {circularData: store}), document.getElementById(columnID));
-			
-			}.bind(this));
-		}.bind(this));
 	}, 
 
 	render: function () {

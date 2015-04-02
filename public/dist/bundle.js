@@ -19804,8 +19804,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 	}, 
 
 	createArrayOfLocationOptions: function (logo) {
-		var locations = [], 
-			selectElementID, 
+		var locations = [],  
 			selectionText;
 
 		this.state.storeLocationData.map(function (location) {
@@ -19820,7 +19819,8 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 	},
 
 	createLocationSelectors: function (locationSelectors) {
-		
+		var selectElementID;
+
 		if (this.state.storeLogoData && this.state.storeLocationData) {
 			this.state.storeLogoData.map(function (logo) {
 
@@ -20050,7 +20050,8 @@ module.exports = SearchField;
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	Welcome = require('./Welcome'), 
-	DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
+	DefaultLocationsSelector = require('./DefaultLocationsSelector'),
+	ViewListings = require('./ViewListings'),  
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
@@ -20064,16 +20065,26 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		return localStorage ? localStorage.getItem('userDefaultLocations') : null;
 	}, 
 
+	defaultsAreValid: function (localStorageData) {
+		var parsedLocalStorageData = JSON.parse(localStorageData);
+
+		return (parsedLocalStorageData.length > 1) && (parsedLocalStorageData.every(function (obj) {
+				return obj.hasOwnProperty('companyID') && obj.hasOwnProperty('defaultLocationID');
+			}));
+	}, 
+
 	getLocalStorageBasedComponent: function () {
-		var defaultLocations = this.getDataFromLocalStorage(), 
+		var localStorageData = this.getDataFromLocalStorage(), 
 			currentViewComponent;
 
-		if (!defaultLocations) {
+		if (!localStorageData || !this.defaultsAreValid(localStorageData)) {
 			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
 		
 		} else {
-			// ...More code will be added here
-			currentViewComponent = React.createElement(ThreeColumnsView, null);
+			if (this.defaultsAreValid(localStorageData)) {
+
+				currentViewComponent = React.createElement(ViewListings, {defaultLocations: localStorageData});
+			}
 		} 
 
 		return currentViewComponent;
@@ -20103,7 +20114,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: React.createElement(ThreeColumnsView, {defaultLocations: defaultData})});	
+		this.setState({currentWindowView: React.createElement(ViewListings, {defaultLocations: defaultData})});	
 
 	}, 
 
@@ -20137,7 +20148,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 module.exports = ShopScraper;
 
-},{"./DefaultLocationsSelector":161,"./Navigation":163,"./ThreeColumnsView":171,"./Welcome":172,"react":157}],167:[function(require,module,exports){
+},{"./DefaultLocationsSelector":161,"./Navigation":163,"./ThreeColumnsView":170,"./ViewListings":172,"./Welcome":173,"react":157}],167:[function(require,module,exports){
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption');
@@ -20260,48 +20271,8 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 module.exports = StoreCircularComponent;
 },{"./ProductComponent":164,"react":157}],170:[function(require,module,exports){
 var React = require('react'), 
-	Spinner = require('./Spinner'), 
-	StoreCircularComponent = require('./StoreCircularComponent');
-
-var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo", 
-	handleClickEvent: function () {
-		var mountID = React.findDOMNode(this.refs.logo).parentNode.getAttribute('id'), 
-			circularDataURL = this.props.store.storeHref;
-
-		React.render(React.createElement(Spinner, {key: this.props.store.imageID}), document.getElementById(mountID));
-		
-		$.get(circularDataURL, function (responseData) {
-
-			React.render(React.createElement(StoreCircularComponent, {circularData: responseData}), 
-				document.getElementById(mountID));
-		});
-
-	}, 
-
-	componentDidMount: function () {
-		$("#" + this.props.store.imageID).on('click', function () {
-			this.handleClickEvent();
-		}.bind(this));
-	}, 
-
-	render: function () {
-		return (
-			React.createElement("div", {ref: "logo", "data-ajax_route": this.props.store.storeHref, id: this.props.store.containerID, className: "container_store_logo_navigation col-md-3 col-xs-6"}, 
-				React.createElement("a", {href: "#", className: "store_navigation_link"}, 
-					React.createElement("img", {id: this.props.store.imageID, className: "store_logo", src: this.props.store.imageURL, alt: this.props.store.storeName})
-				)
-			)
-		);	
-	}
-});
-
-module.exports = StoreNavigationLogo;
-
-},{"./Spinner":168,"./StoreCircularComponent":169,"react":157}],171:[function(require,module,exports){
-var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
-	Spinner = require('./Spinner'), 
-	StoreNavigationLogo = require('./StoreNavigationLogo');
+	Spinner = require('./Spinner');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	getInitialState: function () {
@@ -20330,20 +20301,10 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 		var columnID, i;
 
 		for (i = 0; i < this.props.columnPositions.length; i++) {
-			columnID = this.getColumnID(i);
+			columnID = this.getColumnID(i); 
 
-			React.render(React.createElement(Spinner, null), document.getElementById(columnID));
+			React.render(this.props.listings[i], document.getElementById(columnID));
 		}
-	
-		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
-
-			return storeListings.map(function (store, index) {
-				columnID = "column_" + this.props.columnPositions[index];
-				
-				React.render(React.createElement(StoreCircularComponent, {circularData: store}), document.getElementById(columnID));
-			
-			}.bind(this));
-		}.bind(this));
 	}, 
 
 	render: function () {
@@ -20369,7 +20330,76 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./Spinner":168,"./StoreCircularComponent":169,"./StoreNavigationLogo":170,"react":157}],172:[function(require,module,exports){
+},{"./Spinner":168,"./StoreCircularComponent":169,"react":157}],171:[function(require,module,exports){
+var React = require('react');
+
+var TwoColumnsView = React.createClass({displayName: "TwoColumnsView",
+	getDefaultProps: function () {
+		return {
+			'viewType': 'twoColumns'
+		};
+	}, 
+
+	render: function () {
+		return (
+			React.createElement("div", {id: "two_columns_view"}, 
+				React.createElement("div", {id: "container_two_columns", className: "container"}, 
+					React.createElement("div", {id: "two_columns_row", className: "row"}, 
+						React.createElement("div", {className: "col-md-2"}), 
+						React.createElement("div", {id: "column_left", className: "col-md-3"}
+						), 
+						React.createElement("div", {className: "col-md-2"}), 
+						React.createElement("div", {id: "column_right", className: "col-md-3"}
+						), 
+						React.createElement("div", {className: "col-md-2"})
+					)
+				)
+			)			
+		);
+	}
+});
+
+module.exports = TwoColumnsView;
+
+},{"react":157}],172:[function(require,module,exports){
+var React = require('react'), 
+	Spinner = require('./Spinner'), 
+	StoreCircularComponent = require('./StoreCircularComponent'), 
+	ThreeColumnsView = require('./ThreeColumnsView'), 
+	TwoColumnsView = require('./TwoColumnsView');
+
+var ViewListings = React.createClass({displayName: "ViewListings",
+	getInitialState: function () {
+		return {
+			'currentView': null
+		};
+	}, 
+
+	componentDidMount: function () {
+		var circularListingsComponents = [];
+
+		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
+			
+			storeListings.map(function (store) {
+				circularListingsComponents.push(React.createElement(StoreCircularComponent, {circularData: store}));
+			});
+
+			this.setState({'currentView': React.createElement(ThreeColumnsView, {listings: circularListingsComponents})});
+		}.bind(this));
+	}, 
+
+	render: function () {
+		return (
+			React.createElement("div", {id: "view_listings_component"}, 
+				this.state.currentView
+			)
+		);
+	}
+});
+
+module.exports = ViewListings;
+
+},{"./Spinner":168,"./StoreCircularComponent":169,"./ThreeColumnsView":170,"./TwoColumnsView":171,"react":157}],173:[function(require,module,exports){
 var React = require('react'), 
 	// DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
 	// ThreeColumnsView = require('./ThreeColumnsView'), 
@@ -20434,7 +20464,7 @@ var Welcome = React.createClass({displayName: "Welcome",
 
 module.exports = Welcome;
 
-},{"./WelcomeColumn":173,"react":157}],173:[function(require,module,exports){
+},{"./WelcomeColumn":174,"react":157}],174:[function(require,module,exports){
 var React = require('react');
 
 var WelcomeColumn = React.createClass({displayName: "WelcomeColumn",
