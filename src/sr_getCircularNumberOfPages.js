@@ -17,7 +17,7 @@ var getCircularNumberOfPages = scraper.extend({
 		});
 
 		// DEVELOPMENT ONLY
-		// console.log(pageNumbers);
+		// console.log("PAGE NUMBERS: ", pageNumbers);
 
 		var numberOfPages = pageNumbers.reduce(function (prev, curr) {
 			return curr > prev ? curr : prev;

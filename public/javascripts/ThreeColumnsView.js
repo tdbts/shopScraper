@@ -1,5 +1,6 @@
 var React = require('react'), 
-	StoreNavigationLogo = require('./StoreNavigationLogo');
+	StoreCircularComponent = require('./StoreCircularComponent'), 
+	Spinner = require('./Spinner');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	getInitialState: function () {
@@ -14,26 +15,24 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 	getDefaultProps: function () {
 		return {
-			'viewType': 'threeColumns'
+			'viewType': 'threeColumns', 
+			'columnPositions': ["left", "middle", "right"]
 		};
 	}, 
 
+	getColumnID: function (index) { 
+
+		return "column_" + this.props.columnPositions[index];
+	}, 
+
 	componentDidMount: function () {
-		
-		$.get('/ShopScraperNavigation', function (storeLogoData) {
-			var i = 0, 
-				columnID;
+		var columnID, i;
 
-			storeLogoData = JSON.parse(storeLogoData); 
+		for (i = 0; i < this.props.columnPositions.length; i++) {
+			columnID = this.getColumnID(i); 
 
-			for (columnID in this.state.isOccupied) {
-				React.render(React.createElement(StoreNavigationLogo, {store: storeLogoData[i]}), 
-					document.getElementById(columnID));
-				
-				i++;
-				this.state.isOccupied[columnID] = true;
-			}
-		}.bind(this));
+			React.render(this.props.listings[i], document.getElementById(columnID));
+		}
 	}, 
 
 	render: function () {

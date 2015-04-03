@@ -1,0 +1,44 @@
+// ENTITIES TO TEST: 
+
+// --> src/*.js
+storeLogoData.js
+storeLogoData.json
+shopRiteDomData.js
+applyConstructor.js        
+attachDB.js                
+scrapeShopRite.js
+scrapeStopAndShop.js
+DomData.js                 
+findComparisonObjects.js   
+sp_getProducts.js
+findElementsThatPass.js    
+getStoreLocations.js       
+sr_getCircularNumberOfPages.js
+sr_scrapePage.js
+handleScrapeRequest.js     
+stopAndShopURLs.js
+mongoConnect.js            
+storeRouteMapper.js
+queryDatabaseForScrape.js  
+requester.js               
+renderListings.js          
+wireDatabaseToScrapersAndScrape.js
+// getType.js                 
+// scrapeBigY.js
+// UrlObject.js
+// scraper.js
+// CircularPageData.js        
+// CacheDataLocator.js        
+// Product.js                 
+// UrlCreator.js
+// PageParser.js              
+// sp_getPromotionID.js
+// sp_getPagesMetadata.js
+// CacheForPagesMetadata.js   
+
+
+// --> /views/ViewBase.js --> DEPRECATED
+
+// --> /model/*.js
+BaseModel.js
+// ContentModel.js

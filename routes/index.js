@@ -1,12 +1,20 @@
 var express = require('express'),
+<<<<<<< HEAD
 	router = express.Router(),  
 	ContentModel = require('../model/ContentModel'), 
 	async = require('async'), 
 	getStoreLocations = require('../src/getStoreLocations'), 
+=======
+	router = express.Router(),   
+	getStoreLocations = require('../src/getStoreLocations'), 
+	getAndSendWelcomePageDomData = require('../src/getAndSendWelcomePageDomData'), 
+	getListingsFromUserDefaults = require('../src/getListingsFromUserDefaults'), 
+>>>>>>> ui_development
 	handleScrapeRequest = require('../src/handleScrapeRequest');
 
 /* GET home page. */
 router.get('/', function (req, res) {
+<<<<<<< HEAD
 	// PLACEHOLDER -- DB CHECK
 	if (req.db) {
 		console.log("YEAHHHH WE GOT A DATABASE, BITCH!");
@@ -17,34 +25,53 @@ router.get('/', function (req, res) {
 			}
 		});
 	}
+=======
+
+>>>>>>> ui_development
 	res.render('index');
 });
 
-router.get('/ShopScraperNavigation', function (req, res) {
-	if (req.db) {
-		var model = new ContentModel(req.db);
+// SOON TO BE DEPRECATED
+// router.get('/ShopScraperNavigation', function (req, res) {
+// 	if (req.db) {
+// 		var model = new ContentModel(req.db);
 		
+<<<<<<< HEAD
 		model.collection('storeLogoData').getData({}, {}, function (err, data) {
 			if (!err) {
 				stringifiedLogoData = JSON.stringify(data);
+=======
+// 		model.collection('storeLogoData').getData({}, {}, function (err, data) {
+// 			if (!err) {
+// 				stringifiedLogoData = JSON.stringify(data);
+>>>>>>> ui_development
 				
-				res.send(stringifiedLogoData);
-			}
-		});
-	}
-});
+// 				res.send(stringifiedLogoData);
+// 			}
+// 		});
+// 	}
+// });
 
 router.get('/api/:storeName', function (req, res) {
 
-	var storeName = req.params.storeName;
-
-	handleScrapeRequest(req, res, storeName);
+	handleScrapeRequest(req, res, req.params.storeName);
 });
 
-// TESTING WELCOME PAGE
-router.get('/test/Welcome', function (req, res) {
+router.get('/user/locations', function (req, res) {
+
+	getListingsFromUserDefaults(req, res);	
+});
+
+router.get('/SelectLocationDefaults', function (req, res) {
 	
-	res.render('index');
+	getStoreLocations(req, res, function (results) {
+		res.json(results);
+	});
+});
+
+router.get('/WelcomePageDomData', function (req, res) {
+	
+	getAndSendWelcomePageDomData(req, res);
 });
 
 router.get('/test/SelectLocationDefaults', function (req, res) {

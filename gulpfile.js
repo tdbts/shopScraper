@@ -43,7 +43,8 @@ gulp.task('browserify', function () {
 gulp.task('jshint', function () {
 	gulp.src([
 		'src/*.js', 
-		'model/*.js', 
+		'model/*.js',
+		'routes/*.js',  
 		'public/javascripts/*.js', 
 		'!public/javascripts/bundle.js', 
 		'gulpfile.js'
@@ -67,7 +68,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('test', function () {
-	gulp.src('test/tests.js', {read: false})
+	gulp.src('test/**/*.js', {read: false})
 		.pipe(mocha({reporter: mochaReporter}));	
 });
 

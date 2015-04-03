@@ -81,13 +81,13 @@ var scrapeShopRite = scraper.extend({
 			preferences = data.preferences[0], 
 			scrapers = [this, getCircularNumberOfPages, scrapePage];
 
-		configData.baseURL = preferences.baseURL;
-
+		configData.baseURL = configData.baseURL + preferences.circularPath + "/Weekly/";
+		
 		scrapers.forEach(function (scraper) {
 			scraper.extendConfig(configData);
 		});
-	
-		getCircularNumberOfPages.scrape(this.config.baseURL, function (err, pagesArray) {
+		
+		getCircularNumberOfPages.scrape(this.config.baseURL + this.config.circularNumber, function (err, pagesArray) {
 			self.scrapeCircular(pagesArray, callback);
 		});
 

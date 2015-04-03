@@ -22,7 +22,7 @@ var scrapePage = scraper.extend({
 		
 			var $ = cheerio.load(body),
 				pageData = new CircularPageData();
-			
+			// console.log("SHOP RITE DOM DATA: ", JSON.stringify(shopRiteDomData));
 			pageData.startDate = shopRiteDomData.getDate($, 'start');
 			pageData.endDate = shopRiteDomData.getDate($, 'end');
 

@@ -2,6 +2,11 @@ var React = require('react'),
 	ProductComponent = require('./ProductComponent');
 
 var StoreCircularComponent = React.createClass({
+	componentDidMount: function () {
+		// Make the sidebar as long as the page height
+		$(".sidebar").height(Math.max($("#shsc_subcomponents_wrapper").height(), $(".sidebar").height()));
+	}, 
+
 	render: function () {
 		var storeProducts = [];
 		

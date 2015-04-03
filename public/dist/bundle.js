@@ -9,7 +9,11 @@ $(document).ready(function() {
 	React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
 });
 
+<<<<<<< HEAD
 },{"./ShopScraper":166,"react":157}],2:[function(require,module,exports){
+=======
+},{"./ShopScraper":167,"react":157}],2:[function(require,module,exports){
+>>>>>>> ui_development
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -19793,6 +19797,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 	}, 
 
 	componentDidMount: function () {
+<<<<<<< HEAD
 		$.get('/test/SelectLocationDefaults', function (data) {
 			var json = JSON.parse(data)[0];
 			
@@ -19817,6 +19822,42 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						return locations.push(React.createElement("option", {key: location.storeID, value: location._id}, selectionText));
 					} 
 				}.bind(this));
+=======
+		$.get('/SelectLocationDefaults', function (data) {
+
+			this.setState({
+				storeLogoData: data.logoData, 
+				storeLocationData: data.locationData
+			});
+
+		}.bind(this));
+	}, 
+
+	createArrayOfLocationOptions: function (logo) {
+		var locations = [],  
+			selectionText;
+
+		this.state.storeLocationData.map(function (location) {
+			selectionText = location.name + " \u2014 " + location.address;
+
+			if (location.companyID === logo.storeID) {
+				return locations.push(React.createElement("option", {key: location.storeID, value: location.storeID}, selectionText));
+			} 
+		}.bind(this));	
+
+		return locations;	
+	},
+
+	createLocationSelectors: function (locationSelectors) {
+		var selectElementID;
+
+		if (this.state.storeLogoData && this.state.storeLocationData) {
+			this.state.storeLogoData.map(function (logo) {
+
+				var locations = this.createArrayOfLocationOptions(logo);
+
+				selectElementID = "selectElement_" + logo.storeID;
+>>>>>>> ui_development
 
 				return locationSelectors.push(
 					React.createElement("div", {key: logo.storeID, className: "location_selector_container"}, 
@@ -19830,8 +19871,13 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						React.createElement("div", {className: "row"}, 
 							React.createElement("div", {className: "col-md-1"}), 
 							React.createElement("div", {className: "col-md-8 select_dom_element_container"}, 
+<<<<<<< HEAD
 								React.createElement("select", {className: "form-control locations_selector"}, 
 									React.createElement("option", {value: logo.storeID}, "*** No ", logo.storeName, " Location Selected ***"), 
+=======
+								React.createElement("select", {id: selectElementID, className: "form-control locations_dropdown"}, 
+									React.createElement("option", {className: "no_selection_option", value: logo.storeID}, "*** No ", logo.storeName, " Location Selected ***"), 
+>>>>>>> ui_development
 									locations
 								)
 							), 
@@ -19840,6 +19886,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 					)
 				);
 			}.bind(this));
+<<<<<<< HEAD
 		} 
 		// console.log(locationSelectors);		
 	}, 
@@ -19848,6 +19895,37 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 		var locationSelectors = [];
 
 		this.createLocationSelectors(locationSelectors);
+=======
+		} 	
+	}, 
+
+	createLocationSelectorButtons: function (locationSelectorButtons) {
+		if (this.state.storeLogoData.length && this.state.storeLocationData.length) {
+			locationSelectorButtons.push(
+				React.createElement("div", {key: "0", id: "location_defaults_selection_buttons_container"}, 
+					React.createElement("span", {id: "location_defaults_submit_button_container", className: "defaults_button_container"}, 
+						React.createElement("button", {id: "location_defaults_submit_button", className: "btn btn-info", type: "button", onClick: this.props.handleSubmitSelections}, "Set Default Locations")
+					), 
+					React.createElement("span", {id: "location_defaults_clear_button_container", className: "defaults_button_container"}, 
+						React.createElement("button", {id: "location_defaults_clear_button", className: "btn btn-danger", type: "button", onClick: this.props.handleClearSelections}, "Clear Selected Locations")
+					)				
+				)
+			);
+
+		} else {
+			locationSelectorButtons = [];
+		}
+
+		return locationSelectorButtons;
+	}, 
+
+	render: function () {
+		var locationSelectors = [], 
+			locationSelectorButtons = [];
+
+		this.createLocationSelectors(locationSelectors);
+		this.createLocationSelectorButtons(locationSelectorButtons);
+>>>>>>> ui_development
 
 		return (
 			React.createElement("div", {className: "container"}, 
@@ -19888,6 +19966,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						), 
 						React.createElement("div", {id: "default_submit_button_row", className: "row"}, 
 							React.createElement("div", {className: "col-md-1"}), 
+<<<<<<< HEAD
 							React.createElement("div", {id: "location_defaults_selection_buttons_container", className: "col-md-8"}, 
 								React.createElement("span", {id: "location_defaults_submit_button_container", className: "defaults_button_container"}, 
 									React.createElement("button", {id: "location_defaults_submit_button", className: "btn btn-info", type: "button"}, "Set Default Locations")
@@ -19895,6 +19974,10 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 								React.createElement("span", {id: "location_defaults_clear_button_container", className: "defaults_button_container"}, 
 									React.createElement("button", {id: "location_defaults_clear_button", className: "btn btn-danger", type: "button"}, "Clear Selected Locations")
 								)
+=======
+							React.createElement("div", {id: "location_defaults_selection_buttons_column", className: "col-md-8"}, 
+								locationSelectorButtons
+>>>>>>> ui_development
 							), 
 							React.createElement("div", {className: "col-md-3"})
 						)
@@ -19908,6 +19991,28 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 module.exports = DefaultLocationsSelector;
 
 },{"react":157}],162:[function(require,module,exports){
+<<<<<<< HEAD
+=======
+var React = require('react'), 
+	Spinner = require('./Spinner');
+
+var LoadingOverlay = React.createClass({displayName: "LoadingOverlay",
+	render: function () {
+		return (
+			React.createElement("div", {id: "loading_overlay"}, 
+				React.createElement(Spinner, null), 
+				React.createElement("div", {id: "loading_overlay_text_container", className: "window_view_centered"}, 
+					React.createElement("h1", {id: "loading_overlay_text"}, "Hang on!  We're finding out what's on sale this week!")
+				)
+			)
+		);
+	}
+});
+
+module.exports = LoadingOverlay;
+
+},{"./Spinner":169,"react":157}],163:[function(require,module,exports){
+>>>>>>> ui_development
 var React = require('react');
 
 var Navbar = React.createClass({displayName: "Navbar",
@@ -19974,7 +20079,11 @@ var Navbar = React.createClass({displayName: "Navbar",
 });
 
 module.exports = Navbar;
+<<<<<<< HEAD
 },{"react":157}],163:[function(require,module,exports){
+=======
+},{"react":157}],164:[function(require,module,exports){
+>>>>>>> ui_development
 var React = require('react'), 
 	Navbar = require('./Navbar'), 
 	SidePanel = require('./SidePanel');
@@ -19995,7 +20104,11 @@ var Navigation = React.createClass({displayName: "Navigation",
 });
 
 module.exports = Navigation;
+<<<<<<< HEAD
 },{"./Navbar":162,"./SidePanel":167,"react":157}],164:[function(require,module,exports){
+=======
+},{"./Navbar":163,"./SidePanel":168,"react":157}],165:[function(require,module,exports){
+>>>>>>> ui_development
 var React = require('react');
 
 var ProductComponent = React.createClass({displayName: "ProductComponent",
@@ -20021,7 +20134,11 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 
 module.exports = ProductComponent;
 
+<<<<<<< HEAD
 },{"react":157}],165:[function(require,module,exports){
+=======
+},{"react":157}],166:[function(require,module,exports){
+>>>>>>> ui_development
 /* 
 * SearchField component requires FontAwesome for the magnifying glass icon.
 */
@@ -20044,23 +20161,37 @@ var SearchField = React.createClass({displayName: "SearchField",
 });
 
 module.exports = SearchField;
+<<<<<<< HEAD
 },{"react":157}],166:[function(require,module,exports){
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	Welcome = require('./Welcome'), 
 	DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
+=======
+},{"react":157}],167:[function(require,module,exports){
+var React = require('react'), 
+	Navigation = require('./Navigation'), 
+	Welcome = require('./Welcome'), 
+	Spinner = require('./Spinner'), 
+	DefaultLocationsSelector = require('./DefaultLocationsSelector'),
+	ViewListings = require('./ViewListings'),  
+>>>>>>> ui_development
 	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
+<<<<<<< HEAD
 			showLocationsSelector: false, 
 			showStoreListings: false, 
+=======
+>>>>>>> ui_development
 			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender})
 		};
 	}, 
 
 	getDataFromLocalStorage: function () {
+<<<<<<< HEAD
 		return localStorage ? localStorage.getItem('shopScraperData') : null;
 	}, 
 
@@ -20074,18 +20205,95 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		} else {
 			// ...More code will be added here
 			currentViewComponent = React.createElement(ThreeColumnsView, null);
+=======
+		return localStorage ? localStorage.getItem('userDefaultLocations') : null;
+	}, 
+
+	defaultsAreValid: function (localStorageData) {
+		var parsedLocalStorageData = JSON.parse(localStorageData);
+
+		return (parsedLocalStorageData.length > 1) && (parsedLocalStorageData.every(function (obj) {
+				return obj.hasOwnProperty('companyID') && obj.hasOwnProperty('defaultLocationID');
+			}));
+	}, 
+
+	getLocalStorageBasedComponent: function () {
+		var localStorageData = this.getDataFromLocalStorage(), 
+			currentViewComponent;
+
+		if (!localStorageData || !this.defaultsAreValid(localStorageData)) {
+			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
+		
+		} else {
+			if (this.defaultsAreValid(localStorageData)) {
+
+				currentViewComponent = React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
+			}
+>>>>>>> ui_development
 		} 
 
 		return currentViewComponent;
 	}, 
 
+<<<<<<< HEAD
 	determineViewToRender: function () {
+=======
+	getDefaultDataFromSelections: function () {
+		var defaultData = [];
+
+		$('.locations_dropdown').each(function () {
+			
+			defaultData.push({
+				companyID: $(this).find('.no_selection_option').attr('value'), 
+				defaultLocationID: this.value
+			});
+		});
+
+		return defaultData;		
+	}, 
+
+	handleSubmitSelections: function () {
+
+		var defaultData = this.getDefaultDataFromSelections();
+
+		defaultData = JSON.stringify(defaultData);
+
+		if (localStorage) {
+			localStorage.setItem('userDefaultLocations', defaultData);
+		}
+
+		this.setState({currentWindowView: React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
+
+	}, 
+
+	handleClearSelections: function () {
+
+		$('.locations_dropdown').each(function () {
+			this.selectedIndex = 0;
+		});
+	}, 
+
+	determineViewToRender: function () {	
+>>>>>>> ui_development
 		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
 			: React.createElement(Welcome, {onButtonClick: this.handleButtonClick});
 
 		return this.setState({currentWindowView: currentWindowView}); 
 	}, 
 
+<<<<<<< HEAD
+=======
+	toggleLoadingOverlay: function () {
+		$('body').toggleClass('overlayDarken');
+
+		// React.render(<Spinner />, document.getElementById('window_wrapper'));
+	}, 
+
+	// removeLoadingOverlay: function () {
+	// 	$('body').removeClass('loading_overlay');
+	// }, 
+
+>>>>>>> ui_development
 	render: function () {
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
@@ -20102,7 +20310,11 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 module.exports = ShopScraper;
 
+<<<<<<< HEAD
 },{"./DefaultLocationsSelector":161,"./Navigation":163,"./ThreeColumnsView":171,"./Welcome":172,"react":157}],167:[function(require,module,exports){
+=======
+},{"./DefaultLocationsSelector":161,"./Navigation":164,"./Spinner":169,"./ThreeColumnsView":171,"./ViewListings":173,"./Welcome":174,"react":157}],168:[function(require,module,exports){
+>>>>>>> ui_development
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption');
@@ -20179,14 +20391,18 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 });
 
 module.exports = SidePanel;
+<<<<<<< HEAD
 },{"./CollapsingPanelOption":160,"./SearchField":165,"react":157}],168:[function(require,module,exports){
+=======
+},{"./CollapsingPanelOption":160,"./SearchField":166,"react":157}],169:[function(require,module,exports){
+>>>>>>> ui_development
 var React = require('react');
 
 var Spinner = React.createClass({displayName: "Spinner",
 	render: function () {
 		return (
 			React.createElement("div", {className: "spinner_container"}, 
-				React.createElement("i", {className: "fa fa-spinner fa-pulse fa-5x spinner"})
+				React.createElement("i", {className: "fa fa-3x fa-spin fa-shopping-cart"})
 			)
 		);
 	}
@@ -20194,11 +20410,20 @@ var Spinner = React.createClass({displayName: "Spinner",
 
 module.exports = Spinner;
 
+<<<<<<< HEAD
 },{"react":157}],169:[function(require,module,exports){
+=======
+},{"react":157}],170:[function(require,module,exports){
+>>>>>>> ui_development
 var React = require('react'), 
 	ProductComponent = require('./ProductComponent');
 
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
+	componentDidMount: function () {
+		// Make the sidebar as long as the page height
+		$(".sidebar").height(Math.max($("#shsc_subcomponents_wrapper").height(),$(".sidebar").height()));
+	}, 
+
 	render: function () {
 		var storeProducts = [];
 		
@@ -20223,6 +20448,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 });
 
 module.exports = StoreCircularComponent;
+<<<<<<< HEAD
 },{"./ProductComponent":164,"react":157}],170:[function(require,module,exports){
 var React = require('react'), 
 	Spinner = require('./Spinner'), 
@@ -20263,8 +20489,12 @@ var StoreNavigationLogo = React.createClass({displayName: "StoreNavigationLogo",
 module.exports = StoreNavigationLogo;
 
 },{"./Spinner":168,"./StoreCircularComponent":169,"react":157}],171:[function(require,module,exports){
+=======
+},{"./ProductComponent":165,"react":157}],171:[function(require,module,exports){
+>>>>>>> ui_development
 var React = require('react'), 
-	StoreNavigationLogo = require('./StoreNavigationLogo');
+	StoreCircularComponent = require('./StoreCircularComponent'), 
+	Spinner = require('./Spinner');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	getInitialState: function () {
@@ -20279,26 +20509,24 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 	getDefaultProps: function () {
 		return {
-			'viewType': 'threeColumns'
+			'viewType': 'threeColumns', 
+			'columnPositions': ["left", "middle", "right"]
 		};
 	}, 
 
+	getColumnID: function (index) { 
+
+		return "column_" + this.props.columnPositions[index];
+	}, 
+
 	componentDidMount: function () {
-		
-		$.get('/ShopScraperNavigation', function (storeLogoData) {
-			var i = 0, 
-				columnID;
+		var columnID, i;
 
-			storeLogoData = JSON.parse(storeLogoData); 
+		for (i = 0; i < this.props.columnPositions.length; i++) {
+			columnID = this.getColumnID(i); 
 
-			for (columnID in this.state.isOccupied) {
-				React.render(React.createElement(StoreNavigationLogo, {store: storeLogoData[i]}), 
-					document.getElementById(columnID));
-				
-				i++;
-				this.state.isOccupied[columnID] = true;
-			}
-		}.bind(this));
+			React.render(this.props.listings[i], document.getElementById(columnID));
+		}
 	}, 
 
 	render: function () {
@@ -20324,6 +20552,7 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
+<<<<<<< HEAD
 },{"./StoreNavigationLogo":170,"react":157}],172:[function(require,module,exports){
 var React = require('react'), 
 	// DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
@@ -20362,6 +20591,126 @@ var Welcome = React.createClass({displayName: "Welcome",
 	}, 
 
 	render: function () {
+=======
+},{"./Spinner":169,"./StoreCircularComponent":170,"react":157}],172:[function(require,module,exports){
+var React = require('react');
+
+var TwoColumnsView = React.createClass({displayName: "TwoColumnsView",
+	getDefaultProps: function () {
+		return {
+			'viewType': 'twoColumns'
+		};
+	}, 
+
+	render: function () {
+		return (
+			React.createElement("div", {id: "two_columns_view"}, 
+				React.createElement("div", {id: "container_two_columns", className: "container"}, 
+					React.createElement("div", {id: "two_columns_row", className: "row"}, 
+						React.createElement("div", {className: "col-md-2"}), 
+						React.createElement("div", {id: "column_left", className: "col-md-3"}
+						), 
+						React.createElement("div", {className: "col-md-2"}), 
+						React.createElement("div", {id: "column_right", className: "col-md-3"}
+						), 
+						React.createElement("div", {className: "col-md-2"})
+					)
+				)
+			)			
+		);
+	}
+});
+
+module.exports = TwoColumnsView;
+
+},{"react":157}],173:[function(require,module,exports){
+var React = require('react'), 
+	Spinner = require('./Spinner'), 
+	StoreCircularComponent = require('./StoreCircularComponent'),
+	LoadingOverlay = require('./LoadingOverlay'),  
+	ThreeColumnsView = require('./ThreeColumnsView'), 
+	TwoColumnsView = require('./TwoColumnsView');
+
+var ViewListings = React.createClass({displayName: "ViewListings",
+	getInitialState: function () {
+		return {
+			'currentView': React.createElement(LoadingOverlay, null)
+		};
+	}, 
+
+	componentDidMount: function () {
+		// TESTING OUT LOADING OVERLAY
+		// $('body').addClass('loading_overlay');
+		// React.render(<Spinner />, document.getElementById('window_wrapper'));
+		this.props.toggleLoadingOverlay();
+
+		var circularListingsComponents = [];
+
+		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
+			
+			storeListings.map(function (store) {
+				circularListingsComponents.push(React.createElement(StoreCircularComponent, {circularData: store}));
+			});
+
+			this.setState({'currentView': React.createElement(ThreeColumnsView, {listings: circularListingsComponents})});
+			
+			// TESTING OUT LOADING OVERLAY 
+			// $('body').removeClass('loading_overlay');
+			this.props.toggleLoadingOverlay();
+
+		}.bind(this));
+	}, 
+
+	render: function () {
+		return (
+			React.createElement("div", {id: "view_listings_component"}, 
+				this.state.currentView
+			)
+		);
+	}
+});
+
+module.exports = ViewListings;
+
+},{"./LoadingOverlay":162,"./Spinner":169,"./StoreCircularComponent":170,"./ThreeColumnsView":171,"./TwoColumnsView":172,"react":157}],174:[function(require,module,exports){
+var React = require('react'), 
+	// DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
+	// ThreeColumnsView = require('./ThreeColumnsView'), 
+	WelcomeColumn = require('./WelcomeColumn'); 
+
+var Welcome = React.createClass({displayName: "Welcome", 
+	getInitialState: function () {
+		return {
+			columnData: []
+		};
+	}, 
+
+	componentDidMount: function () {
+		var infoColumnsData;
+
+		$.get('/WelcomePageDomData', function (data) {
+			infoColumnsData = data.pop().welcomePage.infoColumns;
+			
+			this.handleDomData(infoColumnsData);
+		
+		}.bind(this));	
+	}, 
+
+	handleDomData: function (data) {
+		var columns = [];
+
+		data.forEach(function (columnObj, index) {
+			columns[index] = React.createElement(WelcomeColumn, {columnID: columnObj.columnID, key: index, text: columnObj.text, glyphiconClass: columnObj.glyphiconClass});
+			return;
+		});
+
+		this.setState({columnData: columns});
+
+		return;
+	}, 
+
+	render: function () {
+>>>>>>> ui_development
  		return (
 			React.createElement("div", {className: "welcome_container"}, 
 				React.createElement("div", {id: "jumbotron_container", className: "container"}, 
@@ -20375,6 +20724,14 @@ var Welcome = React.createClass({displayName: "Welcome",
 								React.createElement("span", {id: "welcome_button_glyph", className: "fa fa-shopping-cart"}), " Click to Get Started")
 							)
 						)
+<<<<<<< HEAD
+					)
+				), 
+				React.createElement("div", {id: "landing_page_info_container", className: "container"}, 
+					React.createElement("div", {id: "landing_page_info", className: "row"}, 
+						this.state.columnData
+=======
+>>>>>>> ui_development
 					)
 				), 
 				React.createElement("div", {id: "landing_page_info_container", className: "container"}, 
@@ -20389,7 +20746,11 @@ var Welcome = React.createClass({displayName: "Welcome",
 
 module.exports = Welcome;
 
+<<<<<<< HEAD
 },{"./WelcomeColumn":173,"react":157}],173:[function(require,module,exports){
+=======
+},{"./WelcomeColumn":175,"react":157}],175:[function(require,module,exports){
+>>>>>>> ui_development
 var React = require('react');
 
 var WelcomeColumn = React.createClass({displayName: "WelcomeColumn",

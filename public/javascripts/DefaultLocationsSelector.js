@@ -9,6 +9,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 	}, 
 
 	componentDidMount: function () {
+<<<<<<< HEAD
 		$.get('/test/SelectLocationDefaults', function (data) {
 			var json = JSON.parse(data)[0];
 			
@@ -33,6 +34,42 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						return locations.push(React.createElement("option", {key: location.storeID, value: location._id}, selectionText));
 					} 
 				}.bind(this));
+=======
+		$.get('/SelectLocationDefaults', function (data) {
+
+			this.setState({
+				storeLogoData: data.logoData, 
+				storeLocationData: data.locationData
+			});
+
+		}.bind(this));
+	}, 
+
+	createArrayOfLocationOptions: function (logo) {
+		var locations = [],  
+			selectionText;
+
+		this.state.storeLocationData.map(function (location) {
+			selectionText = location.name + " \u2014 " + location.address;
+
+			if (location.companyID === logo.storeID) {
+				return locations.push(React.createElement("option", {key: location.storeID, value: location.storeID}, selectionText));
+			} 
+		}.bind(this));	
+
+		return locations;	
+	},
+
+	createLocationSelectors: function (locationSelectors) {
+		var selectElementID;
+
+		if (this.state.storeLogoData && this.state.storeLocationData) {
+			this.state.storeLogoData.map(function (logo) {
+
+				var locations = this.createArrayOfLocationOptions(logo);
+
+				selectElementID = "selectElement_" + logo.storeID;
+>>>>>>> ui_development
 
 				return locationSelectors.push(
 					React.createElement("div", {key: logo.storeID, className: "location_selector_container"}, 
@@ -46,8 +83,13 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						React.createElement("div", {className: "row"}, 
 							React.createElement("div", {className: "col-md-1"}), 
 							React.createElement("div", {className: "col-md-8 select_dom_element_container"}, 
+<<<<<<< HEAD
 								React.createElement("select", {className: "form-control locations_selector"}, 
 									React.createElement("option", {value: logo.storeID}, "*** No ", logo.storeName, " Location Selected ***"), 
+=======
+								React.createElement("select", {id: selectElementID, className: "form-control locations_dropdown"}, 
+									React.createElement("option", {className: "no_selection_option", value: logo.storeID}, "*** No ", logo.storeName, " Location Selected ***"), 
+>>>>>>> ui_development
 									locations
 								)
 							), 
@@ -56,6 +98,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 					)
 				);
 			}.bind(this));
+<<<<<<< HEAD
 		} 
 		// console.log(locationSelectors);		
 	}, 
@@ -64,6 +107,37 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 		var locationSelectors = [];
 
 		this.createLocationSelectors(locationSelectors);
+=======
+		} 	
+	}, 
+
+	createLocationSelectorButtons: function (locationSelectorButtons) {
+		if (this.state.storeLogoData.length && this.state.storeLocationData.length) {
+			locationSelectorButtons.push(
+				React.createElement("div", {key: "0", id: "location_defaults_selection_buttons_container"}, 
+					React.createElement("span", {id: "location_defaults_submit_button_container", className: "defaults_button_container"}, 
+						React.createElement("button", {id: "location_defaults_submit_button", className: "btn btn-info", type: "button", onClick: this.props.handleSubmitSelections}, "Set Default Locations")
+					), 
+					React.createElement("span", {id: "location_defaults_clear_button_container", className: "defaults_button_container"}, 
+						React.createElement("button", {id: "location_defaults_clear_button", className: "btn btn-danger", type: "button", onClick: this.props.handleClearSelections}, "Clear Selected Locations")
+					)				
+				)
+			);
+
+		} else {
+			locationSelectorButtons = [];
+		}
+
+		return locationSelectorButtons;
+	}, 
+
+	render: function () {
+		var locationSelectors = [], 
+			locationSelectorButtons = [];
+
+		this.createLocationSelectors(locationSelectors);
+		this.createLocationSelectorButtons(locationSelectorButtons);
+>>>>>>> ui_development
 
 		return (
 			React.createElement("div", {className: "container"}, 
@@ -104,6 +178,7 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 						), 
 						React.createElement("div", {id: "default_submit_button_row", className: "row"}, 
 							React.createElement("div", {className: "col-md-1"}), 
+<<<<<<< HEAD
 							React.createElement("div", {id: "location_defaults_selection_buttons_container", className: "col-md-8"}, 
 								React.createElement("span", {id: "location_defaults_submit_button_container", className: "defaults_button_container"}, 
 									React.createElement("button", {id: "location_defaults_submit_button", className: "btn btn-info", type: "button"}, "Set Default Locations")
@@ -111,6 +186,10 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 								React.createElement("span", {id: "location_defaults_clear_button_container", className: "defaults_button_container"}, 
 									React.createElement("button", {id: "location_defaults_clear_button", className: "btn btn-danger", type: "button"}, "Clear Selected Locations")
 								)
+=======
+							React.createElement("div", {id: "location_defaults_selection_buttons_column", className: "col-md-8"}, 
+								locationSelectorButtons
+>>>>>>> ui_development
 							), 
 							React.createElement("div", {className: "col-md-3"})
 						)
