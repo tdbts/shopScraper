@@ -13,8 +13,10 @@ body {
 
 #navbar_container {
 	width: 100%;
+    position: fixed;
+    z-index: 5;
 }
-
+    
 #myNavbar {
     height: 0px;
 }
@@ -36,9 +38,11 @@ a {
 }
 
 #window_wrapper {
-    padding-top: 20px;
+    padding-top: 70px;
     margin-left: 250px;
     height: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 /* PLACEHOLDER */
@@ -139,7 +143,7 @@ body {
 
 
 #side-menu {
-    height: 1500px;
+    /*height: 1500px;*/
     border-right: 1px solid #e7e7e7;
     background-color: #f8f8f8;
 }
@@ -206,10 +210,10 @@ body {
     /*margin-top: 20px;*/
 }
 
-.spinner_container { 
-    text-align: center;
-    margin-top: 100px;
-}
+/*.spinner_container { */
+    /*text-align: center;*/
+    /*margin-top: 100px;*/
+/*}*/
 
 i.spinner {
     display: inline-block;
@@ -437,3 +441,39 @@ i.spinner {
     }
 }
 
+.overlayDarken {
+    background-color: rgba(96, 96, 96, 0.61);
+    z-index: 999;
+    opacity: 0.5;
+}
+
+.spinner_container { 
+    text-align: center;
+    margin-top: 20%;
+}
+
+.window_view_centered {
+    position: absolute;
+    top: 60%;
+    left: 60%;
+    transform: translate(-66%, -66%);        
+}
+
+#loading_overlay {
+    height: 100%;
+    width: 100%;
+}
+
+#loading_overlay_text_container {
+    margin-top: 25px;
+    width: 500px;
+    left: 66%;
+}
+
+#loading_overlay_text {
+    color: #fcfcfc;
+}
+
+.fa-spin {
+    font-size: 5em
+}

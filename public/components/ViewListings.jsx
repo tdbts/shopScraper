@@ -1,17 +1,23 @@
 var React = require('react'), 
 	Spinner = require('./Spinner'), 
-	StoreCircularComponent = require('./StoreCircularComponent'), 
+	StoreCircularComponent = require('./StoreCircularComponent'),
+	LoadingOverlay = require('./LoadingOverlay'),  
 	ThreeColumnsView = require('./ThreeColumnsView'), 
 	TwoColumnsView = require('./TwoColumnsView');
 
 var ViewListings = React.createClass({
 	getInitialState: function () {
 		return {
-			'currentView': null
+			'currentView': <LoadingOverlay />
 		};
 	}, 
 
 	componentDidMount: function () {
+		// TESTING OUT LOADING OVERLAY
+		// $('body').addClass('loading_overlay');
+		// React.render(<Spinner />, document.getElementById('window_wrapper'));
+		this.props.toggleLoadingOverlay();
+
 		var circularListingsComponents = [];
 
 		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
@@ -21,6 +27,11 @@ var ViewListings = React.createClass({
 			});
 
 			this.setState({'currentView': <ThreeColumnsView listings={circularListingsComponents} />});
+			
+			// TESTING OUT LOADING OVERLAY 
+			// $('body').removeClass('loading_overlay');
+			this.props.toggleLoadingOverlay();
+
 		}.bind(this));
 	}, 
 

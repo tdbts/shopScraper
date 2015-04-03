@@ -1,6 +1,7 @@
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	Welcome = require('./Welcome'), 
+	Spinner = require('./Spinner'), 
 	DefaultLocationsSelector = require('./DefaultLocationsSelector'),
 	ViewListings = require('./ViewListings'),  
 	ThreeColumnsView = require('./ThreeColumnsView');
@@ -34,7 +35,7 @@ var ShopScraper = React.createClass({
 		} else {
 			if (this.defaultsAreValid(localStorageData)) {
 
-				currentViewComponent = <ViewListings defaultLocations={localStorageData} />;
+				currentViewComponent = <ViewListings toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
 			}
 		} 
 
@@ -65,7 +66,7 @@ var ShopScraper = React.createClass({
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: <ViewListings defaultLocations={defaultData} />});	
+		this.setState({currentWindowView: <ViewListings toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={defaultData} />});	
 
 	}, 
 
@@ -76,12 +77,22 @@ var ShopScraper = React.createClass({
 		});
 	}, 
 
-	determineViewToRender: function () {
+	determineViewToRender: function () {	
 		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
 			: <Welcome onButtonClick={this.handleButtonClick} />;
 
 		return this.setState({currentWindowView: currentWindowView}); 
 	}, 
+
+	toggleLoadingOverlay: function () {
+		$('body').toggleClass('overlayDarken');
+
+		// React.render(<Spinner />, document.getElementById('window_wrapper'));
+	}, 
+
+	// removeLoadingOverlay: function () {
+	// 	$('body').removeClass('loading_overlay');
+	// }, 
 
 	render: function () {
 		return (

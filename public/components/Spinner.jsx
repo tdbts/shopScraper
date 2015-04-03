@@ -4,7 +4,7 @@ var Spinner = React.createClass({
 	render: function () {
 		return (
 			<div className="spinner_container">
-				<i className="fa fa-spinner fa-pulse fa-5x spinner"></i>
+				<i className="fa fa-3x fa-spin fa-shopping-cart"></i>
 			</div>
 		);
 	}

@@ -9,7 +9,7 @@ $(document).ready(function() {
 	React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
 });
 
-},{"./ShopScraper":166,"react":157}],2:[function(require,module,exports){
+},{"./ShopScraper":167,"react":157}],2:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -19934,6 +19934,25 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 module.exports = DefaultLocationsSelector;
 
 },{"react":157}],162:[function(require,module,exports){
+var React = require('react'), 
+	Spinner = require('./Spinner');
+
+var LoadingOverlay = React.createClass({displayName: "LoadingOverlay",
+	render: function () {
+		return (
+			React.createElement("div", {id: "loading_overlay"}, 
+				React.createElement(Spinner, null), 
+				React.createElement("div", {id: "loading_overlay_text_container", className: "window_view_centered"}, 
+					React.createElement("h1", {id: "loading_overlay_text"}, "Hang on!  We're finding out what's on sale this week!")
+				)
+			)
+		);
+	}
+});
+
+module.exports = LoadingOverlay;
+
+},{"./Spinner":169,"react":157}],163:[function(require,module,exports){
 var React = require('react');
 
 var Navbar = React.createClass({displayName: "Navbar",
@@ -20000,7 +20019,7 @@ var Navbar = React.createClass({displayName: "Navbar",
 });
 
 module.exports = Navbar;
-},{"react":157}],163:[function(require,module,exports){
+},{"react":157}],164:[function(require,module,exports){
 var React = require('react'), 
 	Navbar = require('./Navbar'), 
 	SidePanel = require('./SidePanel');
@@ -20021,9 +20040,33 @@ var Navigation = React.createClass({displayName: "Navigation",
 });
 
 module.exports = Navigation;
-},{"./Navbar":162,"./SidePanel":167,"react":157}],164:[function(require,module,exports){
+},{"./Navbar":163,"./SidePanel":168,"react":157}],165:[function(require,module,exports){
+var React = require('react');
 
-},{}],165:[function(require,module,exports){
+var ProductComponent = React.createClass({displayName: "ProductComponent",
+	render: function () {
+		return (
+			React.createElement("div", {className: "product_info"}, 
+				React.createElement("div", {className: "container_product_name"}, 
+					React.createElement("h3", {className: "product_name"}, this.props.product.productName)
+				), 
+				React.createElement("div", {className: "container_product_description"}, 
+					React.createElement("p", {className: "product_description"}, this.props.product.productDescription)
+				), 
+				React.createElement("div", {className: "container_product_price"}, 
+					React.createElement("p", {className: "product_price"}, React.createElement("strong", null, this.props.product.price))
+				), 
+				React.createElement("div", {className: "container_product_image"}, 
+					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
+				)
+			)
+		);
+	}
+});	
+
+module.exports = ProductComponent;
+
+},{"react":157}],166:[function(require,module,exports){
 /* 
 * SearchField component requires FontAwesome for the magnifying glass icon.
 */
@@ -20046,10 +20089,11 @@ var SearchField = React.createClass({displayName: "SearchField",
 });
 
 module.exports = SearchField;
-},{"react":157}],166:[function(require,module,exports){
+},{"react":157}],167:[function(require,module,exports){
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	Welcome = require('./Welcome'), 
+	Spinner = require('./Spinner'), 
 	DefaultLocationsSelector = require('./DefaultLocationsSelector'),
 	ViewListings = require('./ViewListings'),  
 	ThreeColumnsView = require('./ThreeColumnsView');
@@ -20083,7 +20127,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		} else {
 			if (this.defaultsAreValid(localStorageData)) {
 
-				currentViewComponent = React.createElement(ViewListings, {defaultLocations: localStorageData});
+				currentViewComponent = React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
 			}
 		} 
 
@@ -20114,7 +20158,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: React.createElement(ViewListings, {defaultLocations: defaultData})});	
+		this.setState({currentWindowView: React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
 
 	}, 
 
@@ -20125,12 +20169,22 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		});
 	}, 
 
-	determineViewToRender: function () {
+	determineViewToRender: function () {	
 		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
 			: React.createElement(Welcome, {onButtonClick: this.handleButtonClick});
 
 		return this.setState({currentWindowView: currentWindowView}); 
 	}, 
+
+	toggleLoadingOverlay: function () {
+		$('body').toggleClass('overlayDarken');
+
+		// React.render(<Spinner />, document.getElementById('window_wrapper'));
+	}, 
+
+	// removeLoadingOverlay: function () {
+	// 	$('body').removeClass('loading_overlay');
+	// }, 
 
 	render: function () {
 		return (
@@ -20148,7 +20202,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 module.exports = ShopScraper;
 
-},{"./DefaultLocationsSelector":161,"./Navigation":163,"./ThreeColumnsView":170,"./ViewListings":172,"./Welcome":173,"react":157}],167:[function(require,module,exports){
+},{"./DefaultLocationsSelector":161,"./Navigation":164,"./Spinner":169,"./ThreeColumnsView":171,"./ViewListings":173,"./Welcome":174,"react":157}],168:[function(require,module,exports){
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption');
@@ -20225,14 +20279,14 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 });
 
 module.exports = SidePanel;
-},{"./CollapsingPanelOption":160,"./SearchField":165,"react":157}],168:[function(require,module,exports){
+},{"./CollapsingPanelOption":160,"./SearchField":166,"react":157}],169:[function(require,module,exports){
 var React = require('react');
 
 var Spinner = React.createClass({displayName: "Spinner",
 	render: function () {
 		return (
 			React.createElement("div", {className: "spinner_container"}, 
-				React.createElement("i", {className: "fa fa-spinner fa-pulse fa-5x spinner"})
+				React.createElement("i", {className: "fa fa-3x fa-spin fa-shopping-cart"})
 			)
 		);
 	}
@@ -20240,11 +20294,16 @@ var Spinner = React.createClass({displayName: "Spinner",
 
 module.exports = Spinner;
 
-},{"react":157}],169:[function(require,module,exports){
+},{"react":157}],170:[function(require,module,exports){
 var React = require('react'), 
 	ProductComponent = require('./ProductComponent');
 
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
+	componentDidMount: function () {
+		// Make the sidebar as long as the page height
+		$(".sidebar").height(Math.max($("#shsc_subcomponents_wrapper").height(),$(".sidebar").height()));
+	}, 
+
 	render: function () {
 		var storeProducts = [];
 		
@@ -20269,7 +20328,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 });
 
 module.exports = StoreCircularComponent;
-},{"./ProductComponent":164,"react":157}],170:[function(require,module,exports){
+},{"./ProductComponent":165,"react":157}],171:[function(require,module,exports){
 var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
 	Spinner = require('./Spinner');
@@ -20330,7 +20389,7 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"./Spinner":168,"./StoreCircularComponent":169,"react":157}],171:[function(require,module,exports){
+},{"./Spinner":169,"./StoreCircularComponent":170,"react":157}],172:[function(require,module,exports){
 var React = require('react');
 
 var TwoColumnsView = React.createClass({displayName: "TwoColumnsView",
@@ -20361,21 +20420,27 @@ var TwoColumnsView = React.createClass({displayName: "TwoColumnsView",
 
 module.exports = TwoColumnsView;
 
-},{"react":157}],172:[function(require,module,exports){
+},{"react":157}],173:[function(require,module,exports){
 var React = require('react'), 
 	Spinner = require('./Spinner'), 
-	StoreCircularComponent = require('./StoreCircularComponent'), 
+	StoreCircularComponent = require('./StoreCircularComponent'),
+	LoadingOverlay = require('./LoadingOverlay'),  
 	ThreeColumnsView = require('./ThreeColumnsView'), 
 	TwoColumnsView = require('./TwoColumnsView');
 
 var ViewListings = React.createClass({displayName: "ViewListings",
 	getInitialState: function () {
 		return {
-			'currentView': null
+			'currentView': React.createElement(LoadingOverlay, null)
 		};
 	}, 
 
 	componentDidMount: function () {
+		// TESTING OUT LOADING OVERLAY
+		// $('body').addClass('loading_overlay');
+		// React.render(<Spinner />, document.getElementById('window_wrapper'));
+		this.props.toggleLoadingOverlay();
+
 		var circularListingsComponents = [];
 
 		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
@@ -20385,6 +20450,11 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 			});
 
 			this.setState({'currentView': React.createElement(ThreeColumnsView, {listings: circularListingsComponents})});
+			
+			// TESTING OUT LOADING OVERLAY 
+			// $('body').removeClass('loading_overlay');
+			this.props.toggleLoadingOverlay();
+
 		}.bind(this));
 	}, 
 
@@ -20399,7 +20469,7 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 
 module.exports = ViewListings;
 
-},{"./Spinner":168,"./StoreCircularComponent":169,"./ThreeColumnsView":170,"./TwoColumnsView":171,"react":157}],173:[function(require,module,exports){
+},{"./LoadingOverlay":162,"./Spinner":169,"./StoreCircularComponent":170,"./ThreeColumnsView":171,"./TwoColumnsView":172,"react":157}],174:[function(require,module,exports){
 var React = require('react'), 
 	// DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
 	// ThreeColumnsView = require('./ThreeColumnsView'), 
@@ -20464,7 +20534,7 @@ var Welcome = React.createClass({displayName: "Welcome",
 
 module.exports = Welcome;
 
-},{"./WelcomeColumn":174,"react":157}],174:[function(require,module,exports){
+},{"./WelcomeColumn":175,"react":157}],175:[function(require,module,exports){
 var React = require('react');
 
 var WelcomeColumn = React.createClass({displayName: "WelcomeColumn",
