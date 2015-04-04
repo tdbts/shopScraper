@@ -1,6 +1,4 @@
 var React = require('react'), 
-	// DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
-	// ThreeColumnsView = require('./ThreeColumnsView'), 
 	WelcomeColumn = require('./WelcomeColumn'); 
 
 var Welcome = React.createClass({displayName: "Welcome", 

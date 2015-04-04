@@ -20177,14 +20177,9 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 	}, 
 
 	toggleLoadingOverlay: function () {
+		
 		$('body').toggleClass('overlayDarken');
-
-		// React.render(<Spinner />, document.getElementById('window_wrapper'));
 	}, 
-
-	// removeLoadingOverlay: function () {
-	// 	$('body').removeClass('loading_overlay');
-	// }, 
 
 	render: function () {
 		return (
@@ -20301,7 +20296,7 @@ var React = require('react'),
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
 	componentDidMount: function () {
 		// Make the sidebar as long as the page height
-		$(".sidebar").height(Math.max($("#shsc_subcomponents_wrapper").height(),$(".sidebar").height()));
+		$(".sidebar").height(Math.max($("#shsc_subcomponents_wrapper").height(), $(".sidebar").height()));
 	}, 
 
 	render: function () {
@@ -20328,6 +20323,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 });
 
 module.exports = StoreCircularComponent;
+
 },{"./ProductComponent":165,"react":157}],171:[function(require,module,exports){
 var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
@@ -20471,8 +20467,6 @@ module.exports = ViewListings;
 
 },{"./LoadingOverlay":162,"./Spinner":169,"./StoreCircularComponent":170,"./ThreeColumnsView":171,"./TwoColumnsView":172,"react":157}],174:[function(require,module,exports){
 var React = require('react'), 
-	// DefaultLocationsSelector = require('./DefaultLocationsSelector'), 
-	// ThreeColumnsView = require('./ThreeColumnsView'), 
 	WelcomeColumn = require('./WelcomeColumn'); 
 
 var Welcome = React.createClass({displayName: "Welcome", 

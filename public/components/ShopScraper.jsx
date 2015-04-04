@@ -21,8 +21,8 @@ var ShopScraper = React.createClass({
 		var parsedLocalStorageData = JSON.parse(localStorageData);
 
 		return (parsedLocalStorageData.length > 1) && (parsedLocalStorageData.every(function (obj) {
-				return obj.hasOwnProperty('companyID') && obj.hasOwnProperty('defaultLocationID');
-			}));
+			return obj.hasOwnProperty('companyID') && obj.hasOwnProperty('defaultLocationID');
+		}));
 	}, 
 
 	getLocalStorageBasedComponent: function () {
@@ -85,14 +85,9 @@ var ShopScraper = React.createClass({
 	}, 
 
 	toggleLoadingOverlay: function () {
+		
 		$('body').toggleClass('overlayDarken');
-
-		// React.render(<Spinner />, document.getElementById('window_wrapper'));
 	}, 
-
-	// removeLoadingOverlay: function () {
-	// 	$('body').removeClass('loading_overlay');
-	// }, 
 
 	render: function () {
 		return (
