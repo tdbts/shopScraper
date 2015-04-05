@@ -35,10 +35,16 @@ module.exports = function (req, res) {
 		var dataForScrapes = assembleDataForScrapes(results.locations, results.scrapeConfigs);
 
 		async.map(dataForScrapes, function (data, callback) {
+			// DEVELOPMENT ONLY -- BIG Y BUG FIX
+			// console.log("BEFORE WIRING: ");
 			wireDatabaseToScrapersAndScrape(res, data, callback);
 		}, 
 		function (err, results) {
+			// DEVELOPMENT ONLY -- BIG Y BUG FIX
+			console.log("FINAL CALLBACK ERROR: ", err);
 			if (!err) {
+				// DEVELOPMENT ONLY -- BIG Y BUG FIX
+				console.log("AFTER WIRING AND SCRAPE.");
 				console.log("LINE 68 - results from scrapes: \n", results);
 				res.json(results);
 			}

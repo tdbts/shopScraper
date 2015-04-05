@@ -66,8 +66,9 @@ var scrapeShopRite = scraper.extend({
 
 					self.assignIDsToProducts(circularData.products);
 					
-					console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
-					
+					// DEVELOPMENT ONLY -- BIG Y BUG FIX
+					// console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
+					// console.log("ERR: ", err);
 					callback(err, circularData);
 				}				
 			});		
@@ -86,7 +87,8 @@ var scrapeShopRite = scraper.extend({
 		scrapers.forEach(function (scraper) {
 			scraper.extendConfig(configData);
 		});
-		
+		// BIG FIX
+		console.log("SCRAPING PAGE: ", this.config.baseURL + this.config.circularNumber);
 		getCircularNumberOfPages.scrape(this.config.baseURL + this.config.circularNumber, function (err, pagesArray) {
 			self.scrapeCircular(pagesArray, callback);
 		});

@@ -29,15 +29,12 @@ var ShopScraper = React.createClass({
 		var localStorageData = this.getDataFromLocalStorage(), 
 			currentViewComponent;
 
-		if (!localStorageData || !this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = <DefaultLocationsSelector handleSubmitSelections={this.handleSubmitSelections} handleClearSelections={this.handleClearSelections} />;
+		if (localStorageData && this.defaultsAreValid(localStorageData)) {
+			currentViewComponent = <ViewListings toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
 		
 		} else {
-			if (this.defaultsAreValid(localStorageData)) {
-
-				currentViewComponent = <ViewListings toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
-			}
-		} 
+			currentViewComponent = <DefaultLocationsSelector handleSubmitSelections={this.handleSubmitSelections} handleClearSelections={this.handleClearSelections} />;
+		}
 
 		return currentViewComponent;
 	}, 
@@ -58,9 +55,7 @@ var ShopScraper = React.createClass({
 
 	handleSubmitSelections: function () {
 
-		var defaultData = this.getDefaultDataFromSelections();
-
-		defaultData = JSON.stringify(defaultData);
+		var defaultData = JSON.stringify(this.getDefaultDataFromSelections());
 
 		if (localStorage) {
 			localStorage.setItem('userDefaultLocations', defaultData);

@@ -38,7 +38,7 @@ a {
 }
 
 #window_wrapper {
-    padding-top: 70px;
+    padding: 70px 0px 50px 0px;
     margin-left: 250px;
     height: 100%;
     position: relative;
@@ -442,7 +442,7 @@ i.spinner {
 }
 
 .overlayDarken {
-    background-color: rgba(96, 96, 96, 0.61);
+    background-color: rgba(96, 96, 96, 0.99);
     z-index: 999;
     opacity: 0.5;
 }

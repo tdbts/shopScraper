@@ -82,6 +82,8 @@ var scrapeBigY = scraper.extend({
 
 		config.storeID = data.preferences.pop().storeID;
 
+		// DEVELOPMENT ONLY -- BIG Y BUG FIX
+		// console.log("Big Y URL: ", config.circularDataURL + config.storeID);
 		this.makeRequest(config.circularDataURL + config.storeID, self.handleRequestResults, callback);
 	}, 
 

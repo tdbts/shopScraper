@@ -20113,23 +20113,20 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		var parsedLocalStorageData = JSON.parse(localStorageData);
 
 		return (parsedLocalStorageData.length > 1) && (parsedLocalStorageData.every(function (obj) {
-				return obj.hasOwnProperty('companyID') && obj.hasOwnProperty('defaultLocationID');
-			}));
+			return obj.hasOwnProperty('companyID') && obj.hasOwnProperty('defaultLocationID');
+		}));
 	}, 
 
 	getLocalStorageBasedComponent: function () {
 		var localStorageData = this.getDataFromLocalStorage(), 
 			currentViewComponent;
 
-		if (!localStorageData || !this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
+		if (localStorageData && this.defaultsAreValid(localStorageData)) {
+			currentViewComponent = React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
 		
 		} else {
-			if (this.defaultsAreValid(localStorageData)) {
-
-				currentViewComponent = React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
-			}
-		} 
+			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
+		}
 
 		return currentViewComponent;
 	}, 
@@ -20150,9 +20147,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 	handleSubmitSelections: function () {
 
-		var defaultData = this.getDefaultDataFromSelections();
-
-		defaultData = JSON.stringify(defaultData);
+		var defaultData = JSON.stringify(this.getDefaultDataFromSelections());
 
 		if (localStorage) {
 			localStorage.setItem('userDefaultLocations', defaultData);

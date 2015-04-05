@@ -7,6 +7,8 @@ module.exports = function (res, dataForScrape, callback) {
 
 	storeRouteMapper[storeName].scrape(dataForScrape, function (err, circularData) {
 		if (!err) {
+			// DEVELOPMENT ONLY - BIG Y BUG FIX
+			// console.log("FINAL RESULTS: ", storeName, " ", circularData.products.length, " products.");
 			callback(null, circularData);
 		}
 	});
