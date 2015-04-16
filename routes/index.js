@@ -5,7 +5,7 @@ var express = require('express'),
 	getListingsFromUserDefaults = require('../src/getListingsFromUserDefaults'), 
 	handleScrapeRequest = require('../src/handleScrapeRequest');
 
-/* GET home page. */
+/* ROUTES */
 router.get('/', function (req, res) {
 
 	res.render('index');
