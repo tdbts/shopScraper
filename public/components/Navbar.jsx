@@ -11,7 +11,7 @@ var Navbar = React.createClass({
 	                    <span className="icon-bar"></span>
 	                    <span className="icon-bar"></span>
 	                </button>
-	                <a className="navbar-brand" href="index.html">Shop Scraper</a>
+	                <a className="navbar-brand" href="/">Shop Scraper</a>
 	            </div>        
 	            <div id="myNavbar" className="navbar-collapse collapse">
 	                <div id="navbar_left_wrapper">    

@@ -11,7 +11,7 @@ var Navbar = React.createClass({displayName: "Navbar",
 	                    React.createElement("span", {className: "icon-bar"}), 
 	                    React.createElement("span", {className: "icon-bar"})
 	                ), 
-	                React.createElement("a", {className: "navbar-brand", href: "index.html"}, "Shop Scraper")
+	                React.createElement("a", {className: "navbar-brand", href: "/"}, "Shop Scraper")
 	            ), 
 	            React.createElement("div", {id: "myNavbar", className: "navbar-collapse collapse"}, 
 	                React.createElement("div", {id: "navbar_left_wrapper"}, 

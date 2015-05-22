@@ -41,11 +41,11 @@ module.exports = function (req, res) {
 		}, 
 		function (err, results) {
 			// DEVELOPMENT ONLY -- BIG Y BUG FIX
-			console.log("FINAL CALLBACK ERROR: ", err);
+			// console.log("FINAL CALLBACK ERROR: ", err);
 			if (!err) {
 				// DEVELOPMENT ONLY -- BIG Y BUG FIX
-				console.log("AFTER WIRING AND SCRAPE.");
-				console.log("LINE 68 - results from scrapes: \n", results);
+				// console.log("AFTER WIRING AND SCRAPE.");
+				// console.log("LINE 68 - results from scrapes: \n", results);
 				res.json(results);
 			}
 		});
