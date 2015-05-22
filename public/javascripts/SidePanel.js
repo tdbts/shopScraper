@@ -54,7 +54,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 		        React.createElement("div", {className: "sidebar-nav navbar-collapse"}, 
 		            React.createElement("ul", {className: "nav", id: "side-menu"}, 
 		                React.createElement("li", {className: "sidebar-search"}, 
-		                    React.createElement(SearchField, null)
+		                    React.createElement(SearchField, {inputText: this.props.inputText})
 		                ), 
 		                React.createElement(CollapsingPanelOption, {config: dashboardOptionConfig}), 
 		                React.createElement(CollapsingPanelOption, {config: favoritesOptionConfig}), 

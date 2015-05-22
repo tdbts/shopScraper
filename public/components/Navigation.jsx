@@ -10,7 +10,7 @@ var Navigation = React.createClass({
 		        	<Navbar />
 		        </nav>
 		        <nav id="sidepanel_container">
-		        	<SidePanel />
+		        	<SidePanel inputText={this.props.inputText} />
 		        </nav>
 	        </div>			
 		);

@@ -9,7 +9,8 @@ var React = require('react'),
 var ShopScraper = React.createClass({
 	getInitialState: function () {
 		return {
-			currentWindowView: <Welcome onButtonClick={this.determineViewToRender} />
+			currentWindowView: <Welcome onButtonClick={this.determineViewToRender} />, 
+			inputText: ""
 		};
 	}, 
 
@@ -88,7 +89,7 @@ var ShopScraper = React.createClass({
 		return (
 			<div id="shsc_subcomponents_wrapper">
 				<div id="navigation_wrapper">
-					<Navigation />
+					<Navigation inputText={this.state.inputText} />
 				</div>
 				<div id="window_wrapper">
 					{this.state.currentWindowView}

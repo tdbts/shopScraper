@@ -9,7 +9,8 @@ var React = require('react'),
 var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
-			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender})
+			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender}), 
+			inputText: ""
 		};
 	}, 
 
@@ -88,7 +89,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
 				React.createElement("div", {id: "navigation_wrapper"}, 
-					React.createElement(Navigation, null)
+					React.createElement(Navigation, {inputText: this.state.inputText})
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
 					this.state.currentWindowView
