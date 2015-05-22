@@ -17,14 +17,19 @@ var ViewListings = React.createClass({
 		var circularListingsComponents = [];
 
 		storeListings.map(function (store) { 
-			var products = []; 
+			var products = [];
 
 			store.products.forEach(function (productData) {
-				products.push(<ProductComponent key={productData.shsc_id} {...productData} />);
-			});
+				if (productData.productName.indexOf(this.props.searchFieldText !== -1) || productData.productDescription.indexOf(this.props.searchFieldText !== -1)) {
+				
+					products.push(<ProductComponent key={productData.shsc_id} {...productData} />);
+				}
+
+				return;
+			}.bind(this));
 
 			circularListingsComponents.push(<StoreCircularComponent storeName={store.storeName} startDate={store.startDate} endDate={store.endDate} products={products} />);
-		});
+		}.bind(this));
 
 		this.setState({'currentView': <ThreeColumnsView listings={circularListingsComponents} />});
 		

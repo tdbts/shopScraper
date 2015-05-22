@@ -54,7 +54,7 @@ var SidePanel = React.createClass({
 		        <div className="sidebar-nav navbar-collapse">
 		            <ul className="nav" id="side-menu">
 		                <li className="sidebar-search">
-		                    <SearchField inputText={this.props.inputText} />
+		                    <SearchField searchFieldText={this.props.searchFieldText} />
 		                </li>
 		                <CollapsingPanelOption config={dashboardOptionConfig} />
 		                <CollapsingPanelOption config={favoritesOptionConfig} />

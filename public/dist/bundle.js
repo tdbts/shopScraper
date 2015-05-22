@@ -20032,7 +20032,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 		        	React.createElement(Navbar, null)
 		        ), 
 		        React.createElement("nav", {id: "sidepanel_container"}, 
-		        	React.createElement(SidePanel, {inputText: this.props.inputText})
+		        	React.createElement(SidePanel, {searchFieldText: this.props.searchFieldText})
 		        )
 	        )			
 		);
@@ -20077,7 +20077,7 @@ var SearchField = React.createClass({displayName: "SearchField",
 	render: function () {
 		return (
             React.createElement("div", {className: "input-group custom-search-form"}, 
-                React.createElement("input", {type: "text", className: "form-control", value: this.props.inputText, placeholder: "Search..."}), 
+                React.createElement("input", {type: "text", className: "form-control", value: this.props.searchFieldText, placeholder: "Search..."}), 
                 React.createElement("span", {className: "input-group-btn"}, 
                     React.createElement("button", {className: "btn btn-default", type: "button"}, 
                         React.createElement("span", {className: "fa fa-search"})
@@ -20102,7 +20102,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
 			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender}), 
-			inputText: ""
+			searchFieldText: ""
 		};
 	}, 
 
@@ -20123,7 +20123,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			currentViewComponent;
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
+			currentViewComponent = React.createElement(ViewListings, {searchFieldText: this.state.searchFieldText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
 		
 		} else {
 			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
@@ -20154,7 +20154,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
+		this.setState({currentWindowView: React.createElement(ViewListings, {searchFieldText: this.state.searchFieldText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
 
 	}, 
 
@@ -20181,7 +20181,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
 				React.createElement("div", {id: "navigation_wrapper"}, 
-					React.createElement(Navigation, {inputText: this.state.inputText})
+					React.createElement(Navigation, {searchFieldText: this.state.searchFieldText})
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
 					this.state.currentWindowView
@@ -20250,7 +20250,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 		        React.createElement("div", {className: "sidebar-nav navbar-collapse"}, 
 		            React.createElement("ul", {className: "nav", id: "side-menu"}, 
 		                React.createElement("li", {className: "sidebar-search"}, 
-		                    React.createElement(SearchField, {inputText: this.props.inputText})
+		                    React.createElement(SearchField, {searchFieldText: this.props.searchFieldText})
 		                ), 
 		                React.createElement(CollapsingPanelOption, {config: dashboardOptionConfig}), 
 		                React.createElement(CollapsingPanelOption, {config: favoritesOptionConfig}), 
@@ -20425,14 +20425,19 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 		var circularListingsComponents = [];
 
 		storeListings.map(function (store) { 
-			var products = []; 
+			var products = [];
 
 			store.products.forEach(function (productData) {
-				products.push(React.createElement(ProductComponent, React.__spread({key: productData.shsc_id},  productData)));
-			});
+				if (productData.productName.indexOf(this.props.searchFieldText !== -1) || productData.productDescription.indexOf(this.props.searchFieldText !== -1)) {
+				
+					products.push(React.createElement(ProductComponent, React.__spread({key: productData.shsc_id},  productData)));
+				}
+
+				return;
+			}.bind(this));
 
 			circularListingsComponents.push(React.createElement(StoreCircularComponent, {storeName: store.storeName, startDate: store.startDate, endDate: store.endDate, products: products}));
-		});
+		}.bind(this));
 
 		this.setState({'currentView': React.createElement(ThreeColumnsView, {listings: circularListingsComponents})});
 		

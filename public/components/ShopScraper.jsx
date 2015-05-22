@@ -10,7 +10,7 @@ var ShopScraper = React.createClass({
 	getInitialState: function () {
 		return {
 			currentWindowView: <Welcome onButtonClick={this.determineViewToRender} />, 
-			inputText: ""
+			searchFieldText: ""
 		};
 	}, 
 
@@ -31,7 +31,7 @@ var ShopScraper = React.createClass({
 			currentViewComponent;
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = <ViewListings toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
+			currentViewComponent = <ViewListings searchFieldText={this.state.searchFieldText} toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
 		
 		} else {
 			currentViewComponent = <DefaultLocationsSelector handleSubmitSelections={this.handleSubmitSelections} handleClearSelections={this.handleClearSelections} />;
@@ -62,7 +62,7 @@ var ShopScraper = React.createClass({
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: <ViewListings toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={defaultData} />});	
+		this.setState({currentWindowView: <ViewListings searchFieldText={this.state.searchFieldText} toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={defaultData} />});	
 
 	}, 
 
@@ -89,7 +89,7 @@ var ShopScraper = React.createClass({
 		return (
 			<div id="shsc_subcomponents_wrapper">
 				<div id="navigation_wrapper">
-					<Navigation inputText={this.state.inputText} />
+					<Navigation searchFieldText={this.state.searchFieldText} />
 				</div>
 				<div id="window_wrapper">
 					{this.state.currentWindowView}

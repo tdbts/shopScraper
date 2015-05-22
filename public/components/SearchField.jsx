@@ -8,7 +8,7 @@ var SearchField = React.createClass({
 	render: function () {
 		return (
             <div className="input-group custom-search-form">
-                <input type="text" className="form-control" value={this.props.inputText} placeholder="Search..." />
+                <input type="text" className="form-control" value={this.props.searchFieldText} placeholder="Search..." />
                 <span className="input-group-btn">
                     <button className="btn btn-default" type="button">
                         <span className="fa fa-search"></span>

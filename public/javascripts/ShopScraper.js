@@ -10,7 +10,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
 			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender}), 
-			inputText: ""
+			searchFieldText: ""
 		};
 	}, 
 
@@ -31,7 +31,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			currentViewComponent;
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
+			currentViewComponent = React.createElement(ViewListings, {searchFieldText: this.state.searchFieldText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
 		
 		} else {
 			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
@@ -62,7 +62,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
+		this.setState({currentWindowView: React.createElement(ViewListings, {searchFieldText: this.state.searchFieldText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
 
 	}, 
 
@@ -89,7 +89,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
 				React.createElement("div", {id: "navigation_wrapper"}, 
-					React.createElement(Navigation, {inputText: this.state.inputText})
+					React.createElement(Navigation, {searchFieldText: this.state.searchFieldText})
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
 					this.state.currentWindowView
