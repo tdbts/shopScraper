@@ -1,5 +1,4 @@
-var React = require('react'), 
-	ProductComponent = require('./ProductComponent');
+var React = require('react');
 
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
 	componentDidMount: function () {
@@ -8,22 +7,16 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 	}, 
 
 	render: function () {
-		var storeProducts = [];
-		
-		this.props.circularData.products.forEach(function (productData) {
-			storeProducts.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
-		});
-
 		return (
 			React.createElement("div", {className: "store_circular_component"}, 
 				React.createElement("div", {className: "store_header_component"}, 
-					React.createElement("h1", {className: "header_store_name"}, this.props.circularData.storeName)
+					React.createElement("h1", {className: "header_store_name"}, this.props.storeName)
 				), 
 				React.createElement("div", {className: "store_circular_date_component"}, 
-					React.createElement("h4", {className: "store_valid_dates"}, React.createElement("em", null, "Valid from ", this.props.circularData.startDate, " to ", this.props.circularData.endDate))
+					React.createElement("h4", {className: "store_valid_dates"}, React.createElement("em", null, "Valid from ", this.props.startDate, " to ", this.props.endDate))
 				), 
 				React.createElement("div", {className: "container_circular_products"}, 
-					storeProducts
+					this.props.products
 				)
 			)
 		);

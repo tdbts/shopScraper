@@ -20286,8 +20286,7 @@ var Spinner = React.createClass({displayName: "Spinner",
 module.exports = Spinner;
 
 },{"react":157}],170:[function(require,module,exports){
-var React = require('react'), 
-	ProductComponent = require('./ProductComponent');
+var React = require('react');
 
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
 	componentDidMount: function () {
@@ -20296,22 +20295,17 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 	}, 
 
 	render: function () {
-		var storeProducts = [];
-		
-		this.props.circularData.products.forEach(function (productData) {
-			storeProducts.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
-		});
 
 		return (
 			React.createElement("div", {className: "store_circular_component"}, 
 				React.createElement("div", {className: "store_header_component"}, 
-					React.createElement("h1", {className: "header_store_name"}, this.props.circularData.storeName)
+					React.createElement("h1", {className: "header_store_name"}, this.props.storeName)
 				), 
 				React.createElement("div", {className: "store_circular_date_component"}, 
-					React.createElement("h4", {className: "store_valid_dates"}, React.createElement("em", null, "Valid from ", this.props.circularData.startDate, " to ", this.props.circularData.endDate))
+					React.createElement("h4", {className: "store_valid_dates"}, React.createElement("em", null, "Valid from ", this.props.startDate, " to ", this.props.endDate))
 				), 
 				React.createElement("div", {className: "container_circular_products"}, 
-					storeProducts
+					this.props.products
 				)
 			)
 		);
@@ -20320,7 +20314,7 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 
 module.exports = StoreCircularComponent;
 
-},{"./ProductComponent":165,"react":157}],171:[function(require,module,exports){
+},{"react":157}],171:[function(require,module,exports){
 var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
 	Spinner = require('./Spinner');
@@ -20415,7 +20409,8 @@ module.exports = TwoColumnsView;
 },{"react":157}],173:[function(require,module,exports){
 var React = require('react'), 
 	Spinner = require('./Spinner'), 
-	StoreCircularComponent = require('./StoreCircularComponent'),
+	StoreCircularComponent = require('./StoreCircularComponent'), 
+	ProductComponent = require('./ProductComponent'), 
 	LoadingOverlay = require('./LoadingOverlay'),  
 	ThreeColumnsView = require('./ThreeColumnsView'), 
 	TwoColumnsView = require('./TwoColumnsView');
@@ -20430,8 +20425,14 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 	handleStoreListingsData: function (storeListings) {
 		var circularListingsComponents = [];
 
-		storeListings.map(function (store) {
-			circularListingsComponents.push(React.createElement(StoreCircularComponent, {circularData: store}));
+		storeListings.map(function (store) { 
+			var products = []; 
+
+			store.products.forEach(function (productData) {
+				products.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
+			});
+
+			circularListingsComponents.push(React.createElement(StoreCircularComponent, {storeName: store.storeName, startDate: store.startDate, endDate: store.endDate, products: products}));
 		});
 
 		this.setState({'currentView': React.createElement(ThreeColumnsView, {listings: circularListingsComponents})});
@@ -20465,7 +20466,7 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 
 module.exports = ViewListings;
 
-},{"./LoadingOverlay":162,"./Spinner":169,"./StoreCircularComponent":170,"./ThreeColumnsView":171,"./TwoColumnsView":172,"react":157}],174:[function(require,module,exports){
+},{"./LoadingOverlay":162,"./ProductComponent":165,"./Spinner":169,"./StoreCircularComponent":170,"./ThreeColumnsView":171,"./TwoColumnsView":172,"react":157}],174:[function(require,module,exports){
 var React = require('react'), 
 	WelcomeColumn = require('./WelcomeColumn'); 
 

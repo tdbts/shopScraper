@@ -1,6 +1,7 @@
 var React = require('react'), 
 	Spinner = require('./Spinner'), 
-	StoreCircularComponent = require('./StoreCircularComponent'),
+	StoreCircularComponent = require('./StoreCircularComponent'), 
+	ProductComponent = require('./ProductComponent'), 
 	LoadingOverlay = require('./LoadingOverlay'),  
 	ThreeColumnsView = require('./ThreeColumnsView'), 
 	TwoColumnsView = require('./TwoColumnsView');
@@ -15,8 +16,14 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 	handleStoreListingsData: function (storeListings) {
 		var circularListingsComponents = [];
 
-		storeListings.map(function (store) {
-			circularListingsComponents.push(React.createElement(StoreCircularComponent, {circularData: store}));
+		storeListings.map(function (store) { 
+			var products = []; 
+
+			store.products.forEach(function (productData) {
+				products.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
+			});
+
+			circularListingsComponents.push(React.createElement(StoreCircularComponent, {storeName: store.storeName, startDate: store.startDate, endDate: store.endDate, products: products}));
 		});
 
 		this.setState({'currentView': React.createElement(ThreeColumnsView, {listings: circularListingsComponents})});
