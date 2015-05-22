@@ -20428,7 +20428,11 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 			var products = [];
 
 			store.products.forEach(function (productData) {
-				if (productData.productName.indexOf(this.props.searchFieldText !== -1) || productData.productDescription.indexOf(this.props.searchFieldText !== -1)) {
+				var productName = productData.productName.toLowerCase(), 
+					productDescription = productData.productDescription.toLowerCase(), 
+					searchFieldText = this.props.searchFieldText.toLowerCase();
+
+				if ((productName.indexOf(searchFieldText) !== -1) || (productDescription.indexOf(this.props.searchFieldText) !== -1)) {
 				
 					products.push(React.createElement(ProductComponent, React.__spread({key: productData.shsc_id},  productData)));
 				}
