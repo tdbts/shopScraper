@@ -20048,16 +20048,16 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 		return (
 			React.createElement("div", {className: "product_info"}, 
 				React.createElement("div", {className: "container_product_name"}, 
-					React.createElement("h3", {className: "product_name"}, this.props.product.productName)
+					React.createElement("h3", {className: "product_name"}, this.props.productName)
 				), 
 				React.createElement("div", {className: "container_product_description"}, 
-					React.createElement("p", {className: "product_description"}, this.props.product.productDescription)
+					React.createElement("p", {className: "product_description"}, this.props.productDescription)
 				), 
 				React.createElement("div", {className: "container_product_price"}, 
-					React.createElement("p", {className: "product_price"}, React.createElement("strong", null, this.props.product.price))
+					React.createElement("p", {className: "product_price"}, React.createElement("strong", null, this.props.price))
 				), 
 				React.createElement("div", {className: "container_product_image"}, 
-					React.createElement("img", {className: "product_image", src: this.props.product.imageUrl})
+					React.createElement("img", {className: "product_image", src: this.props.imageUrl})
 				)
 			)
 		);
@@ -20295,7 +20295,6 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 	}, 
 
 	render: function () {
-
 		return (
 			React.createElement("div", {className: "store_circular_component"}, 
 				React.createElement("div", {className: "store_header_component"}, 
@@ -20429,7 +20428,7 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 			var products = []; 
 
 			store.products.forEach(function (productData) {
-				products.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
+				products.push(React.createElement(ProductComponent, React.__spread({key: productData.shsc_id},  productData)));
 			});
 
 			circularListingsComponents.push(React.createElement(StoreCircularComponent, {storeName: store.storeName, startDate: store.startDate, endDate: store.endDate, products: products}));

@@ -20,7 +20,7 @@ var ViewListings = React.createClass({
 			var products = []; 
 
 			store.products.forEach(function (productData) {
-				products.push(<ProductComponent key={productData.shsc_id} product={productData} />);
+				products.push(<ProductComponent key={productData.shsc_id} {...productData} />);
 			});
 
 			circularListingsComponents.push(<StoreCircularComponent storeName={store.storeName} startDate={store.startDate} endDate={store.endDate} products={products} />);

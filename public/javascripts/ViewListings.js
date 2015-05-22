@@ -20,7 +20,7 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 			var products = []; 
 
 			store.products.forEach(function (productData) {
-				products.push(React.createElement(ProductComponent, {key: productData.shsc_id, product: productData}));
+				products.push(React.createElement(ProductComponent, React.__spread({key: productData.shsc_id},  productData)));
 			});
 
 			circularListingsComponents.push(React.createElement(StoreCircularComponent, {storeName: store.storeName, startDate: store.startDate, endDate: store.endDate, products: products}));
