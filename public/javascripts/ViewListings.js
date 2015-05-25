@@ -9,11 +9,15 @@ var React = require('react'),
 var ViewListings = React.createClass({displayName: "ViewListings",
 	getInitialState: function () {
 		return {
-			'currentView': React.createElement(LoadingOverlay, null)
+			// 'currentView': <LoadingOverlay />
+			storeListings: []
+			// , 
+			// displayedStoreListings: []
 		};
 	}, 
 
 	handleStoreListingsData: function (storeListings) {
+		console.log("HANDLING STORE LISTINGS");
 		var circularListingsComponents = [];
 
 		storeListings.map(function (store) { 
@@ -31,18 +35,27 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 
 				return;
 			}.bind(this));
-
+			console.log("PRODUCTS LENGTH: ", products.length);
 			circularListingsComponents.push(React.createElement(StoreCircularComponent, {storeName: store.storeName, startDate: store.startDate, endDate: store.endDate, products: products}));
 		}.bind(this));
 
-		this.setState({'currentView': React.createElement(ThreeColumnsView, {listings: circularListingsComponents})});
-		
+		// this.setState({displayedStoreListings: circularListingsComponents});
+		// this.setState({'currentView': <ThreeColumnsView listings={circularListingsComponents} />});
+		React.render(React.createElement(ThreeColumnsView, {listings: circularListingsComponents}), document.getElementById('view_listings_component'));
+		// console.log(this.state.storeListings);
 		// TESTING OUT LOADING OVERLAY 
 		// $('body').removeClass('loading_overlay');
 		this.props.toggleLoadingOverlay();		
 	}, 
 
+	componentDidUpdate: function () {
+		console.log("VIEWLISTINGS UPDATED: ", this.props.searchFieldText); 
+		this.handleStoreListingsData(this.state.storeListings);
+	},
+
 	componentDidMount: function () {
+		React.render(React.createElement(LoadingOverlay, null), document.getElementById('view_listings_component'));
+
 		// TESTING OUT LOADING OVERLAY
 		// $('body').addClass('loading_overlay');
 		// React.render(<Spinner />, document.getElementById('window_wrapper'));
@@ -50,15 +63,17 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 
 		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
 			
-			this.handleStoreListingsData(storeListings);			
+			this.setState({
+				storeListings: storeListings
+			});		
+			this.handleStoreListingsData(this.state.storeListings);	
 
-		}.bind(this));
+		}.bind(this)); 
 	}, 
 
 	render: function () {
 		return (
-			React.createElement("div", {id: "view_listings_component"}, 
-				this.state.currentView
+			React.createElement("div", {id: "view_listings_component"}
 			)
 		);
 	}

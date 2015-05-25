@@ -20032,7 +20032,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 		        	React.createElement(Navbar, null)
 		        ), 
 		        React.createElement("nav", {id: "sidepanel_container"}, 
-		        	React.createElement(SidePanel, {searchFieldText: this.props.searchFieldText})
+		        	React.createElement(SidePanel, {filterListings: this.props.filterListings})
 		        )
 	        )			
 		);
@@ -20074,10 +20074,36 @@ module.exports = ProductComponent;
 var React = require('react');
 
 var SearchField = React.createClass({displayName: "SearchField",
+    getInitialState: function () {
+        return {
+            searchFieldText: ""
+        };
+    }, 
+
+    handleSearchInput: function (e) {
+        var userInputText = e.target.value;
+
+        this.setState({searchFieldText: userInputText});
+
+        // this.props.filterListings(userInputText);
+    }, 
+
+    componentDidMount: function () {
+
+        $(React.findDOMNode(this)).find('input').keypress(function (e) {
+
+            var keyCode = (e.keyCode ? e.keyCode : e.which);
+            
+            if (keyCode === 13) {
+                this.props.filterListings(e.target.value);
+            }
+        }.bind(this));
+    }, 
+
 	render: function () {
 		return (
             React.createElement("div", {className: "input-group custom-search-form"}, 
-                React.createElement("input", {type: "text", className: "form-control", value: this.props.searchFieldText, placeholder: "Search..."}), 
+                React.createElement("input", {type: "text", className: "form-control", onChange: this.handleSearchInput, value: this.state.searchFieldText, placeholder: "Search..."}), 
                 React.createElement("span", {className: "input-group-btn"}, 
                     React.createElement("button", {className: "btn btn-default", type: "button"}, 
                         React.createElement("span", {className: "fa fa-search"})
@@ -20102,7 +20128,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
 			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender}), 
-			searchFieldText: ""
+			filterText: ""
 		};
 	}, 
 
@@ -20123,7 +20149,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			currentViewComponent;
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = React.createElement(ViewListings, {searchFieldText: this.state.searchFieldText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
+			currentViewComponent = React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
 		
 		} else {
 			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
@@ -20154,7 +20180,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: React.createElement(ViewListings, {searchFieldText: this.state.searchFieldText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
+		this.setState({currentWindowView: React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
 
 	}, 
 
@@ -20177,14 +20203,24 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		$('body').toggleClass('overlayDarken');
 	}, 
 
+	filterListings: function (userInputText) {
+
+		this.setState({
+			filterText: userInputText
+		});
+
+	}, 
+
 	render: function () {
+		var localStorageData = this.getDataFromLocalStorage();
+
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
 				React.createElement("div", {id: "navigation_wrapper"}, 
-					React.createElement(Navigation, {searchFieldText: this.state.searchFieldText})
+					React.createElement(Navigation, {filterListings: this.filterListings})
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
-					this.state.currentWindowView
+					React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData}), ";"
 				)
 			)
 		);
@@ -20250,7 +20286,7 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 		        React.createElement("div", {className: "sidebar-nav navbar-collapse"}, 
 		            React.createElement("ul", {className: "nav", id: "side-menu"}, 
 		                React.createElement("li", {className: "sidebar-search"}, 
-		                    React.createElement(SearchField, {searchFieldText: this.props.searchFieldText})
+		                    React.createElement(SearchField, {filterListings: this.props.filterListings})
 		                ), 
 		                React.createElement(CollapsingPanelOption, {config: dashboardOptionConfig}), 
 		                React.createElement(CollapsingPanelOption, {config: favoritesOptionConfig}), 
@@ -20319,15 +20355,15 @@ var React = require('react'),
 	Spinner = require('./Spinner');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
-	getInitialState: function () {
-		return {
-			'isOccupied': {
-				'column_left': false, 
-				'column_middle': false, 
-				'column_right': false 
-			}
-		};	
-	}, 
+	// getInitialState: function () {
+	// 	return {
+	// 		'isOccupied': {
+	// 			'column_left': false, 
+	// 			'column_middle': false, 
+	// 			'column_right': false 
+	// 		}
+	// 	};	
+	// }, 
 
 	getDefaultProps: function () {
 		return {
@@ -20342,13 +20378,13 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 	}, 
 
 	componentDidMount: function () {
-		var columnID, i;
+		// var columnID, i;
 
-		for (i = 0; i < this.props.columnPositions.length; i++) {
-			columnID = this.getColumnID(i); 
+		// for (i = 0; i < this.props.columnPositions.length; i++) {
+		// 	columnID = this.getColumnID(i); 
 
-			React.render(this.props.listings[i], document.getElementById(columnID));
-		}
+		// 	React.render(this.props.listings[i], document.getElementById(columnID));
+		// }
 	}, 
 
 	render: function () {
@@ -20356,13 +20392,16 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 			React.createElement("div", {id: "three_columns_view"}, 
 				React.createElement("div", {id: "container_three_columns", className: "container"}, 
 					React.createElement("div", {id: "three_columns_row", className: "row"}, 
-						React.createElement("div", {id: "column_left", className: "col-md-3"}
+						React.createElement("div", {id: "column_left", className: "col-md-3"}, 
+							this.props.listings[0]
 						), 
 						React.createElement("div", {className: "col-md-1"}), 
-						React.createElement("div", {id: "column_middle", className: "col-md-3"}
+						React.createElement("div", {id: "column_middle", className: "col-md-3"}, 
+							this.props.listings[1]
 						), 
 						React.createElement("div", {className: "col-md-1"}), 
-						React.createElement("div", {id: "column_right", className: "col-md-3"}
+						React.createElement("div", {id: "column_right", className: "col-md-3"}, 
+							this.props.listings[2]
 						), 
 						React.createElement("div", {className: "col-md-1"})
 					)
@@ -20417,11 +20456,15 @@ var React = require('react'),
 var ViewListings = React.createClass({displayName: "ViewListings",
 	getInitialState: function () {
 		return {
-			'currentView': React.createElement(LoadingOverlay, null)
+			// 'currentView': <LoadingOverlay />
+			storeListings: []
+			// , 
+			// displayedStoreListings: []
 		};
 	}, 
 
 	handleStoreListingsData: function (storeListings) {
+		console.log("HANDLING STORE LISTINGS");
 		var circularListingsComponents = [];
 
 		storeListings.map(function (store) { 
@@ -20439,18 +20482,27 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 
 				return;
 			}.bind(this));
-
+			console.log("PRODUCTS LENGTH: ", products.length);
 			circularListingsComponents.push(React.createElement(StoreCircularComponent, {storeName: store.storeName, startDate: store.startDate, endDate: store.endDate, products: products}));
 		}.bind(this));
 
-		this.setState({'currentView': React.createElement(ThreeColumnsView, {listings: circularListingsComponents})});
-		
+		// this.setState({displayedStoreListings: circularListingsComponents});
+		// this.setState({'currentView': <ThreeColumnsView listings={circularListingsComponents} />});
+		React.render(React.createElement(ThreeColumnsView, {listings: circularListingsComponents}), document.getElementById('view_listings_component'));
+		// console.log(this.state.storeListings);
 		// TESTING OUT LOADING OVERLAY 
 		// $('body').removeClass('loading_overlay');
 		this.props.toggleLoadingOverlay();		
 	}, 
 
+	componentDidUpdate: function () {
+		console.log("VIEWLISTINGS UPDATED: ", this.props.searchFieldText); 
+		this.handleStoreListingsData(this.state.storeListings);
+	},
+
 	componentDidMount: function () {
+		React.render(React.createElement(LoadingOverlay, null), document.getElementById('view_listings_component'));
+
 		// TESTING OUT LOADING OVERLAY
 		// $('body').addClass('loading_overlay');
 		// React.render(<Spinner />, document.getElementById('window_wrapper'));
@@ -20458,15 +20510,17 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 
 		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
 			
-			this.handleStoreListingsData(storeListings);			
+			this.setState({
+				storeListings: storeListings
+			});		
+			this.handleStoreListingsData(this.state.storeListings);	
 
-		}.bind(this));
+		}.bind(this)); 
 	}, 
 
 	render: function () {
 		return (
-			React.createElement("div", {id: "view_listings_component"}, 
-				this.state.currentView
+			React.createElement("div", {id: "view_listings_component"}
 			)
 		);
 	}
