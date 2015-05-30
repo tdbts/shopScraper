@@ -15,20 +15,20 @@ var gulp = require('gulp'),
 
 gulp.task('browserify', function () { 
 	console.log("BUNDLING FILES WITH BROWSERIFY and REACTIFY.");
-	var b = browserify(); 
-	b.transform(reactify); 
-	b.add('./public/javascripts/index.js'); 
 
-	return b.bundle()
-		.on('error', function () {
-			notify.onError({
-				message: "<%= error.message %>"
-			}).apply(this, arguments);
+	var bundler = browserify({
+		entries: ['./public/components/index.jsx'], 
+		extensions: ['.jsx']
+	}).transform(reactify);
 
-			this.emit('end');
-		})	
-		.pipe(source('bundle.js'))
-		.pipe(gulp.dest('public/dist'));	
+	var bundle = function () {
+		return bundler
+			.bundle()
+			.pipe(source('bundle.js'))
+			.pipe(gulp.dest('./public/dist'));
+	};
+
+	return bundle();
 });
 
 gulp.task('jshint', function () {
