@@ -9,7 +9,8 @@ var React = require('react'),
 var ShopScraper = React.createClass({
 	getInitialState: function () {
 		return {
-			currentWindowView: <Welcome onButtonClick={this.determineViewToRender} />
+			currentWindowView: <Welcome onButtonClick={this.determineViewToRender} />, 
+			filterText: ""
 		};
 	}, 
 
@@ -30,7 +31,7 @@ var ShopScraper = React.createClass({
 			currentViewComponent;
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = <ViewListings toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
+			currentViewComponent = <ViewListings searchFieldText={this.state.filterText} toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
 		
 		} else {
 			currentViewComponent = <DefaultLocationsSelector handleSubmitSelections={this.handleSubmitSelections} handleClearSelections={this.handleClearSelections} />;
@@ -61,7 +62,7 @@ var ShopScraper = React.createClass({
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: <ViewListings toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={defaultData} />});	
+		this.setState({currentWindowView: <ViewListings searchFieldText={this.state.filterText} toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={defaultData} />});	
 
 	}, 
 
@@ -84,14 +85,24 @@ var ShopScraper = React.createClass({
 		$('body').toggleClass('overlayDarken');
 	}, 
 
+	filterListings: function (userInputText) {
+
+		this.setState({
+			filterText: userInputText
+		});
+
+	}, 
+
 	render: function () {
+		var localStorageData = this.getDataFromLocalStorage();
+
 		return (
 			<div id="shsc_subcomponents_wrapper">
 				<div id="navigation_wrapper">
-					<Navigation />
+					<Navigation filterListings={this.filterListings} />
 				</div>
 				<div id="window_wrapper">
-					{this.state.currentWindowView}
+					<ViewListings searchFieldText={this.state.filterText} toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
 				</div>
 			</div>
 		);

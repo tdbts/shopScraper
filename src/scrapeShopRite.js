@@ -67,8 +67,8 @@ var scrapeShopRite = scraper.extend({
 					self.assignIDsToProducts(circularData.products);
 					
 					// DEVELOPMENT ONLY -- Shop Rite BUG FIX
-					// console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
-					// console.log("ERR: ", err);
+					console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
+					console.log("ERR: ", err);
 					callback(err, circularData);
 				}				
 			});		

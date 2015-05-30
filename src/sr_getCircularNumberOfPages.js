@@ -41,6 +41,7 @@ var getCircularNumberOfPages = scraper.extend({
 	}, 
 
 	handleResponse: function (err, resp, body) {
+		
 		var self = getCircularNumberOfPages,
 			shopRiteDomData = new DomData(self.config.domData);
 		

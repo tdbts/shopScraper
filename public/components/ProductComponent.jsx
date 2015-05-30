@@ -5,16 +5,16 @@ var ProductComponent = React.createClass({
 		return (
 			<div className="product_info">
 				<div className="container_product_name">
-					<h3 className="product_name">{this.props.product.productName}</h3>
+					<h3 className="product_name">{this.props.productName}</h3>
 				</div>
 				<div className="container_product_description">
-					<p className="product_description">{this.props.product.productDescription}</p>
+					<p className="product_description">{this.props.productDescription}</p>
 				</div>
 				<div className="container_product_price">
-					<p className="product_price"><strong>{this.props.product.price}</strong></p>
+					<p className="product_price"><strong>{this.props.price}</strong></p>
 				</div>
 				<div className="container_product_image">
-					<img className="product_image" src={this.props.product.imageUrl} />
+					<img className="product_image" src={this.props.imageUrl} />
 				</div>
 			</div>
 		);

@@ -3,15 +3,15 @@ var React = require('react'),
 	Spinner = require('./Spinner');
 
 var ThreeColumnsView = React.createClass({
-	getInitialState: function () {
-		return {
-			'isOccupied': {
-				'column_left': false, 
-				'column_middle': false, 
-				'column_right': false 
-			}
-		};	
-	}, 
+	// getInitialState: function () {
+	// 	return {
+	// 		'isOccupied': {
+	// 			'column_left': false, 
+	// 			'column_middle': false, 
+	// 			'column_right': false 
+	// 		}
+	// 	};	
+	// }, 
 
 	getDefaultProps: function () {
 		return {
@@ -26,13 +26,13 @@ var ThreeColumnsView = React.createClass({
 	}, 
 
 	componentDidMount: function () {
-		var columnID, i;
+		// var columnID, i;
 
-		for (i = 0; i < this.props.columnPositions.length; i++) {
-			columnID = this.getColumnID(i); 
+		// for (i = 0; i < this.props.columnPositions.length; i++) {
+		// 	columnID = this.getColumnID(i); 
 
-			React.render(this.props.listings[i], document.getElementById(columnID));
-		}
+		// 	React.render(this.props.listings[i], document.getElementById(columnID));
+		// }
 	}, 
 
 	render: function () {
@@ -41,12 +41,15 @@ var ThreeColumnsView = React.createClass({
 				<div id="container_three_columns" className="container">
 					<div id="three_columns_row" className="row">
 						<div id="column_left" className="col-md-3">
+							{this.props.listings[0]}
 						</div>
 						<div className="col-md-1"></div>
 						<div id="column_middle" className="col-md-3">
+							{this.props.listings[1]}
 						</div>
 						<div className="col-md-1"></div>
 						<div id="column_right" className="col-md-3">
+							{this.props.listings[2]}
 						</div>
 						<div className="col-md-1"></div>
 					</div>

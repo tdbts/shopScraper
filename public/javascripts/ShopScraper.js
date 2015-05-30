@@ -9,7 +9,8 @@ var React = require('react'),
 var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
-			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender})
+			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender}), 
+			filterText: ""
 		};
 	}, 
 
@@ -30,7 +31,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			currentViewComponent;
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
+			currentViewComponent = React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
 		
 		} else {
 			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
@@ -61,7 +62,7 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 
-		this.setState({currentWindowView: React.createElement(ViewListings, {toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
+		this.setState({currentWindowView: React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
 
 	}, 
 
@@ -84,14 +85,24 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		$('body').toggleClass('overlayDarken');
 	}, 
 
+	filterListings: function (userInputText) {
+
+		this.setState({
+			filterText: userInputText
+		});
+
+	}, 
+
 	render: function () {
+		var localStorageData = this.getDataFromLocalStorage();
+
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
 				React.createElement("div", {id: "navigation_wrapper"}, 
-					React.createElement(Navigation, null)
+					React.createElement(Navigation, {filterListings: this.filterListings})
 				), 
 				React.createElement("div", {id: "window_wrapper"}, 
-					this.state.currentWindowView
+					React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData}), ";"
 				)
 			)
 		);
