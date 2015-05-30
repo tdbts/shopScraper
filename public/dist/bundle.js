@@ -9,6 +9,7 @@ $(document).ready(function() {
 	React.render(React.createElement(ShopScraper, null), document.getElementById('app_wrapper'));
 });
 
+
 },{"./ShopScraper":167,"react":157}],2:[function(require,module,exports){
 // shim for using process in browser
 
@@ -19738,6 +19739,7 @@ var CollapsibleListItem = React.createClass({displayName: "CollapsibleListItem",
 
 module.exports = CollapsibleListItem;
 
+
 },{"react":157}],159:[function(require,module,exports){
 var React = require('react'), 
 	CollapsibleListItem = require('./CollapsibleListItem');
@@ -19760,6 +19762,7 @@ var CollapsibleUnorderedList = React.createClass({displayName: "CollapsibleUnord
 
 module.exports = CollapsibleUnorderedList;
 
+
 },{"./CollapsibleListItem":158,"react":157}],160:[function(require,module,exports){
 var React = require('react'), 
 	CollapsibleUnorderedList = require('./CollapsibleUnorderedList');
@@ -19780,6 +19783,7 @@ var CollapsingPanelOption = React.createClass({displayName: "CollapsingPanelOpti
 });
 
 module.exports = CollapsingPanelOption;
+
 
 },{"./CollapsibleUnorderedList":159,"react":157}],161:[function(require,module,exports){
 var React = require('react');
@@ -19933,9 +19937,32 @@ var DefaultLocationsSelector = React.createClass({displayName: "DefaultLocations
 
 module.exports = DefaultLocationsSelector;
 
-},{"react":157}],162:[function(require,module,exports){
 
-},{}],163:[function(require,module,exports){
+},{"react":157}],162:[function(require,module,exports){
+var React = require('react'), 
+	Spinner = require('./Spinner');
+
+var LoadingOverlay = React.createClass({displayName: "LoadingOverlay",
+	getOverlayText: function () {
+		return "Hang on!  We're finding out what's on sale this week!";
+	}, 
+
+	render: function () {
+		return (
+			React.createElement("div", {id: "loading_overlay"}, 
+				React.createElement(Spinner, null), 
+				React.createElement("div", {id: "loading_overlay_text_container", className: "window_view_centered"}, 
+					React.createElement("h1", {id: "loading_overlay_text"}, this.getOverlayText())
+				)
+			)
+		);
+	}
+});
+
+module.exports = LoadingOverlay;
+
+
+},{"./Spinner":169,"react":157}],163:[function(require,module,exports){
 var React = require('react');
 
 var Navbar = React.createClass({displayName: "Navbar",
@@ -20002,6 +20029,7 @@ var Navbar = React.createClass({displayName: "Navbar",
 });
 
 module.exports = Navbar;
+
 },{"react":157}],164:[function(require,module,exports){
 var React = require('react'), 
 	Navbar = require('./Navbar'), 
@@ -20023,6 +20051,7 @@ var Navigation = React.createClass({displayName: "Navigation",
 });
 
 module.exports = Navigation;
+
 },{"./Navbar":163,"./SidePanel":168,"react":157}],165:[function(require,module,exports){
 var React = require('react');
 
@@ -20048,6 +20077,7 @@ var ProductComponent = React.createClass({displayName: "ProductComponent",
 });	
 
 module.exports = ProductComponent;
+
 
 },{"react":157}],166:[function(require,module,exports){
 /* 
@@ -20096,6 +20126,7 @@ var SearchField = React.createClass({displayName: "SearchField",
 });
 
 module.exports = SearchField;
+
 },{"react":157}],167:[function(require,module,exports){
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
@@ -20237,7 +20268,8 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 module.exports = ShopScraper;
 
-},{"./DefaultLocationsSelector":161,"./LoadingOverlay":162,"./Navigation":164,"./ViewListings":171,"./Welcome":172,"react":157}],168:[function(require,module,exports){
+
+},{"./DefaultLocationsSelector":161,"./LoadingOverlay":162,"./Navigation":164,"./ViewListings":172,"./Welcome":173,"react":157}],168:[function(require,module,exports){
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption');
@@ -20314,7 +20346,24 @@ var SidePanel = React.createClass({displayName: "SidePanel",
 });
 
 module.exports = SidePanel;
+
 },{"./CollapsingPanelOption":160,"./SearchField":166,"react":157}],169:[function(require,module,exports){
+var React = require('react');
+
+var Spinner = React.createClass({displayName: "Spinner",
+	render: function () {
+		return (
+			React.createElement("div", {className: "spinner_container"}, 
+				React.createElement("i", {className: "fa fa-3x fa-spin fa-shopping-cart"})
+			)
+		);
+	}
+});
+
+module.exports = Spinner;
+
+
+},{"react":157}],170:[function(require,module,exports){
 var React = require('react');
 
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
@@ -20342,7 +20391,8 @@ var StoreCircularComponent = React.createClass({displayName: "StoreCircularCompo
 
 module.exports = StoreCircularComponent;
 
-},{"react":157}],170:[function(require,module,exports){
+
+},{"react":157}],171:[function(require,module,exports){
 var React = require('react');
 
 var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
@@ -20379,7 +20429,8 @@ var ThreeColumnsView = React.createClass({displayName: "ThreeColumnsView",
 
 module.exports = ThreeColumnsView;
 
-},{"react":157}],171:[function(require,module,exports){
+
+},{"react":157}],172:[function(require,module,exports){
 var React = require('react'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
 	ProductComponent = require('./ProductComponent'),
@@ -20441,7 +20492,8 @@ var ViewListings = React.createClass({displayName: "ViewListings",
 
 module.exports = ViewListings;
 
-},{"./ProductComponent":165,"./StoreCircularComponent":169,"./ThreeColumnsView":170,"react":157}],172:[function(require,module,exports){
+
+},{"./ProductComponent":165,"./StoreCircularComponent":170,"./ThreeColumnsView":171,"react":157}],173:[function(require,module,exports){
 var React = require('react'), 
 	WelcomeColumn = require('./WelcomeColumn'); 
 
@@ -20504,7 +20556,8 @@ var Welcome = React.createClass({displayName: "Welcome",
 
 module.exports = Welcome;
 
-},{"./WelcomeColumn":173,"react":157}],173:[function(require,module,exports){
+
+},{"./WelcomeColumn":174,"react":157}],174:[function(require,module,exports){
 var React = require('react');
 
 var WelcomeColumn = React.createClass({displayName: "WelcomeColumn",
@@ -20526,5 +20579,6 @@ var WelcomeColumn = React.createClass({displayName: "WelcomeColumn",
 });
 
 module.exports = WelcomeColumn;
+
 
 },{"react":157}]},{},[1]);

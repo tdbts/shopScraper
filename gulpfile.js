@@ -9,35 +9,26 @@ var gulp = require('gulp'),
 	// htmlReplace = require('gulp-html-replace'),  
 	source = require('vinyl-source-stream'), 
 	browserify = require('browserify'), 
-	// watchify = require('watchify'), 
-	// reactify = require('reactify'), 
+	// watchify = require('watchify'),  
 	// streamify = require('gulp-streamify') 
-	react = require('gulp-react'); 
+	reactify = require('reactify'); 
 
-gulp.task('transform', function () {
-	gulp.src(['public/components/*.jsx'])
-		.pipe(react())
-		.on('error', console.log.bind(console))
-		.pipe(gulp.dest('public/javascripts'));
+gulp.task('browserify', function () { 
+	console.log("BUNDLING FILES WITH BROWSERIFY and REACTIFY.");
+	var b = browserify(); 
+	b.transform(reactify); 
+	b.add('./public/javascripts/index.js'); 
 
-	console.log("TRANSFORM OF .jsx FILES COMPLETE.");
-});
-
-gulp.task('browserify', function () {
-	console.log("BUNDLING FILES WITH BROWSERIFY.");
-	
-	return browserify('./public/javascripts/index.js')
-		.bundle()
+	return b.bundle()
 		.on('error', function () {
 			notify.onError({
 				message: "<%= error.message %>"
 			}).apply(this, arguments);
 
-			this.emit('end'); 
-		})
+			this.emit('end');
+		})	
 		.pipe(source('bundle.js'))
-		.pipe(gulp.dest('./public/dist'));
-
+		.pipe(gulp.dest('public/dist'));	
 });
 
 gulp.task('jshint', function () {
@@ -64,7 +55,7 @@ gulp.task('watch', function () {
 
 	gulp.watch(sourcefiles, ['jshint']);
 	
-	gulp.watch('public/components/*.jsx', ['transform', 'browserify']);
+	gulp.watch('public/components/*.jsx', ['browserify']);
 });
 
 gulp.task('test', function () {
@@ -92,4 +83,4 @@ gulp.task('server-restart', function () {
 
 gulp.task('default', ['watch']);
 // gulp.task('bundle', ['jshint', 'test', 'transform', 'browserify']);
-gulp.task('build', ['jshint', 'test', 'transform', 'browserify', 'server-restart']);
+gulp.task('build', ['jshint', 'test', 'browserify', 'server-restart']);
