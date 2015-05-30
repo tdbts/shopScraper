@@ -12,6 +12,10 @@ var getCircularNumberOfPages = scraper.extend({
 		var $ = cheerio.load(body), 
 			pageNumbers = [];
 
+		// DEVELOPMENT ONLY 
+		// console.log("PAGENUMBERLOCATION: ", pageNumberLocation);
+		// console.log($(pageNumberLocation));
+
 		$(pageNumberLocation).map(function (index, span) {
 			pageNumbers.push(Number($(span).text()));
 		});

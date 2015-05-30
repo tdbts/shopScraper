@@ -1,16 +1,15 @@
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	Welcome = require('./Welcome'), 
-	Spinner = require('./Spinner'), 
 	DefaultLocationsSelector = require('./DefaultLocationsSelector'),
-	ViewListings = require('./ViewListings'),  
-	ThreeColumnsView = require('./ThreeColumnsView');
+	LoadingOverlay = require('./LoadingOverlay'), 
+	ViewListings = require('./ViewListings');  
 
 var ShopScraper = React.createClass({
 	getInitialState: function () {
 		return {
-			currentWindowView: <Welcome onButtonClick={this.determineViewToRender} />, 
-			filterText: ""
+			filterText: "", 
+			storeListings: []
 		};
 	}, 
 
@@ -26,18 +25,39 @@ var ShopScraper = React.createClass({
 		}));
 	}, 
 
-	getLocalStorageBasedComponent: function () {
-		var localStorageData = this.getDataFromLocalStorage(), 
-			currentViewComponent;
+	defaultStoreSelectionRequired: function () {
+		var localStorageData = this.getDataFromLocalStorage();
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = <ViewListings searchFieldText={this.state.filterText} toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
-		
-		} else {
-			currentViewComponent = <DefaultLocationsSelector handleSubmitSelections={this.handleSubmitSelections} handleClearSelections={this.handleClearSelections} />;
-		}
+			
+			this.loadStoreProductData(localStorageData);
 
-		return currentViewComponent;
+			return false;
+
+		} else {
+			return true;
+		}
+	}, 
+
+	loadStoreProductData: function (userDefaultData) {
+
+		this.getStoreListingsFromServer('user/locations', userDefaultData, this.handleStoreListingsServerResponse);
+	}, 
+
+	getStoreListingsFromServer: function (apiPath, userDefaultLocationData, callback) {
+		
+		$.get(apiPath, {data: userDefaultLocationData}, function (storeListings) {
+			
+			callback(storeListings);
+		});
+	}, 
+
+	handleStoreListingsServerResponse: function (storeListings) {
+		this.setState({
+			storeListings: storeListings
+		});
+
+		this.updateWindowView(<ViewListings searchFieldText={this.state.filterText} storeListings={this.state.storeListings} />);		
 	}, 
 
 	getDefaultDataFromSelections: function () {
@@ -61,9 +81,8 @@ var ShopScraper = React.createClass({
 		if (localStorage) {
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
-
-		this.setState({currentWindowView: <ViewListings searchFieldText={this.state.filterText} toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={defaultData} />});	
-
+	
+		this.getStoreListingsFromServer('user/locations', this.getDataFromLocalStorage(), this.handleStoreListingsServerResponse);
 	}, 
 
 	handleClearSelections: function () {
@@ -74,15 +93,11 @@ var ShopScraper = React.createClass({
 	}, 
 
 	determineViewToRender: function () {	
-		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
-			: <Welcome onButtonClick={this.handleButtonClick} />;
+		var currentWindowView = this.defaultStoreSelectionRequired() ? 
+			<DefaultLocationsSelector handleSubmitSelections={this.handleSubmitSelections} handleClearSelections={this.handleClearSelections} />
+			: <LoadingOverlay />;
 
-		return this.setState({currentWindowView: currentWindowView}); 
-	}, 
-
-	toggleLoadingOverlay: function () {
-		
-		$('body').toggleClass('overlayDarken');
+		this.updateWindowView(currentWindowView);
 	}, 
 
 	filterListings: function (userInputText) {
@@ -93,16 +108,28 @@ var ShopScraper = React.createClass({
 
 	}, 
 
-	render: function () {
-		var localStorageData = this.getDataFromLocalStorage();
+	componentDidUpdate: function () {
 
+		this.updateWindowView(<ViewListings searchFieldText={this.state.filterText} storeListings={this.state.storeListings} />);
+	}, 
+
+	updateWindowView: function (component) {
+		
+		React.render(component, document.getElementById('window_wrapper'));
+	},  
+
+	componentDidMount: function () {
+		
+		this.updateWindowView(<Welcome onButtonClick={this.determineViewToRender} />);
+	}, 
+
+	render: function () {
 		return (
 			<div id="shsc_subcomponents_wrapper">
 				<div id="navigation_wrapper">
 					<Navigation filterListings={this.filterListings} />
 				</div>
 				<div id="window_wrapper">
-					<ViewListings searchFieldText={this.state.filterText} toggleLoadingOverlay={this.toggleLoadingOverlay} defaultLocations={localStorageData} />;
 				</div>
 			</div>
 		);

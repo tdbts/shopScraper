@@ -1,38 +1,11 @@
-var React = require('react'), 
-	StoreCircularComponent = require('./StoreCircularComponent'), 
-	Spinner = require('./Spinner');
+var React = require('react');
 
 var ThreeColumnsView = React.createClass({
-	// getInitialState: function () {
-	// 	return {
-	// 		'isOccupied': {
-	// 			'column_left': false, 
-	// 			'column_middle': false, 
-	// 			'column_right': false 
-	// 		}
-	// 	};	
-	// }, 
-
 	getDefaultProps: function () {
 		return {
 			'viewType': 'threeColumns', 
 			'columnPositions': ["left", "middle", "right"]
 		};
-	}, 
-
-	getColumnID: function (index) { 
-
-		return "column_" + this.props.columnPositions[index];
-	}, 
-
-	componentDidMount: function () {
-		// var columnID, i;
-
-		// for (i = 0; i < this.props.columnPositions.length; i++) {
-		// 	columnID = this.getColumnID(i); 
-
-		// 	React.render(this.props.listings[i], document.getElementById(columnID));
-		// }
 	}, 
 
 	render: function () {

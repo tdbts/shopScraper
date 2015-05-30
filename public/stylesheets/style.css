@@ -110,6 +110,10 @@ body {
     background-color: #f8f8f8;
 }
 
+#app_wrapper {
+    /*background-color: #f8f8f8;*/
+}
+
 #wrapper {
     width: 100%;
 }
@@ -441,12 +445,6 @@ i.spinner {
     }
 }
 
-.overlayDarken {
-    background-color: rgba(96, 96, 96, 0.99);
-    z-index: 999;
-    opacity: 0.5;
-}
-
 .spinner_container { 
     text-align: center;
     margin-top: 20%;
@@ -471,7 +469,7 @@ i.spinner {
 }
 
 #loading_overlay_text {
-    color: #fcfcfc;
+    color: #555;
 }
 
 .fa-spin {

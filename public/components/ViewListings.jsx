@@ -1,79 +1,57 @@
 var React = require('react'), 
-	Spinner = require('./Spinner'), 
 	StoreCircularComponent = require('./StoreCircularComponent'), 
-	ProductComponent = require('./ProductComponent'), 
-	LoadingOverlay = require('./LoadingOverlay'),  
-	ThreeColumnsView = require('./ThreeColumnsView'), 
-	TwoColumnsView = require('./TwoColumnsView');
+	ProductComponent = require('./ProductComponent'),
+	ThreeColumnsView = require('./ThreeColumnsView');
 
 var ViewListings = React.createClass({
-	getInitialState: function () {
-		return {
-			// 'currentView': <LoadingOverlay />
-			storeListings: []
-			// , 
-			// displayedStoreListings: []
-		};
+
+	processStoreListingsData: function (storeListings) {
+
+		var circularListingsComponents = storeListings.map(this.collectCircularListingsComponents);
+
+		return <ThreeColumnsView listings={circularListingsComponents} />;
 	}, 
 
-	handleStoreListingsData: function (storeListings) {
-		console.log("HANDLING STORE LISTINGS");
-		var circularListingsComponents = [];
+	collectCircularListingsComponents: function (store) {
+		
+		var products = [];
 
-		storeListings.map(function (store) { 
-			var products = [];
+		store.products.forEach(function (productData) {
 
-			store.products.forEach(function (productData) {
-				var productName = productData.productName.toLowerCase(), 
-					productDescription = productData.productDescription.toLowerCase(), 
-					searchFieldText = this.props.searchFieldText.toLowerCase();
-
-				if ((productName.indexOf(searchFieldText) !== -1) || (productDescription.indexOf(this.props.searchFieldText) !== -1)) {
-				
-					products.push(<ProductComponent key={productData.shsc_id} {...productData} />);
-				}
-
-				return;
-			}.bind(this));
-			console.log("PRODUCTS LENGTH: ", products.length);
-			circularListingsComponents.push(<StoreCircularComponent storeName={store.storeName} startDate={store.startDate} endDate={store.endDate} products={products} />);
+			this.filterProductBySearchText(productData, products);
+		
 		}.bind(this));
 
-		// this.setState({displayedStoreListings: circularListingsComponents});
-		// this.setState({'currentView': <ThreeColumnsView listings={circularListingsComponents} />});
-		React.render(<ThreeColumnsView listings={circularListingsComponents} />, document.getElementById('view_listings_component'));
-		// console.log(this.state.storeListings);
-		// TESTING OUT LOADING OVERLAY 
-		// $('body').removeClass('loading_overlay');
-		this.props.toggleLoadingOverlay();		
+		return <StoreCircularComponent storeName={store.storeName} startDate={store.startDate} endDate={store.endDate} products={products} />;
+	}, 
+
+	filterProductBySearchText: function (productData, dest) {
+		var productName = productData.productName.toLowerCase(), 
+			productDescription = productData.productDescription.toLowerCase(), 
+			searchFieldText = this.props.searchFieldText.toLowerCase();
+
+		if ((productName.indexOf(searchFieldText) !== -1) || (productDescription.indexOf(searchFieldText) !== -1)) {
+		
+			dest.push(<ProductComponent key={productData.shsc_id} {...productData} />);
+		}
+
+		return;		
 	}, 
 
 	componentDidUpdate: function () {
-		console.log("VIEWLISTINGS UPDATED: ", this.props.searchFieldText); 
-		this.handleStoreListingsData(this.state.storeListings);
+		// DEVELOPMENT ONLY
+		// console.log("VIEWLISTINGS UPDATED: ", this.props.searchFieldText); 
+		
+		this.processStoreListingsData(this.props.storeListings);
 	},
 
-	componentDidMount: function () {
-		React.render(<LoadingOverlay />, document.getElementById('view_listings_component'));
+	render: function () { 
 
-		// TESTING OUT LOADING OVERLAY
-		// $('body').addClass('loading_overlay');
-		// React.render(<Spinner />, document.getElementById('window_wrapper'));
-		this.props.toggleLoadingOverlay();
+		var storeProductListings = this.processStoreListingsData(this.props.storeListings);
 
-		$.get('/user/locations', {data: this.props.defaultLocations}, function (storeListings) {
-			
-			this.setState({
-				storeListings: storeListings
-			});		
-			this.handleStoreListingsData(this.state.storeListings);	
-
-		}.bind(this)); 
-	}, 
-
-	render: function () {
 		return (
 			<div id="view_listings_component">
+				{storeProductListings}
 			</div>
 		);
 	}

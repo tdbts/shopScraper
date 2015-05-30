@@ -3,7 +3,7 @@ var React = require('react');
 var StoreCircularComponent = React.createClass({displayName: "StoreCircularComponent",
 	componentDidMount: function () {
 		// Make the sidebar as long as the page height
-		$(".sidebar").height(Math.max($("#shsc_subcomponents_wrapper").height(), $(".sidebar").height()));
+		$('.sidebar').height(Math.max($('#shsc_subcomponents_wrapper').height(), $('.sidebar').height()));
 	}, 
 
 	render: function () {
