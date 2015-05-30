@@ -15,8 +15,6 @@ var SearchField = React.createClass({displayName: "SearchField",
         var userInputText = e.target.value;
 
         this.setState({searchFieldText: userInputText});
-
-        // this.props.filterListings(userInputText);
     }, 
 
     componentDidMount: function () {

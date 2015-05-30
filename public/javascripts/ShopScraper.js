@@ -1,16 +1,15 @@
 var React = require('react'), 
 	Navigation = require('./Navigation'), 
 	Welcome = require('./Welcome'), 
-	Spinner = require('./Spinner'), 
 	DefaultLocationsSelector = require('./DefaultLocationsSelector'),
-	ViewListings = require('./ViewListings'),  
-	ThreeColumnsView = require('./ThreeColumnsView');
+	LoadingOverlay = require('./LoadingOverlay'), 
+	ViewListings = require('./ViewListings');  
 
 var ShopScraper = React.createClass({displayName: "ShopScraper",
 	getInitialState: function () {
 		return {
-			currentWindowView: React.createElement(Welcome, {onButtonClick: this.determineViewToRender}), 
-			filterText: ""
+			filterText: "", 
+			storeListings: []
 		};
 	}, 
 
@@ -26,18 +25,39 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		}));
 	}, 
 
-	getLocalStorageBasedComponent: function () {
-		var localStorageData = this.getDataFromLocalStorage(), 
-			currentViewComponent;
+	defaultStoreSelectionRequired: function () {
+		var localStorageData = this.getDataFromLocalStorage();
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
-			currentViewComponent = React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData});
-		
-		} else {
-			currentViewComponent = React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections});
-		}
+			
+			this.loadStoreProductData(localStorageData);
 
-		return currentViewComponent;
+			return false;
+
+		} else {
+			return true;
+		}
+	}, 
+
+	loadStoreProductData: function (userDefaultData) {
+
+		this.getStoreListingsFromServer('user/locations', userDefaultData, this.handleStoreListingsServerResponse);
+	}, 
+
+	getStoreListingsFromServer: function (apiPath, userDefaultLocationData, callback) {
+		
+		$.get(apiPath, {data: userDefaultLocationData}, function (storeListings) {
+			
+			callback(storeListings);
+		});
+	}, 
+
+	handleStoreListingsServerResponse: function (storeListings) {
+		this.setState({
+			storeListings: storeListings
+		});
+
+		this.updateWindowView(React.createElement(ViewListings, {searchFieldText: this.state.filterText, storeListings: this.state.storeListings}));		
 	}, 
 
 	getDefaultDataFromSelections: function () {
@@ -61,9 +81,8 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 		if (localStorage) {
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
-
-		this.setState({currentWindowView: React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: defaultData})});	
-
+	
+		this.getStoreListingsFromServer('user/locations', this.getDataFromLocalStorage(), this.handleStoreListingsServerResponse);
 	}, 
 
 	handleClearSelections: function () {
@@ -74,15 +93,11 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 	}, 
 
 	determineViewToRender: function () {	
-		var currentWindowView = this.isMounted() ? this.getLocalStorageBasedComponent() 
-			: React.createElement(Welcome, {onButtonClick: this.handleButtonClick});
+		var currentWindowView = this.defaultStoreSelectionRequired() ? 
+			React.createElement(DefaultLocationsSelector, {handleSubmitSelections: this.handleSubmitSelections, handleClearSelections: this.handleClearSelections})
+			: React.createElement(LoadingOverlay, null);
 
-		return this.setState({currentWindowView: currentWindowView}); 
-	}, 
-
-	toggleLoadingOverlay: function () {
-		
-		$('body').toggleClass('overlayDarken');
+		this.updateWindowView(currentWindowView);
 	}, 
 
 	filterListings: function (userInputText) {
@@ -93,16 +108,28 @@ var ShopScraper = React.createClass({displayName: "ShopScraper",
 
 	}, 
 
-	render: function () {
-		var localStorageData = this.getDataFromLocalStorage();
+	componentDidUpdate: function () {
 
+		this.updateWindowView(React.createElement(ViewListings, {searchFieldText: this.state.filterText, storeListings: this.state.storeListings}));
+	}, 
+
+	updateWindowView: function (component) {
+		
+		React.render(component, document.getElementById('window_wrapper'));
+	},  
+
+	componentDidMount: function () {
+		
+		this.updateWindowView(React.createElement(Welcome, {onButtonClick: this.determineViewToRender}));
+	}, 
+
+	render: function () {
 		return (
 			React.createElement("div", {id: "shsc_subcomponents_wrapper"}, 
 				React.createElement("div", {id: "navigation_wrapper"}, 
 					React.createElement(Navigation, {filterListings: this.filterListings})
 				), 
-				React.createElement("div", {id: "window_wrapper"}, 
-					React.createElement(ViewListings, {searchFieldText: this.state.filterText, toggleLoadingOverlay: this.toggleLoadingOverlay, defaultLocations: localStorageData}), ";"
+				React.createElement("div", {id: "window_wrapper"}
 				)
 			)
 		);
