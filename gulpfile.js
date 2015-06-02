@@ -1,10 +1,11 @@
 var gulp = require('gulp'), 
 	jshint = require('gulp-jshint'), 
 	stylish = require('jshint-stylish'), 
-	nodemon = require('gulp-nodemon'), 
+	nodemon = require('gulp-nodemon'),
+	less = require('gulp-less'),  
 	mocha = require('gulp-mocha'),
 	mochaReporter = require('mocha-pretty-spec-reporter'), 
-	notify = require('gulp-notify'), 
+	// notify = require('gulp-notify'), 
 	// uglify = require('gulp-uglify'),
 	// htmlReplace = require('gulp-html-replace'),  
 	source = require('vinyl-source-stream'), 
@@ -12,6 +13,14 @@ var gulp = require('gulp'),
 	// watchify = require('watchify'),  
 	// streamify = require('gulp-streamify') 
 	reactify = require('reactify'); 
+
+gulp.task('build-less', function () {
+	console.log("BUILDING LESS.");
+
+	return gulp.src('./public/stylesheets/less/styles.less')
+		.pipe(less())
+		.pipe(gulp.dest('./public/stylesheets/css'));
+});
 
 gulp.task('browserify', function () { 
 	console.log("BUNDLING FILES WITH BROWSERIFY and REACTIFY.");
@@ -83,4 +92,4 @@ gulp.task('server-restart', function () {
 
 gulp.task('default', ['watch']);
 // gulp.task('bundle', ['jshint', 'test', 'transform', 'browserify']);
-gulp.task('build', ['jshint', 'test', 'browserify', 'server-restart']);
+gulp.task('build', ['jshint', 'test', 'build-less', 'browserify', 'server-restart']);

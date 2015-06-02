@@ -13,18 +13,18 @@ var ThreeColumnsView = React.createClass({
 			<div id="three_columns_view">
 				<div id="container_three_columns" className="container">
 					<div id="three_columns_row" className="row">
-						<div id="column_left" className="col-md-3">
+						<div id="column_left" className="col-md-3 store_listings_column">
 							{this.props.listings[0]}
 						</div>
-						<div className="col-md-1"></div>
-						<div id="column_middle" className="col-md-3">
+						<div className="col-md-1 space_column"></div>
+						<div id="column_middle" className="col-md-3 store_listings_column">
 							{this.props.listings[1]}
 						</div>
-						<div className="col-md-1"></div>
-						<div id="column_right" className="col-md-3">
+						<div className="col-md-1 space_column"></div>
+						<div id="column_right" className="col-md-3 store_listings_column">
 							{this.props.listings[2]}
 						</div>
-						<div className="col-md-1"></div>
+						<div className="col-md-1 space_column"></div>
 					</div>
 				</div>
 			</div>

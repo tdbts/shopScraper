@@ -6,6 +6,7 @@
     "gulp": "^3.8.11",
     "gulp-html-replace": "^1.4.4",
     "gulp-jshint": "^1.9.2",
+    "gulp-less": "^3.0.3",
     "gulp-mocha": "^2.0.0",
     "gulp-nodemon": "^1.0.5",
     "gulp-notify": "^2.2.0",
@@ -33,6 +34,7 @@
     "mongoose": "^4.0.0",
     "react": "^0.13.1",
     "request": "^2.53.0",
+    "slick-carousel": "^1.5.5",
     "underscore": "^1.8.1"
   }
 }

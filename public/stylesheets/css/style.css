@@ -1,13 +1,13 @@
-html {
+/*html {
     height: 100%;
 }
 
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   height: 100%;
-}
+}*/
 
-#navbar {
+/*#navbar {
 	height: 50px;
 }
 
@@ -23,11 +23,11 @@ body {
 
 #primary_navbar {
     margin-bottom: 0;
-}
+}*/
 
-a {
+/*a {
   color: #00b7ff;
-}
+}*/
 
 .fa-2x {
 	font-size: 1.55em;
@@ -39,7 +39,7 @@ a {
 
 #window_wrapper {
     padding: 70px 0px 50px 0px;
-    margin-left: 250px;
+    /*margin-left: 250px;*/
     height: 100%;
     position: relative;
     z-index: 1;
@@ -135,6 +135,7 @@ body {
 
 #primary_navbar {
     max-height: 50px;
+    margin-bottom: 0px;
 }
 
 #navbar_right_wrapper {
@@ -210,10 +211,10 @@ body {
 
 
 /* WINDOW CSS */
-#container_three_columns {
-    /*margin-top: 20px;*/
+/*#container_three_columns {
+    margin-top: 20px;
 }
-
+*/
 /*.spinner_container { */
     /*text-align: center;*/
     /*margin-top: 100px;*/
@@ -252,7 +253,7 @@ i.spinner {
             rgba(0, 0, 0, 0.3), 
             rgba(0, 0, 0, 0.3)
         ), 
-        url(store_aisle_fast.jpg);
+        url(../../images/store_aisle_fast.jpg);
     background-size: cover;
     padding: 15px;
 }
@@ -355,7 +356,7 @@ i.spinner {
     }
 
     #side-menu {
-        height: 1500px;
+        /*height: 1500px;*/
     }
 
     #welcome_text {
@@ -474,4 +475,10 @@ i.spinner {
 
 .fa-spin {
     font-size: 5em
+}
+
+.store_circular_component.hidden-md-hidden-lg {
+    max-width: 75%;
+    display: block;
+    margin: 0 auto;
 }

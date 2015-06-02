@@ -121,6 +121,8 @@ var ShopScraper = React.createClass({
 	componentDidMount: function () {
 		
 		this.updateWindowView(<Welcome onButtonClick={this.determineViewToRender} />);
+
+		$('#window_wrapper').css({marginLeft: "0px"});
 	}, 
 
 	render: function () {

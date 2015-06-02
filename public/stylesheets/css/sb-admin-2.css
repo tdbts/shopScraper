@@ -45,7 +45,7 @@ body {
 
 
 #side-menu {
-    height: 1000px;
+    /*height: 1000px;*/
     border-right: 1px solid #E7E7E7
 }
 
@@ -91,8 +91,8 @@ body {
     padding-left: 52px;
 }
 
-@media(max-width: 992px) {
+/*@media(max-width: 992px) {
     #side-menu {
         height: 1500px;
     }
-}
+}*/

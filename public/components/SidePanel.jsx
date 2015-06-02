@@ -1,16 +1,50 @@
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
-	CollapsingPanelOption = require('./CollapsingPanelOption');
+	CollapsingPanelOption = require('./CollapsingPanelOption'), 
+	$ = window.jquery || require('jquery');
 
 var SidePanel = React.createClass({
+	getInitialState: function () {
+		return {
+			sidePanelHeight: {
+				height: "50px"
+			}		
+		};	
+	},		
+
+	getWindowHeight: function () {
+		var heightValue = Math.max($(document).height(), $(window).height(), screen.height); 
+
+		return heightValue.toString() + "px";
+	}, 
+
+	setSidePanelHeight: function () {	
+		if ($(window).width() < 768) {
+			this.setState({sidePanelHeight: {height: "100%"}});
+		} else {
+			this.setState({sidePanelHeight: {height: this.getWindowHeight()}});
+		}
+	}, 
+
 	componentDidMount: function () {
 		/* *** Source: metisMenu.js *** */
 		$('#side-menu').find('li').has('ul').children('a').on('click', function (e) {
 			e.preventDefault();
 
-			$(this).parent('li').toggleClass('active').children('ul').collapse('toggle');
-			$(this).parent('li').siblings().removeClass('active').children('ul.in').collapse('hide');
+			$(this).parent('li').toggleClass('active');
+			$(this).parent('li').siblings().removeClass('active');
 		});
+
+		this.setSidePanelHeight();
+
+		$(window).on('resize', function () {
+			this.setSidePanelHeight();
+		}.bind(this));
+	}, 
+
+	componentWillUnmount: function () {
+
+		$(window).off('resize');
 	}, 
 
 	render: function () {
@@ -50,7 +84,7 @@ var SidePanel = React.createClass({
 
 
 		return (
-		    <div className="navbar-default sidebar" role="navigation">
+		    <div className="navbar-default sidebar" role="navigation" style={this.state.sidePanelHeight}>
 		        <div className="sidebar-nav navbar-collapse">
 		            <ul className="nav" id="side-menu">
 		                <li className="sidebar-search">
