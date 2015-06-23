@@ -37,8 +37,22 @@ var scrapeShopRite = scraper.extend({
 			
 			console.log("DUPLICATE PAGE DETECTED -- altering circular number.");
 
-			var currentCircularNumber = scrapePage.getConfigData('circularNumber');
-			scrapePage.setConfigData('circularNumber', currentCircularNumber === "1/" ? "2/" : "1/");
+			var circularNumberAlternatives = {
+				'1/': '2/', 
+				'2/': '', 
+				'': '1/'
+			}; 
+
+			var currentCircularNumber = scrapePage.getConfigData('circularNumber'), 
+				newCircularNumber;
+
+			for (var circularNumber in circularNumberAlternatives) {
+				if (currentCircularNumber === circularNumber) {
+					newCircularNumber = circularNumberAlternatives[circularNumber];
+				}
+			}
+
+			scrapePage.setConfigData('circularNumber', newCircularNumber);
 		}		
 	}, 
 
