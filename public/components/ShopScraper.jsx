@@ -53,11 +53,21 @@ var ShopScraper = React.createClass({
 	}, 
 
 	handleStoreListingsServerResponse: function (storeListings) {
+		
 		this.setState({
 			storeListings: storeListings
 		});
 
-		this.updateWindowView(<ViewListings searchFieldText={this.state.filterText} storeListings={this.state.storeListings} />);		
+		// DEVELOPMENT ONLY 
+		// console.log(this.state.storeListings);
+
+		// this.updateWindowView(<ViewListings searchFieldText={this.state.filterText} storeListings={this.state.storeListings} />);		
+		this.renderViewListings(); 
+	}, 
+
+	renderViewListings: function () {
+		
+		this.updateWindowView(<ViewListings searchFieldText={this.state.filterText} storeListings={this.state.storeListings} />); 
 	}, 
 
 	getDefaultDataFromSelections: function () {

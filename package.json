@@ -5,8 +5,10 @@
     "chai": "^2.0.0",
     "gulp": "^3.8.11",
     "gulp-html-replace": "^1.4.4",
+    "gulp-if": "^1.2.5",
     "gulp-jshint": "^1.9.2",
     "gulp-less": "^3.0.3",
+    "gulp-minify-css": "^1.1.6",
     "gulp-mocha": "^2.0.0",
     "gulp-nodemon": "^1.0.5",
     "gulp-notify": "^2.2.0",
@@ -22,6 +24,7 @@
     "nock": "^0.59.1",
     "reactify": "^1.1.1",
     "sinon": "^1.12.2",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^2.3.0"
   },

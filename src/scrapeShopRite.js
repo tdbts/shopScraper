@@ -65,27 +65,37 @@ var scrapeShopRite = scraper.extend({
 			self.checkForDuplicatePages(comparisonObjects);
 
 			var pageScrapes = pagesArray.map(function (pageNumber) {
-				return function (callback) {
+				return function (callback) { 
+					console.log("SHOPRITE SCRAPER: SCRAPING PAGE " + pageNumber);
 					scrapePage.scrape(pageNumber, callback);
 				};
 			});
 
-			async.parallel(pageScrapes, function (err, pagesDataArray) {
-				if (!err) {
-					var circularData = new CircularPageData();
-					
-					self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
+			process.nextTick(function () {
+				
+				async.parallel(pageScrapes, function (err, pagesDataArray) {
+					if (!err) {
 
-					circularData.storeName = self.config.storeName; 
+						process.nextTick(function () {
+							var circularData = new CircularPageData();
+							
+							self.collectAllProducts(pagesDataArray, circularData, self.parseDate);
 
-					self.assignIDsToProducts(circularData.products);
-					
-					// DEVELOPMENT ONLY -- Shop Rite BUG FIX
-					console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
-					console.log("ERR: ", err);
-					callback(err, circularData);
-				}				
-			});		
+							circularData.storeName = self.config.storeName; 
+
+							self.assignIDsToProducts(circularData.products);
+							
+							// DEVELOPMENT ONLY -- Shop Rite BUG FIX
+							console.log("Found " + circularData.products.length + " products in this week's " + self.config.storeName + " circular!");
+							console.log("ERR: ", err);
+							callback(err, circularData);
+							
+						});
+					}				
+				});		
+				
+			});
+
 		});
 	},
 

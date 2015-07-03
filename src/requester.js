@@ -18,10 +18,12 @@ module.exports = {
 				result = processor(err, resp, body);
 			}
 
-			callback(err, result);
-			// DEVELOPMENT ONLY
-			// var end = process.hrtime(start);
-			// console.log("Request response time to" + url + ": ", end);
+			process.nextTick(function () {
+				callback(err, result);
+				// DEVELOPMENT ONLY
+				// var end = process.hrtime(start);
+				// console.log("Request response time to" + url + ": ", end);				
+			});
 		});
 	}, 
 

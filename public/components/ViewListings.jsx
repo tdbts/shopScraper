@@ -33,7 +33,7 @@ var ViewListings = React.createClass({
 		}.bind(this));
 
 		// DEVELOPMENT ONLY 
-		console.log("PRODUCTS for " + store.storeName + ": ", products);
+		// console.log("PRODUCTS for " + store.storeName + ": ", products);
 
 		if (products.length === 0) {
 			this.handleEmptyFilterResults(products);

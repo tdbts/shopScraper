@@ -253,7 +253,7 @@ i.spinner {
             rgba(0, 0, 0, 0.3), 
             rgba(0, 0, 0, 0.3)
         ), 
-        url(../../images/store_aisle_fast.jpg);
+        url(../../../images/store_aisle_fast.jpg);
     background-size: cover;
     padding: 15px;
 }
