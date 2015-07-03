@@ -20,7 +20,11 @@ var SearchField = React.createClass({
 
     handleFilterRequest: function () {
        
-       this.props.filterListings(this.state.searchFieldText);  
+       if (this.state.searchFieldText) {
+           this.props.filterListings(this.state.searchFieldText);  
+       
+           this.props.addFilterRequestToLocalStorage(this.state.searchFieldText); 
+       }
     }, 
 
     componentDidMount: function () {
@@ -30,7 +34,6 @@ var SearchField = React.createClass({
             var keyCode = (e.keyCode ? e.keyCode : e.which);
             
             if (keyCode === 13) {
-                // this.props.filterListings(e.target.value);
                 this.handleFilterRequest(); 
             }
         }.bind(this));

@@ -5,6 +5,7 @@ var CollapsingPanelOption = React.createClass({
 	render: function () {
 		var targetHref = "#" + this.props.config.targetID, 
 			fontAwesomeClassName = "fa " + this.props.config.fontAwesomeIcon + " fa-fw";
+			
 		return (
 			<li className="collapsing_panel_option">
 				<a className="side_panel_option collapse_anchor" data-toggle="collapse" href={targetHref}>

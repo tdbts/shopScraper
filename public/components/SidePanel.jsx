@@ -26,6 +26,37 @@ var SidePanel = React.createClass({
 		}
 	}, 
 
+	addFilterRequestToLocalStorage: function (filterText) {
+
+		var existingFilterHistory = localStorage.getItem('filterTextHistory'), 
+			filterHistoryArray;  
+		
+		if (localStorage && existingFilterHistory) {
+			
+			filterHistoryArray = JSON.parse(existingFilterHistory); 
+
+			filterHistoryArray.push(filterText);
+
+			localStorage.setItem('filterTextHistory', JSON.stringify(filterHistoryArray)); 
+		
+		} else if (localStorage && !existingFilterHistory) {
+
+			localStorage.setItem('filterTextHistory', JSON.stringify([filterText])); 
+		
+		} else {
+			console.log("Your device does not support local storage.  Your filter history will not be saved.");
+		} 
+
+		return; 
+	}, 
+
+	clearFilterRequestHistory: function () {
+		
+		if (localStorage && localStorage.getItem('filterTextHistory')) {
+			localStorage.setItem('filterTextHistory', "[]");
+		}
+	}, 
+
 	componentDidMount: function () {
 		/* *** Source: metisMenu.js *** */
 		$('#side-menu').find('li').has('ul').children('a').on('click', function (e) {
@@ -88,7 +119,7 @@ var SidePanel = React.createClass({
 		        <div className="sidebar-nav navbar-collapse">
 		            <ul className="nav" id="side-menu">
 		                <li className="sidebar-search">
-		                    <SearchField filterListings={this.props.filterListings} />
+		                    <SearchField filterListings={this.props.filterListings} addFilterRequestToLocalStorage={this.addFilterRequestToLocalStorage} />
 		                </li>
 		                <CollapsingPanelOption config={dashboardOptionConfig} />
 		                <CollapsingPanelOption config={favoritesOptionConfig} />
