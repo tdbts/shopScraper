@@ -17,6 +17,11 @@ var SearchField = React.createClass({
         this.setState({searchFieldText: userInputText});
     }, 
 
+    handleSearchClick: function () {
+       
+       this.props.filterListings(this.state.searchFieldText);  
+    }, 
+
     componentDidMount: function () {
 
         $(React.findDOMNode(this)).find('input').keypress(function (e) {
@@ -34,7 +39,7 @@ var SearchField = React.createClass({
             <div className="input-group custom-search-form">
                 <input type="text" className="form-control" onChange={this.handleSearchInput} value={this.state.searchFieldText} placeholder="Search..." />
                 <span className="input-group-btn">
-                    <button className="btn btn-default" type="button">
+                    <button className="btn btn-default" type="button" onClick={this.handleSearchClick}>
                         <span className="fa fa-search"></span>
                     </button>
                 </span>
