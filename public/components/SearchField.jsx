@@ -2,7 +2,8 @@
 * SearchField component requires FontAwesome for the magnifying glass icon.
 */
 
-var React = require('react');
+var React = require('react'), 
+    $ = window.jQuery || require('jquery'); 
 
 var SearchField = React.createClass({
     getInitialState: function () {
@@ -17,7 +18,7 @@ var SearchField = React.createClass({
         this.setState({searchFieldText: userInputText});
     }, 
 
-    handleSearchClick: function () {
+    handleFilterRequest: function () {
        
        this.props.filterListings(this.state.searchFieldText);  
     }, 
@@ -29,7 +30,8 @@ var SearchField = React.createClass({
             var keyCode = (e.keyCode ? e.keyCode : e.which);
             
             if (keyCode === 13) {
-                this.props.filterListings(e.target.value);
+                // this.props.filterListings(e.target.value);
+                this.handleFilterRequest(); 
             }
         }.bind(this));
     }, 
@@ -39,7 +41,7 @@ var SearchField = React.createClass({
             <div className="input-group custom-search-form">
                 <input type="text" className="form-control" onChange={this.handleSearchInput} value={this.state.searchFieldText} placeholder="Search..." />
                 <span className="input-group-btn">
-                    <button className="btn btn-default" type="button" onClick={this.handleSearchClick}>
+                    <button className="btn btn-default" type="button" onClick={this.handleFilterRequest}>
                         <span className="fa fa-search"></span>
                     </button>
                 </span>
