@@ -2,6 +2,7 @@ var React = require('react'),
 	StoreCircularComponent = require('./StoreCircularComponent'), 
 	ProductComponent = require('./ProductComponent'),
 	ThreeColumnsView = require('./ThreeColumnsView'), 
+	_ = require('underscore'), 
 	$ = window.jQuery || require('jquery');
 
 var ViewListings = React.createClass({
@@ -90,7 +91,7 @@ var ViewListings = React.createClass({
 
 		this.setViewState();
 
-		$(window).on('resize', this.setViewState);
+		$(window).on('resize', _.debounce(this.setViewState, 500, true));
 	}, 
 
 	componentWillUnmount: function () {

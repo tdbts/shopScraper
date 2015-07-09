@@ -23,7 +23,7 @@ var SearchField = React.createClass({
        if (this.state.searchFieldText) {
            this.props.filterListings(this.state.searchFieldText);  
        
-           this.props.addFilterRequestToLocalStorage(this.state.searchFieldText); 
+           this.props.addSearchRequestToLocalStorage(this.state.searchFieldText); 
        }
     }, 
 

@@ -1,6 +1,7 @@
 var React = require('react'), 
 	SearchField = require('./SearchField'),  
 	CollapsingPanelOption = require('./CollapsingPanelOption'), 
+	_ = require('underscore'), 
 	$ = window.jquery || require('jquery');
 
 var SidePanel = React.createClass({
@@ -26,9 +27,9 @@ var SidePanel = React.createClass({
 		}
 	}, 
 
-	addFilterRequestToLocalStorage: function (filterText) {
+	addSearchRequestToLocalStorage: function (filterText) {
 
-		var existingFilterHistory = localStorage.getItem('filterTextHistory'), 
+		var existingFilterHistory = localStorage.getItem('filterSearchHistory'), 
 			filterHistoryArray;  
 		
 		if (localStorage && existingFilterHistory) {
@@ -37,11 +38,11 @@ var SidePanel = React.createClass({
 
 			filterHistoryArray.push(filterText);
 
-			localStorage.setItem('filterTextHistory', JSON.stringify(filterHistoryArray)); 
+			localStorage.setItem('filterSearchHistory', JSON.stringify(filterHistoryArray)); 
 		
 		} else if (localStorage && !existingFilterHistory) {
 
-			localStorage.setItem('filterTextHistory', JSON.stringify([filterText])); 
+			localStorage.setItem('filterSearchHistory', JSON.stringify([filterText])); 
 		
 		} else {
 			console.log("Your device does not support local storage.  Your filter history will not be saved.");
@@ -50,16 +51,37 @@ var SidePanel = React.createClass({
 		return; 
 	}, 
 
-	clearFilterRequestHistory: function () {
+	getSearchHistoryArray: function () {
+		var searchHistoryLocalStorageData = localStorage.getItem('filterSearchHistory'),  
+			searchHistoryArray;  
+
+		if (searchHistoryLocalStorageData) {
+			searchHistoryArray = JSON.parse(searchHistoryLocalStorageData); 
+		} 
+
+		return searchHistoryArray || []; 
+	}, 
+
+	createArrayOfSearchHistoryObjects: function () {
+		var searchHistoryArray = this.getSearchHistoryArray(); 
+
+		var searchHistoryObjects = searchHistoryArray.map(function (searchText, index) {
+			return {text: searchText, key: index}; 
+		}); 
+
+		return searchHistoryObjects; 
+	}, 
+
+	clearSearchRequestHistory: function () {
 		
-		if (localStorage && localStorage.getItem('filterTextHistory')) {
-			localStorage.setItem('filterTextHistory', "[]");
+		if (localStorage && localStorage.getItem('filterSearchHistory')) {
+			localStorage.setItem('filterSearchHistory', "[]");
 		}
 	}, 
 
 	componentDidMount: function () {
 		/* *** Source: metisMenu.js *** */
-		$('#side-menu').find('li').has('ul').children('a').on('click', function (e) {
+		$(React.findDOMNode(this.refs.sideMenu)).find('li').has('ul').children('a').on('click', function (e) {
 			e.preventDefault();
 
 			$(this).parent('li').toggleClass('active');
@@ -68,9 +90,10 @@ var SidePanel = React.createClass({
 
 		this.setSidePanelHeight();
 
-		$(window).on('resize', function () {
-			this.setSidePanelHeight();
-		}.bind(this));
+		// $(window).on('resize', function () {
+		// 	this.setSidePanelHeight();
+		// }.bind(this));
+		$(window).on('resize', _.debounce(this.setSidePanelHeight, 500, true)); 
 	}, 
 
 	componentWillUnmount: function () {
@@ -111,15 +134,22 @@ var SidePanel = React.createClass({
 				targetID: "settings_panel_option", 
 				fontAwesomeIcon: "fa-cog", 
 				subCategories: settingsSubCategories
-			};
+			}, 
+
+			historyOptionConfig = {
+				optionName: "History", 
+				targetID: "history_panel_option", 
+				fontAwesomeIcon: "fa-history", 
+				subCategories: this.createArrayOfSearchHistoryObjects()
+			}; 
 
 
 		return (
 		    <div className="navbar-default sidebar" role="navigation" style={this.state.sidePanelHeight}>
 		        <div className="sidebar-nav navbar-collapse">
-		            <ul className="nav" id="side-menu">
+		            <ul id="side-menu" className="nav" ref="sideMenu">
 		                <li className="sidebar-search">
-		                    <SearchField filterListings={this.props.filterListings} addFilterRequestToLocalStorage={this.addFilterRequestToLocalStorage} />
+		                    <SearchField filterListings={this.props.filterListings} addSearchRequestToLocalStorage={this.addSearchRequestToLocalStorage} />
 		                </li>
 		                <CollapsingPanelOption config={dashboardOptionConfig} />
 		                <CollapsingPanelOption config={favoritesOptionConfig} />
@@ -128,9 +158,7 @@ var SidePanel = React.createClass({
 		                </li>
 		                <CollapsingPanelOption config={listsOptionConfig} />
 		                <CollapsingPanelOption config={settingsOptionConfig} />
-		                <li>
-		                    <a className="side_panel_option" href="#"><span className="fa fa-history fa-fw"></span> History</a>
-		                </li>
+		                <CollapsingPanelOption config={historyOptionConfig} />
 		            </ul>
 		        </div>
 		    </div>
