@@ -52,7 +52,17 @@ var scraper = requester.extend({
 	}, 
 
 	parseDate: function (givenDate) {
-		
+		if (givenDate.indexOf("-") !== -1) {
+			givenDate = givenDate.replace(/-/g, '/'); 
+		} 
+
+		if (givenDate.indexOf("T") !== -1) {
+			givenDate = givenDate.slice(0, givenDate.indexOf("T")); 
+		} 
+
+		givenDate = new Date(givenDate).toISOString(); 
+
+
 		return moment(givenDate).format("dddd, MMMM Do YYYY");
 	}
 });
