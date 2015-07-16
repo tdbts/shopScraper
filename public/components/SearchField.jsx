@@ -17,16 +17,27 @@ var SearchField = React.createClass({
         this.setState({searchFieldText: userInputText});
     }, 
 
-    componentDidMount: function () {
+    handleSearchRequest: function (e) {
+        
+        this.props.filterListings(e.target.value); 
 
-        $(React.findDOMNode(this)).find('input').keypress(function (e) {
+        this.setState({searchFieldText: ""}); 
+    }, 
+
+    attachEnterKeyHandler: function (domNode, handler) {
+        $(domNode).find('input').keypress(function (e) {
 
             var keyCode = (e.keyCode ? e.keyCode : e.which);
             
             if (keyCode === 13) {
-                this.props.filterListings(e.target.value);
+                handler(e); 
             }
-        }.bind(this));
+        }.bind(this));        
+    }, 
+
+    componentDidMount: function () {
+
+        this.attachEnterKeyHandler(React.findDOMNode(this), this.handleSearchRequest); 
     }, 
 
 	render: function () {

@@ -13,7 +13,7 @@ var ShopScraper = React.createClass({
 		};
 	}, 
 
-	getDataFromLocalStorage: function () {
+	getUserDefaultLocationsFromLocalStorage: function () {
 		return localStorage ? localStorage.getItem('userDefaultLocations') : null;
 	}, 
 
@@ -26,7 +26,7 @@ var ShopScraper = React.createClass({
 	}, 
 
 	defaultStoreSelectionRequired: function () {
-		var localStorageData = this.getDataFromLocalStorage();
+		var localStorageData = this.getUserDefaultLocationsFromLocalStorage();
 
 		if (localStorageData && this.defaultsAreValid(localStorageData)) {
 			
@@ -92,7 +92,7 @@ var ShopScraper = React.createClass({
 			localStorage.setItem('userDefaultLocations', defaultData);
 		}
 	
-		this.getStoreListingsFromServer('user/locations', this.getDataFromLocalStorage(), this.handleStoreListingsServerResponse);
+		this.getStoreListingsFromServer('user/locations', this.getUserDefaultLocationsFromLocalStorage(), this.handleStoreListingsServerResponse);
 	}, 
 
 	handleClearSelections: function () {

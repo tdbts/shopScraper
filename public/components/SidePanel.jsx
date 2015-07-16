@@ -26,20 +26,32 @@ var SidePanel = React.createClass({
 		}
 	}, 
 
-	componentDidMount: function () {
+	attachSideMenuClickHandler: function () {
 		/* *** Source: metisMenu.js *** */
-		$('#side-menu').find('li').has('ul').children('a').on('click', function (e) {
-			e.preventDefault();
+		$('#side-menu')
+			.find('li')
+			.has('ul')
+			.children('a')
+			.on('click', function (e) {
+				e.preventDefault();
 
-			$(this).parent('li').toggleClass('active');
-			$(this).parent('li').siblings().removeClass('active');
-		});
+				$(this).parent('li').toggleClass('active');
+				$(this).parent('li').siblings().removeClass('active');
+			});		
+	}, 
+
+	attachWindowResizeHandler: function () {
+		$(window).on('resize', function () {
+			this.setSidePanelHeight();
+		}.bind(this));		
+	}, 
+
+	componentDidMount: function () {
+		this.attachSideMenuClickHandler(); 
 
 		this.setSidePanelHeight();
 
-		$(window).on('resize', function () {
-			this.setSidePanelHeight();
-		}.bind(this));
+		this.attachWindowResizeHandler(); 
 	}, 
 
 	componentWillUnmount: function () {
